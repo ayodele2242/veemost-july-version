@@ -1,0 +1,49 @@
+/* CheckboxStyles.module.css */
+.checkboxContainer {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .checkboxInput {
+    display: none;
+  }
+  
+  .checkboxInput:checked + .checkboxLabel:before {
+    background-color: #27C479;
+    border-color: #27C479;
+  }
+  
+  .checkboxLabel {
+    position: relative;
+    padding-left: 24px;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .checkboxLabel:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #fff;
+  }
+  
+  .checkboxInput:checked + .checkboxLabel:after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: #27C479;
+    border-radius: 2px;
+  }
+  

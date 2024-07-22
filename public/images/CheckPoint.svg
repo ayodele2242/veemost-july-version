@@ -1,0 +1,42 @@
+var _rect, _defs;
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+import * as React from "react";
+function SvgCheckPoint(_ref, svgRef) {
+  let {
+    title,
+    titleId,
+    ...props
+  } = _ref;
+  return /*#__PURE__*/React.createElement("svg", _extends({
+    width: 120,
+    height: 38,
+    viewBox: "0 0 120 38",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg",
+    xmlnsXlink: "http://www.w3.org/1999/xlink",
+    ref: svgRef,
+    "aria-labelledby": titleId
+  }, props), title ? /*#__PURE__*/React.createElement("title", {
+    id: titleId
+  }, title) : null, _rect || (_rect = /*#__PURE__*/React.createElement("rect", {
+    width: 120,
+    height: 38,
+    fill: "url(#pattern0_3168_53733)"
+  })), _defs || (_defs = /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("pattern", {
+    id: "pattern0_3168_53733",
+    patternContentUnits: "objectBoundingBox",
+    width: 1,
+    height: 1
+  }, /*#__PURE__*/React.createElement("use", {
+    xlinkHref: "#image0_3168_53733",
+    transform: "matrix(0.00833333 0 0 0.0263158 0 -0.394737)"
+  })), /*#__PURE__*/React.createElement("image", {
+    id: "image0_3168_53733",
+    width: 120,
+    height: 70,
+    xlinkHref: "data:image/png;base64,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"
+  }))));
+}
+const ForwardRef = /*#__PURE__*/React.forwardRef(SvgCheckPoint);
+export default __webpack_public_path__ + "static/media/CheckPoint.8f46af56bf0f81b2b8cf2a833974380a.svg";
+export { ForwardRef as ReactComponent };

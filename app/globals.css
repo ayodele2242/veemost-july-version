@@ -2,32 +2,535 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+
+@font-face {
+  font-family: 'Gilroy-ExtraBold';
+  src: local('Gilroy-ExtraBold'), url(../fonts/Gilroy-ExtraBold.ttf) format('truetype');
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@font-face {
+  font-family: 'Gilroy-Bold';
+  src: local('Gilroy-Bold'), url(../fonts/Gilroy-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Gilroy-Medium';
+  src: local('Gilroy-Medium'), url(../fonts/Gilroy-Medium.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Gilroy-Light';
+  src: local('Gilroy-Light'), url(../fonts/Gilroy-Light.ttf) format('truetype');
+}
+
+
+@font-face {
+  font-family: 'Gilroy-Regular';
+  src: local('Gilroy-Regular'), url(../fonts/Gilroy-Regular.ttf) format('truetype');
+}
+
+*{
+  font-family: 'Gilroy-Medium', sans-serif;
+  
+}
+
+.default-black{
+ color: #121212;
+}
+
+.extrabolder {
+  font-family: 'Gilroy-ExtraBold';
+  line-height: 64px;
+  font-weight: 700;
+  font-size: 70px;
+}
+
+.text{
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 14px;
+  text-align: center;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.custom-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+
+.firstLink{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+
+
+
+.shadow-left {
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.15);
+}
+.shadow-right {
+  box-shadow: 5px 0 10px rgba(0, 0, 0, 0.15);
+}
+.shadow-bottom {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+.text-footer-main{
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.tab-container {
+  display: flex;
+  border-bottom: solid 1px #636361;
+}
+
+
+.tab-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-right: -2px;
+  color: #000; /* Default color */
+  text-decoration: none;
+}
+
+.tab-button.active {
+  color: #D6A912; /* Active color */
+  border-bottom: solid 2px #D6A912;
+}
+
+.informationDetails{
+  padding: 20px;
+  margin-bottom: 15px;
+}
+
+.tab-content{
+  overflow: hidden;
+  word-wrap: break-word; 
+  overflow-wrap: break-word
+}
+
+
+
+.frameCover{
+  overflow: hidden;
+  position: relative;
+  margin:0;
+}
+
+
+.frameCover iframe{
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+
+.infoTitle{
+  background: #f0f0f0;
+  font-size: 14px;
+}
+
+.listItems{
+  position: absolute !important;
+  overflow-x: scroll;
+  z-index: 999 !important;
+}
+
+
+.slider {
+  width: 100%;
+  height: 100%;
+}
+
+.slide{
+  height: 100%;
+  width: 100%;
+  
+}
+
+.slide > div{
+  width: 100%;
+  height: 100%;
+  
+}
+
+[class^="LazyImage_placeholder"] {
+  width: 100%;
+  height: 200px !important;
+}
+
+
+.custom-select option {
+  --tw-text-opacity: 1;
+    color: rgb(55 65 81 / var(--tw-text-opacity));
+
+}
+
+
+.relative {
+  position: relative;
+}
+
+.searchForm{
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.searchBody{
+  position: relative;
+  border: solid 2px #636361;
+  background-color: transparent;
+  width: 350px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  border-radius: 20px;
+  padding: 6px;
+  outline: none;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.iSpinner{
+position: absolute;
+width: 100%;
+height: 100%;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.resutsLoader{
+position: absolute;
+top: 60px;
+padding: 20px;
+width: 100%;
+max-width: 600px;
+height: 400px;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+background-color: rgba(255, 255, 255, 0.5);
+backdrop-filter: blur(5px);
+overflow: hidden;
+z-index: 9001;
+}
+
+
+
+.scrollbar {
+  height: 100%;
+  max-height: 400px;
+  overflow-y: scroll;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #d7aa12 transparent; /* For Firefox */
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px; /* For Chrome, Safari, and Opera */
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #d7aa12; /* For Chrome, Safari, and Opera */
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: transparent; /* For Chrome, Safari, and Opera */
+}
+
+
+.inputholder{
+  display: flex;
+  padding: 4px;
+  font-size: 14px;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  border: solid 1px #666363;
+  border-radius: 10px;
+}
+
+.inputholder .searchIcon{
+  font-size: 12px !important;
+ 
+}
+
+.inputholder input{
+  outline: none;
+  width: 95%;
+  padding-left: 4px;
+}
+
+.scrollbar-2{
+overflow-y: scroll;
+height: 450px !important;
+background-color: rgba(255, 255, 255, 0.5);
+backdrop-filter: blur(20px);
+}
+
+.suggestions li{
+font-size: 11px;
+padding: 4px;
+margin-bottom: 10px;
+text-transform: capitalize;
+border-bottom: solid 1px #d7aa12;
+
+}
+
+.searchBody input{
+ background-color: transparent;
+ columns: #888885;
+width: 95%;
+font-size: 14px;
+font-weight: normal;
+padding: 6px;
+outline: none;
+}
+
+
+
+.searchBody input:focus, .searchBody input:active {
+ color: #535252;
+ background-color: transparent;
+ outline: none;
+}
+
+.input-placeholder-asterisk {
+  position: absolute;
+  top: 25%;
+  left: calc(100% - 200rem);
+  transform: translateY(-50%);
+  color: red;
+  pointer-events: none;
+  font-size: 1.25rem; /* Adjust the size as needed */
+}
+
+
+.slide > div >img {
+
+  width: 100%;
+  height: 100%;
+  max-height: 180px !important;
+}
+
+.slick-dots {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 1rem 0;
+  list-style-type: none;
+}
+.slick-dots li {
+  margin: 0 0.25rem;
+}
+
+.slick-dots li button{
+  background: #8585862f !important;
+  width: 25px !important;
+  height: 2px !important;
+  border-radius: 10px !important;
+}
+
+.slick-dots button {
+  display: block;
+  width: 12px;
+  height: 9px;
+  padding: 0;
+  border: none;
+  text-indent: -9999px;
+  
+}
+.slick-dots li.slick-active button {
+  background-color: #D6A912 !important;
+}
+
+.group-hover\:scale-110:hover {
+  transform: scale(1.1);
+}
+
+.overlayer{
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Skeleton styles */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-primary {
+  background: linear-gradient(90deg, #947904 25%, #e0e0e0 50%, #947904 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+      background-position: 200% 0;
+  }
+  100% {
+      background-position: -200% 0;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.skeleton-img {
+  height: 140px;
+  width: 100%;
+  border-radius: 8px;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.skeleton-text {
+  height: 1.2em;
+  margin-bottom: 0.8em;
+  border-radius: 4px;
+}
+
+.skeleton-button {
+  height: 1.5em;
+  width: 100px;
+  border-radius: 4px;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
+
+.fadeIn {
+  animation: fadeIn 1s ease-in-out;
+}
+
+
+@keyframes fadeInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeInBottom {
+  animation: fadeInBottom 1s ease-in-out;
+}
+
+
+/* Define the keyframes for the pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Apply the pulse animation */
+.animate-pulse {
+  animation: pulse 1.5s infinite;
+}
+
+/* Additional styles to mimic Tailwind CSS classes for example purposes */
+.bg-gray-400 {
+  background-color: #cbd5e0; /* Tailwind's gray-400 color */
+}
+
+.bg-gray-200 {
+  background-color: #edf2f7; /* Tailwind's gray-200 color */
+}
+
+.rounded {
+  border-radius: 0.25rem; /* Tailwind's rounded class */
+}
+
+
+
+@media (max-width: 1024px) { /* Tablets and below */
+  .extrabolder {
+    font-size: 50px;
+    line-height: 56px;
+  }
+
+  .custom-scrollbar{
+    padding-right: 20px;
+  }
+
+  .custom-scrollbar > .lastItem{
+    margin-right: 30px !important;
+    background-color: blue;
+  }
+
+  .listItems{
+  position: relative !important;
+  overflow-x: none;
+}
+
+.vector-icons{
+  display: none;
+}
+}
+
+@media (max-width: 768px) { /* Mobile devices */
+  .extrabolder {
+    font-size: 40px;
+    line-height: 48px;
+  }
+  .custom-scrollbar{
+    padding-right: 20px;
+  }
+
+  .tab-container{
+    flex-direction: wrap;
+    margin-bottom: 10px;
+   }
+
+   .vector-icons{
+    display: none;
+  }
+
+
+  .itemB{
+  width: 100% !important;
+  max-width: 389px !important;
+  
+  }
+
+}
+
+@media (max-width: 480px) { /* Small mobile devices */
+  .extrabolder {
+    font-size: 30px;
+    line-height: 38px;
+  }
+  
+
+  .itemB{
+    width: 100% !important;
+    max-width: 389px !important;
+    
+    }
+}
+
