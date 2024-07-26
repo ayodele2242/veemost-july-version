@@ -39,6 +39,7 @@ const ProductList: React.FC = () => {
     const [layoutType, setLayoutType] = useState<"grid" | "list">("list");
     const searchParams = useSearchParams();
     const search = searchParams.get('search');
+    const category = searchParams.get('category') || '';
     const [totalRecords, setTotalRecords] = useState(0);
     const [startRecord, setStartRecord] = useState(0);
     const [endRecord, setEndRecord] = useState(0);
@@ -57,6 +58,12 @@ const ProductList: React.FC = () => {
         [searchParams]
     );
 
+    useEffect(() => {
+        if (category) {
+            setSelectedCategories([decodeURIComponent(category)]);
+        }
+    }, [category]);
+
     const handleSelectedCategoriesChange = (selectedCategories: { category: string[] }) => {
         setSelectedCategories(selectedCategories.category);
     };
@@ -69,7 +76,8 @@ const ProductList: React.FC = () => {
         setSelectedCategories([]);
         if (search) {
             // Clear the search query parameter
-            nextSearchParams.delete('search')
+            nextSearchParams.delete('search');
+            nextSearchParams.delete('category')
             router.replace(`${pathname}?${nextSearchParams}`)
         }
     };
