@@ -287,13 +287,13 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                             }).format(0.0)} </p>
                                             <p className="text-[14px] font-normal">EXCL TAX</p>
                                         </div>
-                                        <div className="itemListMe">
+                                        {/*<div className="itemListMe">
                                             <CartQuantityActionBtns 
                                                 product={product} 
                                                 id={product?.ingramPartNumber} 
                                                 amount={0.0} 
                                                 image={DEFAULT_IMAGE} />
-                                        </div>
+                                        </div>*/}
                                     </div>
                                 </div>
                             </div>

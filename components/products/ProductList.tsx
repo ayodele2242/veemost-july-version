@@ -109,14 +109,23 @@ const ProductList: React.FC = () => {
                 const matchedVendor = vendorNames.find(vendor => search && search.toLowerCase().includes(vendor.toLowerCase()));
 
                 if (matchedVendor) {
-                    // Fetch products for the matched vendor
                     vendorName = matchedVendor;
                     data = await fetchVendorProducts(itemsPerPage, pageNumber, vendorName);
-                } else if (selectedCategories.length > 0 || search) {
-                    // Prepare keywords
-                    const keywords = search ? [search, ...selectedCategories] : selectedCategories;
-                    const category = selectedCategories.length === 1 ? selectedCategories[0] : '';
-    
+                } else if (selectedCategories.length === 1) {
+                    const category = selectedCategories[0];
+                    data = await fetchCategoryProducts(itemsPerPage, pageNumber, category);
+                } else if (selectedCategories.length > 1 || search) {
+                    let category = '';
+                    const keywords = search ? [search] : [];
+
+                    //Choose a random category from selectedCategories
+                    const randomIndex = Math.floor(Math.random() * selectedCategories.length);
+                    category = selectedCategories[randomIndex];
+                    // Use the rest of the selected categories as keywords
+                    const otherCategories = selectedCategories.filter((_, index) => index !== randomIndex);
+                    keywords.push(...otherCategories);
+                    
+                    //const keywords = search ? [search, ...selectedCategories] : selectedCategories;
                     data = await searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category);
                 } else {
                     data = await fetchProducts(itemsPerPage, pageNumber);

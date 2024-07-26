@@ -87,7 +87,7 @@ export const fetchCategoryProducts = async (pageSize: number, pageNumber: number
     }
 
     const data = await response.json();
-    return data;
+    return { catalog: data };
   } catch (error) {
     console.error('Error fetching category products:', error);
     throw error;
@@ -133,26 +133,44 @@ export const searchProducts = async (pageSize: number, pageNumber: number, keywo
   }
 };
 
-export const searchProductsAndCategories = async (pageSize: number, pageNumber: 
-  number, keywords: string[], category: string): Promise<any> => {
+export const searchProductsAndCategories = async (pageSize: number, pageNumber: number, keywords: string[], category: string = ''): Promise<any> => {
   try {
-      const token = await getToken('ieljYW23S3CZKITfDFynkA3qAF7D3dy2', 'dFpwrJxph9T7szOc');
-      let keywordParams = keywords.map(keyword => `keyword=${encodeURIComponent(keyword)}`).join('&');
-      const response = await fetch(`${API_URL}catalog?pageSize=${pageSize}&pageNumber=${pageNumber}${keywordParams ? `&${keywordParams}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`, {
-          headers: getCommonHeaders(token) as HeadersInit,
-      });
+    const token = await getToken('ieljYW23S3CZKITfDFynkA3qAF7D3dy2', 'dFpwrJxph9T7szOc');
+    
+    // Build query parameters
+    const keywordParams = keywords.map(keyword => `keyword=${encodeURIComponent(keyword)}`).join('&');
+    const categoryParam = category ? `category=${encodeURIComponent(category)}` : '';
+    
+    const queryString = [
+      `pageSize=${pageSize}`,
+      `pageNumber=${pageNumber}`,
+      keywordParams,
+      categoryParam
+    ].filter(Boolean).join('&');
+    
+    const url = `${API_URL}catalog?${queryString}`;
+    
+    console.log(`Fetching URL: ${url}`); // Log URL for debugging
 
-      if (!response.ok) {
-          throw new Error('Network response was not ok');
-      }
+    const response = await fetch(url, {
+      headers: getCommonHeaders(token) as HeadersInit,
+    });
 
-      const data = await response.json();
-      return { catalog: data };
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Error response from API: ${errorText}`); // Log error response
+      throw new Error(`Network response was not ok: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return { catalog: data };
   } catch (error) {
-      console.error('Error searching for products:', error);
-      throw error;
+    console.error('Error searching for products:', error);
+    throw error;
   }
 };
+
+
 
 
 

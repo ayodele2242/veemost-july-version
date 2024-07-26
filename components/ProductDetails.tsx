@@ -44,10 +44,23 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
         const retailPrice = priceData[0].pricing.retailPrice;
 
         // Find the warehouse with the highest quantity available
-        /*const availabilityData = priceData[0].availability.availabilityByWarehouse;
-        const highestAvailabilityWarehouse = availabilityData.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) => 
-          prev.quantityAvailable > curr.quantityAvailable ? prev : curr
-        );*/
+        const availabilityData = priceData[0].availability.availabilityByWarehouse;
+
+        // Check if availabilityByWarehouse is not null
+        if (availabilityData !== null) {
+            // Find the warehouse with the highest quantity available
+            const highestAvailabilityWarehouse = availabilityData.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) => 
+              prev.quantityAvailable > curr.quantityAvailable ? prev : curr
+            );
+        
+            // Do something with highestAvailabilityWarehouse
+            console.log('Warehouse with highest availability:', highestAvailabilityWarehouse);
+        
+        } else {
+            // Handle the case where availabilityByWarehouse is null
+            console.log('No availability data available.');
+            // Optionally, you could set a default value or state here
+        }
 
         // Calculate the price with an additional 6%
         const customerPrice = productPrice * 1.06;
@@ -160,9 +173,9 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
 
                 <div className="flex-shrink-0 w-full md:w-3/5 lg:w-2/3 flex-col">
                        {product ? (
-                        <div className="flex flex-row bg-[#FFFCDE]  h-[50px] gap-[4px] rounded-[8px] p-3 w-full mb-4">
-                            <Image src="/warning-icon.png" width={24} height={25} alt="icon" />
-                            <p className="text-[#D6A912]  text-[14px] font-normal font-gilroy-regular">This product is delivered directly from the vendor.</p>
+                        <div className="flex flex-row bg-[#FFFCDE]  h-[50px] gap-[4px] rounded-[8px] p-3 w-full mb-4 justify-left items-center">
+                            <Image src="/info.png" width={24} height={24} alt="icon" />
+                            <p className="text-[#D6A912]  text-[14px] font-bold font-gilroy-regular">This product is delivered directly from the vendor.</p>
                         </div>
                          ) : (
                             <div className="skeleton skeleton-text w-full mb-5 mt-3"></div>
