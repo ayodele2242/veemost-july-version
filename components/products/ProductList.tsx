@@ -40,6 +40,7 @@ const ProductList: React.FC = () => {
     const searchParams = useSearchParams();
     const search = searchParams.get('search');
     const category = searchParams.get('category') || '';
+    const subCategory = searchParams.get('subCategory') || '';
     const [totalRecords, setTotalRecords] = useState(0);
     const [startRecord, setStartRecord] = useState(0);
     const [endRecord, setEndRecord] = useState(0);
@@ -74,10 +75,18 @@ const ProductList: React.FC = () => {
 
     const handleClearAll = () => {
         setSelectedCategories([]);
+        if(category || subCategory){
+            nextSearchParams.delete('category')
+            router.replace(`${pathname}?${nextSearchParams}`)
+            nextSearchParams.delete('subCategory');
+        }
+
+      
+
         if (search) {
             // Clear the search query parameter
             nextSearchParams.delete('search');
-            nextSearchParams.delete('category')
+           
             router.replace(`${pathname}?${nextSearchParams}`)
         }
     };
@@ -228,8 +237,8 @@ const ProductList: React.FC = () => {
         loadProducts();
     }, [pageNumber, itemsPerPage, selectedCategories, search]);
 
-    const shouldShowBanner = !selectedCategories.length && !search;
-    const shouldShowClear = selectedCategories.length || search;
+    const shouldShowBanner = !selectedCategories.length && !search && !category && !subCategory;
+    const shouldShowClear = selectedCategories.length || search || category || subCategory;
 
     const breadcrumbs = [
         { label: 'Home', href: '/' },

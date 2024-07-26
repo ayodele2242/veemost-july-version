@@ -105,13 +105,13 @@ const HeaderMobileCategories: React.FC<HeaderCategoriesProps> = ({ onClose }) =>
       return (
         <div>
           <div className="p-2  font-bold text-primaryText text-center w-[100%] mb-3">
-            <Link href={`/categories?category=${encodeURIComponent(category.root_menu)}`} 
+            <Link href={`/products?category=${encodeURIComponent(category.root_menu)}`} 
               className="w-full cursor-pointer">{category.root_menu}</Link>
           </div>
           <ul>
             {category.sub_categories.map((subCategory: any) => (
               <li key={subCategory.sub_id} className='font-semibold p-1 cursor-pointer hover:text-primaryText'>
-                <a href={`/products?category=${encodeURIComponent(category.root_menu)}&subCategory=${encodeURIComponent(subCategory.name)}`}>
+                <a href={`/products?category=${encodeURIComponent(category.root_menu)}`}>
                   {subCategory.name}
                 </a>
               </li>
