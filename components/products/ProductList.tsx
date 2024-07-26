@@ -131,6 +131,8 @@ const ProductList: React.FC = () => {
                 } else if (selectedCategories.length === 1) {
                     const category = selectedCategories[0];
                     data = await fetchCategoryProducts(itemsPerPage, pageNumber, category);
+                }else if (category && !selectedCategories) {
+                    data = await fetchCategoryProducts(itemsPerPage, pageNumber, category);
                 } else if (selectedCategories.length > 1 || search) {
                     let category = '';
                     const keywords: string[] = [];
@@ -227,9 +229,45 @@ const ProductList: React.FC = () => {
 
 
             } catch (error: any) {
+                // Log the error for debugging purposes
                 console.error('Error loading products:', error);
-                setError(error.message || 'An unknown error occurred');
-            } finally {
+            
+                // Check for specific types of errors and set a more descriptive error message
+                if (error instanceof TypeError) {
+                    setError('A type error occurred. Please check the data types and try again.');
+                } else if (error instanceof SyntaxError) {
+                    setError('There was a syntax error in the response data. Please contact support.');
+                } else if (error.response && error.response.status) {
+                    // Handle HTTP errors based on response status
+                    switch (error.response.status) {
+                        case 400:
+                            setError('Bad request. Please check your request and try again.');
+                            break;
+                        case 401:
+                            setError('Unauthorized. Please check your authentication and try again.');
+                            break;
+                        case 403:
+                            setError('Forbidden. You do not have permission to access this resource.');
+                            break;
+                        case 404:
+                            setError('Not found. The requested resource could not be found.');
+                            break;
+                        case 500:
+                            setError('Internal server error. Please try again later.');
+                            break;
+                        default:
+                            setError('An unexpected error occurred. Please try again.');
+                            break;
+                    }
+                } else if (error.message) {
+                    // Handle general errors with a message
+                    setError(error.message);
+                } else {
+                    // Fallback for any other types of errors
+                    setError('An unknown error occurred. Please try again later.');
+                }
+            }
+             finally {
                 setLoading(false);
             }
         };
