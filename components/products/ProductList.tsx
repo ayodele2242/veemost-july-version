@@ -234,7 +234,7 @@ const ProductList: React.FC = () => {
             
                 // Check for specific types of errors and set a more descriptive error message
                 if (error instanceof TypeError) {
-                    setError('A type error occurred. Please check the data types and try again.');
+                    setError('No search could be made for this query. Please try again.');
                 } else if (error instanceof SyntaxError) {
                     setError('There was a syntax error in the response data. Please contact support.');
                 } else if (error.response && error.response.status) {
