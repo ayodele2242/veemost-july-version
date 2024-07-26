@@ -116,18 +116,40 @@ const ProductList: React.FC = () => {
                     data = await fetchCategoryProducts(itemsPerPage, pageNumber, category);
                 } else if (selectedCategories.length > 1 || search) {
                     let category = '';
-                    const keywords = search ? [search] : [];
+                    const keywords: string[] = [];
+                
+                    // Check if search is not null and contains specific words
+                    const specificKeywords = ["switch", "routers", "firewalls", "wireless"];
+                    const searchLower = search ? search.toLowerCase() : '';
+                    const containsSpecificKeyword = specificKeywords.some(keyword => searchLower.includes(keyword));
+                
+                    if (containsSpecificKeyword) {
+                        // Use specific keywords from the search term
+                        keywords.push(...specificKeywords.filter(keyword => searchLower.includes(keyword)));
+                        category = 'Accessories'; // Default category when specific keywords are present
+                    }else {
+                       // If no specific keywords are found, and if search is present
+                        if (search !== null) {
+                            keywords.push(search); // Add the search term as a keyword if it's not null
+                        }
+                        
+                        // Choose a random category from selectedCategories
+                        if (selectedCategories.length > 0) {
+                            const randomIndex = Math.floor(Math.random() * selectedCategories.length);
+                            category = selectedCategories[randomIndex];
 
-                    //Choose a random category from selectedCategories
-                    const randomIndex = Math.floor(Math.random() * selectedCategories.length);
-                    category = selectedCategories[randomIndex];
-                    // Use the rest of the selected categories as keywords
-                    const otherCategories = selectedCategories.filter((_, index) => index !== randomIndex);
-                    keywords.push(...otherCategories);
-                    
-                    //const keywords = search ? [search, ...selectedCategories] : selectedCategories;
+                            // Use the rest of the selected categories as keywords
+                            const otherCategories = selectedCategories.filter((_, index) => index !== randomIndex);
+                            keywords.push(...otherCategories);
+                        } else {
+                            // If no selected categories, fallback to default category or empty string
+                            category = ''; // Or a default category if applicable
+                        }
+                    }
+                
                     data = await searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category);
-                } else {
+                }
+                 else {
                     data = await fetchProducts(itemsPerPage, pageNumber);
                 }
     
@@ -198,6 +220,9 @@ const ProductList: React.FC = () => {
         loadProducts();
     }, [pageNumber, itemsPerPage, selectedCategories, search]);
 
+    const shouldShowBanner = !selectedCategories.length && !search;
+    const shouldShowClear = selectedCategories.length || search;
+
     const breadcrumbs = [
         { label: 'Home', href: '/' },
         { label: 'Products', href: '/products' },
@@ -231,7 +256,7 @@ const ProductList: React.FC = () => {
                         <div className="leftDiv flex flex-row gap-4 lg:gap-6 items-center">
                             {/*<span className="text-base lg:text-lg">{products.length} Products</span>*/}
                             {loading && (
-                                <div className="h-4 rounded-lg skeleton-primary skeleton-text w-full flex justify-center items-center text-white font-bold p-3">Loading...</div>
+                                <div className="h-4 rounded-lg skeleton-primary skeleton-text flex justify-center items-center text-white font-bold p-3 w-[200px]">Loading...</div>
                                 )}
                             
                             <SelectedCategoriesList
@@ -239,10 +264,10 @@ const ProductList: React.FC = () => {
                                 onRemove={handleRemoveCategory}
                             />
 
-                            {selectedCategories.length > 0 && (
+                            {shouldShowClear && (
                                 <div 
                                     onClick={handleClearAll} 
-                                    className="text-sm text-red-600 cursor-pointer underline underline-offset-4"
+                                    className="text-sm font-bold text-red-600 cursor-pointer underline underline-offset-4 whitespace-nowrap mx-3"
                                 >
                                     Clear Filter
                                 </div>
@@ -254,9 +279,11 @@ const ProductList: React.FC = () => {
                             <GridIcon onClick={() => setLayoutType("grid")} />
                         </div>
                     </div>
+                {shouldShowBanner && (
                 <div className="flex w-full justify-center items-center">
                  <Image src="/product-banner.png" alt="banner" width={600} height={250} className="w-full lg:h-[200px] lg:w-[700px]" />
                 </div>
+                )}
 
                     {layoutType === "grid" ? (
                         <GridView
@@ -273,6 +300,7 @@ const ProductList: React.FC = () => {
                             productImages={productImages}
                             loading={loading}
                             error={error}
+                            search={search}
                         />
                     )}
 
@@ -303,7 +331,7 @@ const ProductList: React.FC = () => {
                         </select>
                         <button
                             onClick={() => handlePageChange('next')}
-                            
+                            disabled={endRecord === totalRecords}
                             className="px-4 py-2 bg-primaryBg text-white rounded"
                         >
                             Next

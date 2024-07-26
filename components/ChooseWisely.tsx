@@ -26,7 +26,7 @@ const ChooseWisely = () => {
         <div className="mx-auto px-4 mt-10">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             
-              <div className="p-2 flex items-center justify-center flex-col">
+              <Link href="products?search=firewalls" className="p-2 flex items-center justify-center flex-col">
                   <div style={{ width: '140px', height: '140px', position: 'relative' }}>
                       <LazyImage
                         src="/firewalls.png"
@@ -37,9 +37,9 @@ const ChooseWisely = () => {
                       />
                   </div>  
                     <span>Firewalls</span>
-              </div>
+              </Link>
 
-              <div className="p-2 flex items-center justify-center flex-col">
+              <Link href="products?search=routers" className="p-2 flex items-center justify-center flex-col">
                   <div style={{ width: '140px', height: '140px', position: 'relative' }}>
                       <LazyImage
                         src="/routers.png"
@@ -50,9 +50,9 @@ const ChooseWisely = () => {
                       />
                   </div>  
                     <span>Routers</span>
-              </div>
+              </Link>
 
-              <div className="p-2 flex items-center justify-center flex-col">
+              <Link href="products?search=switches" className="p-2 flex items-center justify-center flex-col">
                   <div style={{ width: '140px', height: '140px', position: 'relative' }}>
                       <LazyImage
                         src="/switches.png"
@@ -63,9 +63,9 @@ const ChooseWisely = () => {
                       />
                   </div>  
                     <span>Switches</span>
-              </div>
+              </Link>
 
-              <div className="p-2 flex items-center justify-center flex-col">
+              <Link href="products?search=computing" className="p-2 flex items-center justify-center flex-col">
                   <div style={{ width: '140px', height: '140px', position: 'relative' }}>
                       <LazyImage
                         src="/computing.png"
@@ -76,9 +76,9 @@ const ChooseWisely = () => {
                       />
                   </div>  
                     <span>Computing</span>
-              </div>
+              </Link>
 
-              <div className="p-2 flex items-center justify-center flex-col">
+              <Link href="products?search=storage" className="p-2 flex items-center justify-center flex-col">
                   <div style={{ width: '140px', height: '140px', position: 'relative' }}>
                       <LazyImage
                         src="/storage.png"
@@ -89,10 +89,10 @@ const ChooseWisely = () => {
                       />
                   </div>  
                     <span>Storage</span>
-              </div>
+              </Link>
 
               
-              <div className="p-2 flex items-center justify-center flex-col">
+              <Link href="products?search=wireless" className="p-2 flex items-center justify-center flex-col">
                   <div style={{ width: '140px', height: '140px', position: 'relative' }}>
                       <LazyImage
                         src="/wireless.png"
@@ -102,7 +102,7 @@ const ChooseWisely = () => {
                       />
                   </div>  
                     <span>Wireless</span>
-              </div>
+              </Link>
 
               
               

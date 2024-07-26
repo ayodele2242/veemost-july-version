@@ -30,6 +30,7 @@ interface ListViewProps {
     productImages: { [key: string]: string[] };
     loading: boolean;
     error: string | null;
+    search: string | null;
 }
 
 interface ResponseDataItem {
@@ -38,7 +39,7 @@ interface ResponseDataItem {
     data: any;
 }
 
-const ListView: React.FC<ListViewProps> = ({ products, productDetails, productImages, loading, error }) => {
+const ListView: React.FC<ListViewProps> = ({ products, productDetails, productImages, loading, error, search }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const DEFAULT_IMAGE = "/no-image.png";
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
@@ -61,6 +62,12 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
         slidesToScroll: 1,
         afterChange: (current: number) => setCurrentSlide(current),
     };
+
+    const highlightText = (text: string, search: string | null) => {
+        if (!search) return text;
+        const regex = new RegExp(`(${search.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
+        return text.replace(regex, '<span class="highlight">$1</span>');
+      };
 
     const handleViewDetails = (product: IngramProductType) => {
         // setSelectedProduct(product);
@@ -253,7 +260,8 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                             {product.description}
                                         </Link>
                                     </div>
-                                    <div className="text-sm font-normal">{product.extraDescription}</div>
+                                   
+                                    <div className="product-description text-sm font-normal" dangerouslySetInnerHTML={{ __html: highlightText(product.extraDescription, search) }} />
                                     <div className="w-full mt-2">
                                         <div className="flex justify-left gap-3 text-xs">
                                             <span className="uppercase">
@@ -352,7 +360,8 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                             {product.description}
                                         </Link>
                                     </div>
-                                    <div className="text-sm font-normal mt-3">{product.extraDescription}</div>
+                                    <div className="product-description text-sm font-normal" dangerouslySetInnerHTML={{ __html: highlightText(product.extraDescription, search) }} />
+                                   
                                     <div className="w-full mt-3">
                                         <div className="flex justify-left gap-3 text-xs">
                                             <span className="uppercase">

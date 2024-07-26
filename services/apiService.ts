@@ -150,7 +150,7 @@ export const searchProductsAndCategories = async (pageSize: number, pageNumber: 
     
     const url = `${API_URL}catalog?${queryString}`;
     
-    console.log(`Fetching URL: ${url}`); // Log URL for debugging
+    //console.log(`Fetching URL: ${url}`); // Log URL for debugging
 
     const response = await fetch(url, {
       headers: getCommonHeaders(token) as HeadersInit,

@@ -1,6 +1,7 @@
 import React from "react";
 import Container from "./Container";
 import Image from 'next/image';
+import Link from "next/link";
 
 const FooterTop = () => {
   
@@ -17,13 +18,13 @@ const FooterTop = () => {
                 className="object-cover w-[186px] h-[69px] mb-2"/>
 
                 <p className="text-[16px] text-[#FAFAFA] font-normal text-gilroy-regular text-footer-main">
-                Elevate Your Tech Experience with VeeMost: Where Innovation Meets
-                Affordability. Your One-Stop Shop for Cutting-Edge IT Solutions.
+                Elevate Your Tech Experience with VeeMost: Where Innovation Meets Affordability. 
+                Your One-Stop Shop for Cutting-Edge IT products and Solutions.
                 </p>
                 <p
                 className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular mt-10 mb-2 cursor-pointer"
                 >
-                +1 732 523 1180
+                <a href="tel:+17325231180">+1 732 523 1180</a>
                 </p>
                 <p
                 className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular mb-2 cursor-pointer"
@@ -54,37 +55,42 @@ const FooterTop = () => {
                 </div>
                 <div className="w-1/2 md:w-1/4">
                 <h2 className="text-[18px] text-[#FFFFFF] font-normal GilroySemiBold">
-            Our services
+            Our products
           </h2>
-          <p
-            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular py-3 cursor-pointer"
-          >
+          <p 
+            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular py-3 cursor-pointer">
+          <Link href="/products?search=firewalls">
             Firewalls
+          </Link>
           </p>
-          <p
-            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
+          <p className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
+          <Link href="/products?search=routers"
           >
             Routers
+          </Link>
           </p>
-          <p
-            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
-          >
+          <p className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
+          <Link href="/products?search=switch">
             Switch
+          </Link>
           </p>
-          <p
-            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
+          <p  className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
+          <Link href="/products?search=wireless"
           >
             Wireless
+          </Link>
           </p>
                 </div>
                 <div className="w-1/2 md:w-1/4">
+           
                 <h2 className="text-[18px] text-[#FFFFFF] font-normal GilroySemiBold">
+                About Us
+              </h2>
+       
+         <p  className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular py-3 cursor-pointer">
+         <Link href="/about-us">
             About Us
-          </h2>
-          <p
-            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular py-3 cursor-pointer"
-          >
-            About Us
+          </Link>
           </p>
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
@@ -114,12 +120,16 @@ const FooterTop = () => {
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular py-3 cursor-pointer"
           >
+            <Link href="help-and-faq">
             FAQs
+            </Link>
           </p>
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
           >
+            <Link href="contact-us">
             Support
+            </Link>
           </p>
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"

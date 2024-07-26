@@ -68,6 +68,11 @@
   padding: 10px;
 }
 
+.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
+
 
 /* Styling the horizontal scrollbar */
 ::-webkit-scrollbar {

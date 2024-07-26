@@ -46,7 +46,7 @@ const SimilarProducts  = ({ productCategory }: ProductDetailsProps) => {
         setError(null); // Reset the error before fetching
         const data = await fetchCategoryProducts(pageSize, pageNumber, productCategory);
         //console.log("Similar Products", JSON.stringify(data));
-        const catalog = data.catalog || [];
+        const catalog = data.catalog?.catalog || [];
         //console.log("Similar Products ",JSON.stringify(data.catalog))
         // Filter products to only include those authorized to purchase
         const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "True");
