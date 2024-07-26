@@ -44,10 +44,10 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
         const retailPrice = priceData[0].pricing.retailPrice;
 
         // Find the warehouse with the highest quantity available
-        const availabilityData = priceData[0].availability.availabilityByWarehouse;
+        /*const availabilityData = priceData[0].availability.availabilityByWarehouse;
         const highestAvailabilityWarehouse = availabilityData.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) => 
           prev.quantityAvailable > curr.quantityAvailable ? prev : curr
-        );
+        );*/
 
         // Calculate the price with an additional 6%
         const customerPrice = productPrice * 1.06;
