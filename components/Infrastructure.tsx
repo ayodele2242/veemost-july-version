@@ -6,6 +6,7 @@ import ContactForm from './ContactForm'
 import SubscribeForm from './SubscribeForm'
 import Footer from './Footer'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const Infrastructure = () => {
   return (
@@ -34,7 +35,7 @@ const Infrastructure = () => {
                     We want our clients to see maximum return on<br className="hidden lg:block"/> investment (ROI) from their new solutions.
                     </h2>
                 </div>
-               <img src="/services-img-5.png" alt="Strategy" 
+               <Image src="/services-img-5.png" alt="Strategy" width={500} height={300}
                className="bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[400px] lg:w-[524px] lg:h-[349px] fadeIn fadeIn" />
             </div>
          </div>
@@ -46,7 +47,7 @@ const Infrastructure = () => {
     <Container>
     <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
                     <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-                        <img src="/infrastructure-img.png" alt="solution" 
+                        <Image src="/infrastructure-img.png" alt="solution"  width={500} height={300}
                         className="bg-no-repeat xl:object-cover lg:object-contain object-cover lg:w-[500px]" />
                         <div className="flex flex-col">
                             <div className="xl:w-[528px] lg:w-[400px] md:w-[640]">
@@ -54,19 +55,21 @@ const Infrastructure = () => {
                                 but still suffer breaches and other network issues that results in inefficient practices, slower processing among other things.
                                 </p>
                                 <div className="bg-[#FFFCDE] p-4 flex gap-2 items-start my-4">
-                                    <img
+                                    <Image
                                         src="/icon.png"
                                         alt="icon"
+                                        width={25}
+                                        height={26}
                                     />
                                     <p className="text-base text-[#858586] font-GilroyRegular text-[16px]">
                                     At VeeMost, we help our clients get the most out of the 
-                                    infrastructure solutions our team or someone else’s team designed and deployed.
+                                    infrastructure solutions our team or someone else&apos;s team designed and deployed.
                                     We want our clients to see maximum return on investment (ROI) from their new solutions.
                                     </p>
                                 </div>
                                 <p className="text-[#858586] font-GilroyRegular font-normal text-[16px]">We want our clients to see maximum return on investment (ROI) from their new solutions.<br/>
                                 VeeMost offers Optimization Services where we assess network infrastructures, services, applications, 
-                                security and much more. Then, using specialized tools and processes we optimize them for better performance, security and maximum return on your investment. 
+                                security and much more. Then, using specialized tools and processes we optimize them for better performance, security and maximum return on your investment.
                                 </p>
                             </div>
                         </div>

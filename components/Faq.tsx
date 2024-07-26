@@ -9,6 +9,7 @@ import Link from 'next/link'
 import BrandIcons from './BrandIcons'
 import { RiCustomerServiceLine } from "react-icons/ri";
 import { faqData } from '@/utils/faq'
+import Image from 'next/image'
 
 const Faq = () => {
 
@@ -51,9 +52,9 @@ const Faq = () => {
             <div className="flex lg:flex-row flex-col justify-between items-center gap-6">
               <div className="bg-[#FAFAFA] rounded-lg lg:w-[529px] px-4 py-8 flex flex-col items-center lg:mt-[-67rem]">
                 <div className="flex flex-col gap-10 items-center">
-                  <img
+                  <Image
                     src="/question-mark.png"
-                    alt="icon"
+                    alt="icon" width={"72"} height={"72"}
                     className="w-[72px] h-[72px]"
                   />
                   <div className="text-center flex flex-col gap-2">
@@ -61,11 +62,12 @@ const Faq = () => {
                     Do you have specific questions?
                     </p>
                     <p className="font-GilroyRegular font-normal text-[#858586]">
-                    Explore our FAQ section to find quick solutions, expert tips, and insider insights. Whether you're curious 
-                    about our offerings, troubleshooting, or just looking for some tech-savvy advice, 
-                    you're in the right place. Dive in and discover the answers you need to make informed decisions, 
-                    and elevate your digital experience!"
+                        Explore our FAQ section to find quick solutions, expert tips, and insider insights. Whether you&apos;re curious 
+                        about our offerings, troubleshooting, or just looking for some tech-savvy advice, 
+                        you&apos;re in the right place. Dive in and discover the answers you need to make informed decisions, 
+                        and elevate your digital experience&hellip;
                     </p>
+
                   </div>
                   <button
                     className={`rounded-[7px] h-[53px] p-4 flex gap-2 items-center font-GilroySemiBold font-bold text-sm text-white bg-[#D6A912] whitespace-nowrap hover:bg-[#B67E0A]}`}

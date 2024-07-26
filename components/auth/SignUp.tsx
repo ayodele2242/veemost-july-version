@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { iStates, State } from '@/utils/getStateAbbreviation';
+import Image from 'next/image';
 
 
 interface ResponseDataItem {
@@ -261,13 +262,13 @@ const SignUp = () => {
             <div className="left flex flex-1 relative">
                 {/* Background image and overlay for mobile */}
                 <div className="lg:hidden block absolute inset-0">
-                    <img src="/signup-img.jpg" alt="Background" className="w-full h-full object-cover" />
+                    <Image src="/signup-img.jpg" alt="Background" width={"500"} height={"500"} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black opacity-50"></div> {/* Overlay */}
                 </div>
                 {/* Form */}
                 <div className="relative z-10 p-4 lg:p-8 w-full h-full max-w-md mx-auto bg-white bg-opacity-50 lg:bg-transparent lg:bg-opacity-100">
                     <Link href="/" className="flex justify-left items-left mb-4">
-                        <img src="/logoheader.png" alt="logo" className="mt-[2rem] md:w-[150px] md:h-[58px] w-[80px] h-[28px]" />
+                    <Image src="/logoheader.png" alt="logo" width={"150"} height={"50"} className="mt-[2rem] md:w-[150px] md:h-[58px] w-[80px] h-[28px]" />
                     </Link>
                     <div className="w-full mt-4">
                         <h1 className="font-GilroySemiBold font-normal text-[24px] text-[#0B0B0C]">Get started with Us</h1>
@@ -541,7 +542,7 @@ const SignUp = () => {
                 </div>
             </div>
             <div className="right flex flex-1 items-center justify-center hidden lg:flex">
-                <img src="/signup-img.jpg" alt="Background" className="w-full h-full object-cover" />
+                <Image src="/signup-img.jpg" alt="Background" width={500} height={800} className="w-full h-full object-cover" />
             </div>
         </main>
     );

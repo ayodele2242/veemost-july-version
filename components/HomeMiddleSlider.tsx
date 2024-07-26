@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import useInView from '../hooks/useInView';
 
+
 const HomeMiddleSlider = () => {
 
     const [resolution, setResolution] = useState({
@@ -66,21 +67,27 @@ const HomeMiddleSlider = () => {
         {/* Add any content you want here */}
       </div>
 
-      <img
+      <Image
         src="/indicator.png"
         alt="Right Image 1"
-        className="hidden md:flex tablet:hidden largeTablet:hidden desktop:flex absolute top-0 right-[180px] h-[400px]"
+        width={410}
+        height={400}
+        className="hidden md:flex tablet:hidden largeTablet:hidden desktop:flex absolute top-0 right-[180px] h-[400px] max-w-[410px]"
       />
-      <img
+      <Image
         src="/right-img.png"
         alt="Right Image 2"
+        width={610}
+        height={400}
         className="hidden md:flex tablet:hidden largeTablet:hidden desktop:flex absolute bottom-[-170px] right-[-30px] w-[700px]"
       />
 
-      <img
+      <Image
         src="/left-img.png"
         alt="Left Image"
         ref={ref}
+        width={1000} 
+        height={800} 
         className={`absolute bottom-[-70px] left-[-167px] 
           foldPhone:bottom-[-100px] foldPhone:left-[-140px] 
           tablet:bottom-[-250px] tablet:left-[-240px]

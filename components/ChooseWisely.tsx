@@ -31,7 +31,8 @@ const ChooseWisely = () => {
                       <LazyImage
                         src="/firewalls.png"
                         alt="Firewalls"
-                        layout="fill" 
+                        layout="responsive" 
+                         objectFit="cover"
                         
                       />
                   </div>  
@@ -43,7 +44,8 @@ const ChooseWisely = () => {
                       <LazyImage
                         src="/routers.png"
                         alt="Routers"
-                        layout="fill" 
+                        layout="responsive" 
+                         objectFit="cover"
                         
                       />
                   </div>  
@@ -55,7 +57,8 @@ const ChooseWisely = () => {
                       <LazyImage
                         src="/switches.png"
                         alt="Switches"
-                        layout="fill" 
+                        layout="responsive" 
+                         objectFit="cover"
                         
                       />
                   </div>  
@@ -67,7 +70,8 @@ const ChooseWisely = () => {
                       <LazyImage
                         src="/computing.png"
                         alt="Computing"
-                        layout="fill" 
+                        layout="responsive" 
+                         objectFit="cover"
                         
                       />
                   </div>  
@@ -79,7 +83,8 @@ const ChooseWisely = () => {
                       <LazyImage
                         src="/storage.png"
                         alt="Storage"
-                        layout="fill" 
+                        layout="responsive" 
+                         objectFit="cover"
                         
                       />
                   </div>  
@@ -92,8 +97,8 @@ const ChooseWisely = () => {
                       <LazyImage
                         src="/wireless.png"
                         alt="Wireless"
-                        layout="fill" 
-                        
+                        layout="responsive" 
+                         objectFit="cover"
                       />
                   </div>  
                     <span>Wireless</span>

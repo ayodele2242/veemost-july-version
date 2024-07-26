@@ -6,6 +6,7 @@ import ContactForm from './ContactForm'
 import SubscribeForm from './SubscribeForm'
 import Footer from './Footer'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const Budgeting = () => {
   return (
@@ -31,7 +32,7 @@ const Budgeting = () => {
                   </div>
                   <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center lg:text-left">We assist you plan strategically by consulting with your various departments, tracking existing data to prove ROI, rolling forecasting etc.</h2>
                </div>
-               <img src="/services-img-3.png" alt="Strategy" 
+               <Image src="/services-img-3.png" alt="Strategy" width={600} height={400}
                className="bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[400px] lg:w-[524px] lg:h-[349px] fadeIn" />
             </div>
          </div>
@@ -43,7 +44,7 @@ const Budgeting = () => {
     <Container>
     <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
          <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-            <img src="/budget-img-1.png" alt="solution" 
+            <Image src="/budget-img-1.png" alt="solution" width={"600"} height={"500"}
             className="bg-no-repeat object-cover fadeIn lg:w-[500px]"/>
             <div className="flex flex-col lg:mt-[4rem]">
                <div className="xl:w-[528px] lg:w-[400px] md:w-[640]">
@@ -61,7 +62,7 @@ const Budgeting = () => {
                      <p className="text-[#858586] font-GilroyRegular font-normal text-[16px]">At VeeMost we understand that IT project budget planning, project payments and financing requirements are constantly changing along with the technology landscape. This is why we offer the invaluable service of helping organizations plan their budgets. We conduct audits of current processes, network designs, hardware, and software usage, in order to find efficiencies and identify the right upgrade path. We also guide organizations through project payments and financing on a case-by-case basis.</p>
                   </div>
                </div>
-               <img src="/budget-img-2.png" alt="solution" 
+               <Image src="/budget-img-2.png" alt="solution"  width={"600"} height={"500"}
                className="bg-no-repeat object-cover lg:mt-[2rem] fadeIn lg:w-[500px]" />
             </div>
          </div>

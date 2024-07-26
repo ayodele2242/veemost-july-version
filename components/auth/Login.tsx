@@ -6,6 +6,7 @@ import { ApiRequestService } from '@/services/apiRequest.service';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import Image from 'next/image';
 import {
     isUserLoggedIn,
 } from "@/auth/auth";
@@ -124,12 +125,12 @@ const Login = () => {
         <main className="w-full h-screen overflow-hidden flex lg:flex-row 2lg:flex-row flex-col">
             <div className="left flex flex-1 relative">
                 <div className="lg:hidden block absolute inset-0">
-                    <img src="/login-img.jpg" alt="Background" className="w-full h-full object-cover" />
+                    <Image src="/login-img.jpg" alt="Background" width={"500"} height={"500"} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black opacity-50"></div>
                 </div>
                 <div className="relative z-10 p-4 lg:p-8 w-full h-screen mx-auto bg-white bg-opacity-50 lg:bg-transparent lg:bg-opacity-100">
                     <Link href="/" className="flex justify-left items-left mb-4">
-                        <img src="/logoheader.png" alt="logo" className="mt-[2rem] md:w-[150px] md:h-[58px] w-[80px] h-[28px]" />
+                        <Image src="/logoheader.png" alt="logo" width={"150"} height={"50"} className="mt-[2rem] md:w-[150px] md:h-[58px] w-[80px] h-[28px]" />
                     </Link>
                     <div className="w-full mt-[120px]">
                         <h1 className="font-gilroy-semiBold font-normal text-[24px] text-[#0B0B0C] sm:font-extrabold">Log into Account</h1>

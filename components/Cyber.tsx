@@ -6,6 +6,7 @@ import ContactForm from './ContactForm'
 import SubscribeForm from './SubscribeForm'
 import Footer from './Footer'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const Cyber = () => {
   return (
@@ -34,7 +35,7 @@ const Cyber = () => {
                         VeeMost specializes in the full technology<br className="hidden lg:block" /> implementation lifecycle.
                     </h2>
                 </div>          
-               <img src="/services-img-8.png" alt="Strategy" 
+               <Image src="/services-img-8.png" alt="Strategy" width={"500"} height={"300"}
                className="bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[400px] lg:w-[524px] lg:h-[349px] fadeIn" />
             </div>
          </div>
@@ -45,11 +46,11 @@ const Cyber = () => {
 
     <Container>
     <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
-                    <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[20px] text-center uppercase lg:mt-[6rem] md:mt-[3rem]">IT'S ALL ABOUT SAFEGUARDING OUR CLIENTS</h2>
+                    <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[20px] text-center uppercase lg:mt-[6rem] md:mt-[3rem]">IT&apos;S ALL ABOUT SAFEGUARDING OUR CLIENTS</h2>
                     <div className="flex flex-col mt-[2rem]  xl:mx-auto justify-center gap-8">
                         <div className="flex flex-col xl:flex-row mt-[1rem]  lg:mx-auto justify-center gap-8">
                             <div className="xl:w-[417px] w-full h-[299px] border-[#EEEEEE] border bg-[#FAFAFA] flex flex-col justify-center items-center rounded-[24px] gap-[5rem]">
-                                <img src='/icons/1.png' />
+                                <Image src="/icons/1.png" alt="Cyber" width={"70"} height={"70"} />
                                 <div className="xl:w-[329px] w-full">
                                     <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] text-center uppercase">WE STOP RANSOMWARE
                                         BEFORE IT BECOMES A THREAT</h2>
@@ -57,7 +58,7 @@ const Cyber = () => {
                             </div>
 
                             <div className="xl:w-[308.5px] w-full h-[299px] border-[#EEEEEE] border flex flex-col justify-center items-center rounded-[24px] gap-[5rem]">
-                            <img src='/icons/2.png' />
+                            <Image src="/icons/2.png" alt="Cyber" width={"70"} height={"70"} />
                                 <div className="xl:w-[150.5px] w-full">
                                     <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] text-center uppercase">WE FILTER AND
                                         ELIMINATE PHISHING
@@ -66,7 +67,7 @@ const Cyber = () => {
                             </div>
 
                             <div className="xl:w-[308.5px] w-full h-[299px] border-[#EEEEEE] border flex flex-col justify-center items-center rounded-[24px] gap-[5rem]">
-                            <img src='/icons/3.png' />
+                            <Image src="/icons/3.png" alt="Cyber" width={"70"} height={"70"} />
                                 <div className="xl:w-[150.5px] w-full">
                                     <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] text-center uppercase">WE BLOCK BOTNET
                                     TRAFFIC FROM
@@ -78,7 +79,7 @@ const Cyber = () => {
                         <div className="flex flex-col xl:flex-row mt-[1rem]  lg:mx-auto justify-center gap-8">
 
                             <div className="xl:w-[308.5px] w-full h-[299px] border-[#EEEEEE] border flex flex-col justify-center items-center rounded-[24px] gap-[5rem]">
-                            <img src='/icons/4.png' />
+                            <Image src="/icons/4.png" alt="Cyber" width={"70"} height={"70"} />
                                 <div className="xl:w-[200.5px] w-full">
                                     <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] text-center uppercase">LEARN AND APPROVE
                                     WHICH APPS SHOULD BE
@@ -87,7 +88,7 @@ const Cyber = () => {
                             </div>
 
                             <div className="xl:w-[308.5px] w-full h-[299px] border-[#EEEEEE] border flex flex-col justify-center items-center rounded-[24px] gap-[5rem]">
-                            <img src='/icons/5.png' />
+                            <Image src="/icons/5.png" alt="Cyber" width={"70"} height={"70"} />
                                 <div className="xl:w-[150.5px] w-full">
                                     <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] text-center uppercase">SEE AND CONTROL
                                     WHICH WEBSITES
@@ -96,7 +97,7 @@ const Cyber = () => {
                             </div>
 
                             <div className="xl:w-[417px] w-full h-[299px] border-[#EEEEEE] border bg-[#FAFAFA] flex flex-col justify-center items-center rounded-[24px] gap-[5rem]">
-                            <img src='/icons/6.png' />
+                            <Image src="/icons/6.png" alt="Cyber" width={"70"} height={"70"} />
                                 <div className="xl:w-[230.5px] w-full">
                                     <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] text-center uppercase">ALLOW ONLY APPROVED
                                     DEVICES ON YOUR NETWORK,
@@ -110,7 +111,7 @@ const Cyber = () => {
 
                 <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
                     <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-                        <img src="/protection-img-1.png" alt="solution" 
+                        <Image src="/protection-img-1.png" alt="solution"  width={"500"} height={"300"}
                         className="bg-no-repeat object-cover lg:object-contain xl:object-cover fadeIn lg:w-[500px]" />
                         <div className="flex flex-col lg:mt-[2rem]">
                             <div className="xl:w-[528px] lg:w-[400px] md:w-[640]">
@@ -143,7 +144,7 @@ const Cyber = () => {
                                     </p>
                                 </div>
                             </div>
-                            <img src="/protection-img-2.png" alt="solution"  
+                            <Image src="/protection-img-2.png" alt="solution"  width={"500"} height={"300"} 
                             className="bg-no-repeat object-cover lg:mt-[2rem] fadeIn lg:w-[500px]" />
                         </div>
                     </div>

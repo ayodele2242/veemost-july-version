@@ -1,9 +1,9 @@
+import { NextRequest } from 'next/server';
 import axios from 'axios';
 
 const SPEXLIVE_API_URL = 'https://ws-na1.spexlive.net/service/rest/catalog';
 
-
-export const GET = async (request: { url: string | URL; }) => {
+export const GET = async (request: NextRequest) => {
   const url = new URL(request.url);
   const vendorName = url.searchParams.get('vendorName');
   const partNumber = url.searchParams.get('partNumber');
@@ -37,12 +37,9 @@ export const GET = async (request: { url: string | URL; }) => {
       const resources = response.data.resources.resource;
       const imageUrls = resources.map((resource: { url: any; }) => resource.url);
       return new Response(JSON.stringify(imageUrls), { status: 200 });
-     // return new Response(JSON.stringify(imageUrls.length > 0 ? imageUrls : [DEFAULT_IMAGE]), { status: 200 });
     } else {
       // Handle case where no images are found
-     // return new Response(JSON.stringify({ error: 'Product images not found in response' }), { status: 404 });
-     // Handle case where no images are found
-     return new Response(JSON.stringify([]), { status: 200 });
+      return new Response(JSON.stringify([]), { status: 200 });
     }
   } catch (error) {
     // Handle errors from the axios request

@@ -6,11 +6,13 @@ import TopSlider from "../components/TopSlider";
 import ChooseWisely from "../components/ChooseWisely";
 import ProductCard from "../components/ProductCard";
 import SubscribeForm from "@/components/SubscribeForm";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
   
-    
+    <Suspense fallback={<div className="h-[100vh] w-full h-full flex justify-center text-center overlayer bg-white bg-opacity-50"></div>}>
+  
     <main className="w-full overflow-hidden">
     <Header />
     <TopSlider />
@@ -20,7 +22,7 @@ export default function Home() {
     
       <Footer />
     </main>
-   
+   </Suspense>
     
   );
 }

@@ -69,6 +69,24 @@
 }
 
 
+/* Styling the horizontal scrollbar */
+::-webkit-scrollbar {
+  height: 5px; /* Adjust the height of the scrollbar */
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background color of the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e7b204;; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Roundness of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a98203; /* Color of the scrollbar thumb on hover */
+}
 
 
 .shadow-left {
@@ -372,6 +390,16 @@ outline: none;
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-box {
+  height: 2rem;
+  border-radius: 8px;
+}
+
+.skeleton-large-box {
+  height: 3rem; 
+  border-radius: 8px;
 }
 
 .skeleton-primary {

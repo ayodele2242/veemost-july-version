@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ApiRequestService } from "@/services/apiRequest.service";
+import SocialLinks from './SocialLinks';
 
 interface ResponseDataItem {
   status: string;
@@ -142,12 +143,7 @@ const ContactForm = () => {
                   <h2 className="font-Regular text-[#121212] font-normal text-[14px]">Head Office, Red Bank, New Jersey, NJ 07701, USA</h2>
                 </div>
                 <div className="flex flex-row justify-between pb-[2rem]">
-                  <div className="flex flex-row gap-[1.5rem]">
-                    <img src="/phone.png" className=""/>
-                    <img src="/insta.png" className=""/>
-                    <img src="/linkedin.png" className=""/>
-                    <img src="/facebk.png" className=""/>
-                  </div>
+                  <SocialLinks />
                 </div>
               </div>
               <div className="md:w-[640px] w-[100%] flex flex-col gap-[8px] md:p-[2.5rem] 

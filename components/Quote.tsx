@@ -7,6 +7,7 @@ import { AddCircleIcon, MultiplicationSignIcon } from "hugeicons-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ApiRequestService } from "@/services/apiRequest.service";
+import SocialLinks from "./SocialLinks";
 
 interface Item {
   part_number: string;
@@ -214,10 +215,7 @@ const Quote = () => {
                     <div className="flex flex-row justify-between pb-[2rem]">
                        <div className="flex flex-row gap-[1.5rem]">
                         
-                          <img src="/phone.png" className=""/>
-                          <img src="/insta.png" className=""/>
-                          <img src="/linkedin.png" className=""/>
-                          <img src="/facebk.png" className="" />
+                         <SocialLinks />
                        </div>
                     </div>
                  </div>

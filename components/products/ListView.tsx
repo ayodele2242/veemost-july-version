@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IngramProductDetailType, IngramProductType } from '@/types/types';
 import ProductCardSideNav from '../ProductCardSideNav';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import { FavouriteIcon } from 'hugeicons-react';
 import LazyImage from '../LazyImage';
 import Slider, { Settings } from 'react-slick';
 import "slick-carousel/slick/slick.css"; 
@@ -22,6 +22,7 @@ import { VeeProductType } from '@/types/types';
 import CartQuantityActionBtns from '../cart-quantity-btn';
 import Link from 'next/link';
 import SkeletonPage from '@/loaders/SkeletonPage';
+import BuyNowBtns from '../cart-buy-now-btn';
 
 interface ListViewProps {
     products: IngramProductType[];
@@ -199,22 +200,33 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
         }
     };
 
-    if (error) return <div>Error: {error}</div>;
+    if (error) return <div className="flex items-center justify-center border border-red-400 px-4 h-[100px] py-3 bg-red-100 mt-10 desktop:p-10">Error: {error}</div>;
 
     return (
+        
         <div className="relative productList flex flex-col">
             {loading && products.length === 0 && (
                 <div className="flex flex-col" >
                     <SkeletonPage count={5} />
                 </div>
             )}
+
+            {/* Show "No data available" message if loading is complete and no products */}
+            {!loading && products.length === 0 && (
+                <div className="flex items-center justify-center w-full h-32">
+                    <p className="text-red-500 text-lg">No product found.</p>
+                </div>
+            )}
+
+
             {products.map(product => {
                 const details = productDetails[product.ingramPartNumber];
                 const images = productImages[product.ingramPartNumber] || [];
 
                 // Check if details is undefined
                 if (!details) return (
-                    <div key={product.ingramPartNumber} className="px-2 mb-5 rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+                    <div key={product.ingramPartNumber} className="px-2 mb-5 rounded-xl duration-500 hover:scale-105 
+                    hover:shadow-xl">
                         <div className="flex flex-wrap md:-mx-2">
                             <div className="w-full md:w-1/2 lg:w-1/5 px-2 mb-4 md:mb-0">
                                 <div className="relative">
@@ -222,12 +234,12 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                         <LazyImage
                                             src={DEFAULT_IMAGE}
                                             alt="No Details Available"
-                                            layout="fill"
-                                            objectFit="cover"
+                                            layout="responsive" 
+                                             objectFit="cover"
                                         />
                                     </div>
                                     <div className="favourite absolute top-5 left-2">
-                                        <FavoriteBorderOutlinedIcon
+                                        <FavouriteIcon
                                             onClick={() => handleAddToFavorites(product?.ingramPartNumber || '')}
                                             className=""
                                         />
@@ -236,8 +248,8 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                             </div>
                             <div className="w-full md:w-1/2 lg:w-1/2 px-2 mb-4 md:mb-0">
                                 <div className="">
-                                    <div className="mb-2 text-xs font-bold">
-                                        <Link href={`/productdetail?id=${product.ingramPartNumber}`} className="text-xs">
+                                    <div className="mb-2 text-lg font-bold">
+                                        <Link href={`/product-details/${encodeURIComponent(product.ingramPartNumber)}`} className="text-lg">
                                             {product.description}
                                         </Link>
                                     </div>
@@ -294,7 +306,8 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                 const discount = details.discount ?? 0;
 
                 return (
-                    <div className="px-2 mb-5 rounded-xl duration-500 hover:scale-105 hover:shadow-xl" key={product.ingramPartNumber}>
+                    <div className="px-2 mb-5 rounded-xl duration-500 hover:scale-105 hover:shadow-xl" 
+                    key={product.ingramPartNumber}>
                         <div className="flex flex-wrap md:-mx-2">
                             <div className="w-full md:w-1/2 lg:w-1/5 px-2 mb-4 md:mb-0">
                                 <div className="relative">
@@ -307,7 +320,7 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                                             <LazyImage
                                                                 src={image}
                                                                 alt={product.description + ' - '+product.vendorName+ ' - '+product.vendorPartNumber}
-                                                                layout="fill"
+                                                                layout="responsive"
                                                                 objectFit="cover"
                                                             />
                                                         </Zoom>
@@ -318,8 +331,8 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                             <LazyImage
                                                 src={DEFAULT_IMAGE}
                                                 alt="No Image Available"
-                                                layout="fill"
-                                                objectFit="cover"
+                                                layout="responsive" 
+                                                 objectFit="cover"
                                             />
                                         )}
                                     </div>
@@ -333,8 +346,9 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                             </div>
                             <div className="w-full md:w-1/2 lg:w-1/2 px-2 mb-4 md:mb-0">
                                 <div className="">
-                                    <div className="mb-2 text-xs font-bold">
-                                        <Link href={`/productdetail?id=${product.ingramPartNumber}`} className="text-xs">
+                                    <div className="mb-2 text-lg font-bold">
+                                        <Link href={`/products/${encodeURIComponent(product.ingramPartNumber)}`} 
+                                        className="text-lg">
                                             {product.description}
                                         </Link>
                                     </div>
@@ -386,12 +400,18 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                                 </h6>
                                             )}
                                         </div>
-                                        <div className="itemListMe mt-2">
+                                        <div className="itemListMe mt-2 flex gap-2">
+                                            <BuyNowBtns  product={product} 
+                                                id={product?.ingramPartNumber} 
+                                                amount={customerPrice} 
+                                                image={images[0] || DEFAULT_IMAGE} />
+
                                             <CartQuantityActionBtns 
                                                 product={product} 
                                                 id={product?.ingramPartNumber} 
                                                 amount={customerPrice} 
                                                 image={images[0] || DEFAULT_IMAGE} />
+
                                         </div>
                                     </div>
                                 </div>

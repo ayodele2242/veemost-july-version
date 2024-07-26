@@ -6,6 +6,7 @@ import ContactForm from './ContactForm'
 import SubscribeForm from './SubscribeForm'
 import Footer from './Footer'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const Implementation = () => {
   return (
@@ -33,7 +34,7 @@ const Implementation = () => {
                                     VeeMost specializes in the full technology<br className="hidden lg:block"/> implementation lifecycle.
                                 </h2>
                             </div>
-               <img src="/services-img-4.png" alt="Strategy" 
+               <Image src="/services-img-4.png" alt="Strategy" height={340} width={520}
                className="bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[400px] lg:w-[524px] lg:h-[349px] fadeIn" />
             </div>
          </div>
@@ -45,7 +46,7 @@ const Implementation = () => {
     <Container>
     <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
             <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-                <img src="/implementation-img-1.png" alt="solution" className="bg-no-repeat object-cover lg:w-[500px] fadeIn" />
+                <Image src="/implementation-img-1.png" alt="solution" width={500} height={300} className="bg-no-repeat object-cover lg:w-[500px] fadeIn" />
                 <div className="flex flex-col lg:mt-[1rem]">
                     <div className="xl:w-[528px] lg:w-[400px] md:w-[640] fadeIn">
 
@@ -83,7 +84,7 @@ const Implementation = () => {
                                     </p>
                                 </div>
                             </div>
-                            <img src="/implementation-img-2.png" alt="solution" className="bg-no-repeat object-cover lg:mt-[2rem] lg:w-[500px]" />
+                            <Image src="/implementation-img-2.png" alt="solution" width={500} height={300} className="bg-no-repeat object-cover lg:mt-[2rem] lg:w-[500px]" />
                         </div>
                     </div>
  </div>

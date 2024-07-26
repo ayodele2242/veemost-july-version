@@ -7,8 +7,8 @@ interface ProductDetailsProps {
 }
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({ ingramPartNumber }) => {
-  const [productDetails, setProductDetails] = useState<any>(null); // Replace 'any' with your specific type
-  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  const [productDetails, setProductDetails] = useState<any>(null); 
+  const [loading, setLoading] = useState<boolean>(true); 
 
   useEffect(() => {
     const fetchDetails = async () => {

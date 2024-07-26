@@ -32,7 +32,7 @@ const Services = () => {
   </div>
   <div className="w-full lg:w-[862px] md:w-[600px] flex flex-col items-center gap-[16px] px-5">
     <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center pr-5">
-      VeeMost’s specialty is in architecting, deploying, and managing secure digital solutions 
+      VeeMost&apos;s specialty is in architecting, deploying, and managing secure digital solutions 
       and platforms for customers to be more efficient, profitable, and relevant in their businesses.
     </h2>
   </div>
@@ -51,11 +51,11 @@ const Services = () => {
            <Link href={"/services/strategy"} className="flex justify-center items-center w-[113px] h-[37px] rounded-[8px] bg-[#FFFCDE] cursor-pointer text-[#D6A912] 
            font-GilroyBold font-bold text-[14px] mt-[2rem]">Learn more</Link>
         </div>
-        <img src="/services-img-1.png" alt="Strategy" className="bg-no-repeat object-cover lg:w-[600px]" />
+        <Image src="/services-img-1.png" alt="Strategy" width={600} height={400} className="bg-no-repeat object-cover lg:w-[600px]" />
      </div>
 
      <div className="flex flex-col lg:flex-row mt-[6rem] lg:mx-auto justify-center gap-8">
-        <img src="/services-img-2.png" alt="solution" className="bg-no-repeat object-cover lg:w-[600px]" />
+        <Image src="/services-img-2.png" alt="solution" width={600} height={400} className="bg-no-repeat object-cover lg:w-[600px]" />
         <div className="flex flex-col lg:mt-[6rem]">
            <div className="xl:w-[500px] lg:w-[342px] md:w-[640]">
               <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] uppercase">SOLUTION DESIGN &amp; PLANNING</h2>
@@ -77,12 +77,12 @@ const Services = () => {
            className="flex justify-center items-center w-[113px] h-[37px] rounded-[8px] bg-[#FFFCDE] 
            cursor-pointer text-[#D6A912] font-GilroyBold font-bold text-[14px] mt-[2rem]">Learn more</Link>
            </div>
-        <img src="/services-img-3.png" alt="budgeting" className="bg-no-repeat object-cover lg:w-[600px]" />
+        <Image src="/services-img-3.png" alt="budgeting" width={600} height={400} className="bg-no-repeat object-cover lg:w-[600px]" />
      </div>
 
 
      <div className="flex flex-col lg:flex-row mt-[6rem] lg:mx-auto justify-center gap-8">
-        <img src="/services-img-4.png" alt="implementation" 
+        <Image src="/services-img-4.png" alt="implementation" width={600} height={400} 
         className="bg-no-repeat object-cover lg:w-[600px]" />
         <div className="flex flex-col lg:mt-[6rem]">
            <div className="xl:w-[500px] lg:w-[342px] md:w-[640]">
@@ -107,12 +107,12 @@ const Services = () => {
            cursor-pointer text-[#D6A912] font-GilroyBold font-bold text-[14px] mt-[2rem]">Learn more</Link>
           
         </div>
-        <img src="/services-img-5.png" alt="infrastructure" 
+        <Image src="/services-img-5.png" alt="infrastructure"  width={600} height={400}
         className="bg-no-repeat object-cover lg:w-[600px]" />
      </div>
 
      <div className="flex flex-col lg:flex-row mt-[6rem] lg:mx-auto justify-center gap-8">
-        <img src="/services-img-6.png" alt="Managed" className="bg-no-repeat object-cover lg:w-[600px]" />
+        <Image src="/services-img-6.png" alt="Managed" width={600} height={400} className="bg-no-repeat object-cover lg:w-[600px]" />
         <div className="flex flex-col lg:mt-[6rem]">
            <div className="xl:w-[500px] lg:w-[342px] md:w-[640]">
               <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] uppercase">MANAGED SERVICES</h2>
@@ -134,12 +134,12 @@ const Services = () => {
            className="flex justify-center items-center w-[113px] h-[37px] rounded-[8px] bg-[#FFFCDE] 
            cursor-pointer text-[#D6A912] font-GilroyBold font-bold text-[14px] mt-[2rem]">Learn more</Link>
         </div>
-        <img src="/services-img-7.png" alt="operational" 
+        <Image src="/services-img-7.png" alt="operational"  width={600} height={400}
         className="bg-no-repeat object-cover lg:w-[600px]" />
      </div>
 
      <div className="flex flex-col lg:flex-row mt-[6rem] lg:mx-auto justify-center gap-8">
-        <img src="/services-img-8.png" alt="protection"
+        <Image src="/services-img-8.png" alt="protection" width={600} height={400}
          className="bg-no-repeat object-cover lg:w-[600px]" />
         <div className="flex flex-col lg:mt-[6rem]">
            <div className="xl:w-[500px] lg:w-[342px] md:w-[640]">

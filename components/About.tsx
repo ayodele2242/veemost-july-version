@@ -6,6 +6,7 @@ import SubscribeForm from './SubscribeForm'
 import Container from './Container'
 import Link from 'next/link'
 import BrandIcons from './BrandIcons'
+import Image from 'next/image'
 
 const About = () => {
   return (
@@ -57,10 +58,11 @@ const About = () => {
                   addition, we also innovate new products.
                 </p>
                 <div className="bg-[#FFFCDE] p-4 flex gap-2 items-start">
-                  <img
+                  <Image
                     src="/icon.png"
                     alt="icon"
-                    
+                    width={"25"}
+                    height={"26"}
                   />
                   <p className="text-base text-[#858586] font-GilroyRegular">
                     VeeMost is committed to the success of
@@ -71,10 +73,12 @@ const About = () => {
                 </div>
               </div>
               <div className="w-full h-full">
-                <img
+                <Image
                   src="/about.png"
                   alt="about"
-                  className="w-full lg:w-[600px]"
+                  className="w-full lg:w-[700px]"
+                  width={"700"}
+                  height={"500"}
                 />
               </div>
             </div>
@@ -95,14 +99,19 @@ const About = () => {
 
     <div className="absolute w-full h-full left-[0] right-[0] top-[-200px] flex justify-center items-center z-0 vector-icons">
       <div className="relative w-full vectorBody">
-        <img src="/vector.png" className="w-full absolute left-0 right-0" />
-        <img src="/vectors/ellipse-1.png" className="absolute left-[50px] top-[118px]"   />
-        <img src="/vectors/ellipse-2.png" className="absolute left-[380px] top-[280px]" />
-        <img src="/vectors/ellipse-2.png" className="absolute left-[673px] top-[258px]" />
-        <img src="/vectors/ellipse-2.png" className="absolute left-[918px] top-[112px]" />
+        <Image 
+        alt="vector"
+        src="/vector.png" 
+        width={"1000"}
+        height={"200"}
+        className="w-full absolute left-0 right-0" />
+        <Image src="/vectors/ellipse-1.png" alt="Circle" width={"15"} height={"15"} className="absolute left-[50px] top-[118px]"   />
+        <Image src="/vectors/ellipse-2.png" alt="Circle" width={"15"} height={"15"} className="absolute left-[380px] top-[280px]" />
+        <Image src="/vectors/ellipse-2.png" alt="Circle" width={"15"} height={"15"} className="absolute left-[673px] top-[253px]" />
+        <Image src="/vectors/ellipse-2.png" alt="Circle" width={"15"} height={"15"} className="absolute left-[918px] top-[109px]" />
         
-        <img src="/vectors/ellipse-3.png" className="absolute right-[340px] top-[104px]" />
-        <img src="/vectors/ellipse-4.png" className="absolute right-[10px] top-[126px]" />
+        <Image src="/vectors/ellipse-3.png" alt="Circle" width={"15"} height={"15"} className="absolute right-[340px] top-[104px]" />
+        <Image src="/vectors/ellipse-4.png" alt="Circle" width={"15"} height={"15"} className="absolute right-[10px] top-[126px]" />
       </div>
     </div>
 

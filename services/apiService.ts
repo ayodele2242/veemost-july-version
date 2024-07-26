@@ -51,7 +51,9 @@ interface Product {
 }
 
 interface ProductResponse {
-  catalog: Product[];
+  catalog: {
+    catalog: Product[];
+  };
 }
 
 export const fetchProducts = async (pageSize: number, pageNumber: number): Promise<ProductResponse> => {
@@ -76,7 +78,7 @@ export const fetchProducts = async (pageSize: number, pageNumber: number): Promi
 export const fetchCategoryProducts = async (pageSize: number, pageNumber: number, category: string): Promise<any> => {
   try {
     const token = await getToken('ieljYW23S3CZKITfDFynkA3qAF7D3dy2', 'dFpwrJxph9T7szOc');
-    const response = await fetch(`${API_URL}catalog?pageSize=${pageSize}&pageNumber=${pageNumber}&type=IM%3A%3Aphysical&hasDiscounts=true&category=${encodeURIComponent(category)}`, {
+    const response = await fetch(`${API_URL}catalog?pageSize=${pageSize}&pageNumber=${pageNumber}&category=${encodeURIComponent(category)}`, {
       headers: getCommonHeaders(token) as HeadersInit,
     });
 
@@ -86,6 +88,25 @@ export const fetchCategoryProducts = async (pageSize: number, pageNumber: number
 
     const data = await response.json();
     return data;
+  } catch (error) {
+    console.error('Error fetching category products:', error);
+    throw error;
+  }
+};
+
+export const fetchVendorProducts = async (pageSize: number, pageNumber: number, vendorName: string): Promise<any> => {
+  try {
+    const token = await getToken('ieljYW23S3CZKITfDFynkA3qAF7D3dy2', 'dFpwrJxph9T7szOc');
+    const response = await fetch(`${API_URL}catalog?pageSize=${pageSize}&pageNumber=${pageNumber}&vendor=${encodeURIComponent(vendorName)}`, {
+      headers: getCommonHeaders(token) as HeadersInit,
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    return { catalog: data };
   } catch (error) {
     console.error('Error fetching category products:', error);
     throw error;
@@ -117,7 +138,7 @@ export const searchProductsAndCategories = async (pageSize: number, pageNumber:
   try {
       const token = await getToken('ieljYW23S3CZKITfDFynkA3qAF7D3dy2', 'dFpwrJxph9T7szOc');
       let keywordParams = keywords.map(keyword => `keyword=${encodeURIComponent(keyword)}`).join('&');
-      const response = await fetch(`${API_URL}catalog?pageSize=${pageSize}&pageNumber=${pageNumber}&type=IM%3A%3Aphysical&hasDiscounts=true${keywordParams ? `&${keywordParams}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`, {
+      const response = await fetch(`${API_URL}catalog?pageSize=${pageSize}&pageNumber=${pageNumber}${keywordParams ? `&${keywordParams}` : ''}${category ? `&category=${encodeURIComponent(category)}` : ''}`, {
           headers: getCommonHeaders(token) as HeadersInit,
       });
 
@@ -270,7 +291,41 @@ export const fetchProductImage = async (vendorName: string, partNumber: string):
 };
 
 
+export const getFreightEstimate = async (requestData: {
+  billToAddressId: string;
+  shipToAddressId: string;
+  shipToAddress: {
+    companyName: string;
+    addressLine1: string;
+    addressLine2?: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    countryCode: string;
+  };
+  lines: {
+    customerLineNumber: string;
+    ingramPartNumber: string;
+    quantity: string;
+    warehouseId: string;
+    carrierCode?: string;
+  }[];
+}): Promise<any> => {
+  try {
+    const token = await getToken('ieljYW23S3CZKITfDFynkA3qAF7D3dy2', 'dFpwrJxph9T7szOc');
+    const headers = await getCommonHeaders(token);
+    const response = await axios.post(
+      `${API_URL}/sandbox/resellers/v6/freightestimate`,
+      requestData,
+      { headers }
+    );
 
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching freight estimate:', error);
+    throw error;
+  }
+};
 
 
 /*export const fetchProductImage = async (vendorName: string, partNumber: string): Promise<string[]> => {

@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useImage } from '@/providers/ImageContext'; 
 import { Transition } from '@headlessui/react';
 import { UserAdd01Icon, MultiplicationSignIcon } from 'hugeicons-react'
+import Image from 'next/image'
 
 import {
     isUserLoggedIn,
@@ -76,7 +77,7 @@ const goToProduct = (path: string) => {
                            </h2>
                            {isLogin ? (
                                <button className="w-[139px] h-[53px] bg-[#D6A912] cursor-pointer text-[#FFFFFF] 
-                               font-SemiBold font-normal text-[14px] rounded-[8px] lg:mx-0 mx-auto" onClick={handleOpen}>Learn more</button>
+                               font-SemiBold font-normal text-[14px] rounded-[8px] lg:mx-0 mx-auto" onClick={handleOpen}>Configure</button>
                            ): (
                                <button className="w-[139px] h-[53px] bg-[#D6A912] cursor-pointer text-[#FFFFFF] 
                                font-SemiBold font-normal text-[14px] rounded-[8px] lg:mx-0 mx-auto" 
@@ -84,7 +85,7 @@ const goToProduct = (path: string) => {
                            )}
                            
                        </div>
-                       <img src='/config-img.png' alt="Serverimg" className="hidden lg:block bg-no-repeat object-cover 2xl:w-[50%]  md:w-[400px] lg:w-[524px] lg:h-[349px]" />
+                       <Image src='/config-img.png' alt="Serverimg" width={"600"} height={"350"} className="hidden lg:block bg-no-repeat object-cover 2xl:w-[50%]  md:w-[400px] lg:w-[524px] lg:h-[349px]" />
                    </div>
 
                </div>     

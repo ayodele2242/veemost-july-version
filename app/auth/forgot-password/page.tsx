@@ -1,14 +1,12 @@
-import Configurations from '@/components/Configurations'
-import Main from '@/components/configurtions/Main'
+import ForgotPwd from '@/components/auth/ForgotPwd'
 import React, { Suspense } from 'react'
 
-const ConfigPage = () => {
+const ForgotPassword = () => {
   return (
     <Suspense fallback={<div className="h-[100vh] w-full h-full flex justify-center text-center overlayer bg-white bg-opacity-50"></div>}>
-      <Main />
-    </Suspense>
-    
+        <ForgotPwd />
+    </Suspense>    
   )
 }
 
-export default ConfigPage
+export default ForgotPassword

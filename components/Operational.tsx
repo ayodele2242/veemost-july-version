@@ -6,6 +6,7 @@ import ContactForm from './ContactForm'
 import SubscribeForm from './SubscribeForm'
 import Footer from './Footer'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const Operational = () => {
   return (
@@ -35,7 +36,7 @@ const Operational = () => {
                     </h2>
                 </div>
                            
-               <img src="/services-img-7.png" alt="Strategy" 
+               <Image src="/services-img-7.png" alt="Strategy"  width={600} height={400} 
                className="bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[400px] lg:w-[524px] lg:h-[349px] fadeIn" />
             </div>
          </div>
@@ -47,17 +48,19 @@ const Operational = () => {
     <Container>
     <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
         <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-            <img src={"/operational-img.png"} alt="solution" 
+            <Image src={"/operational-img.png"} alt="solution"   width={600} height={400}
             className="bg-no-repeat xl:object-cover lg:object-contain object-cover fadeIn lg:w-[500px]" />
             <div className="flex flex-col  lg:mt-[3rem]">
                 <div className="xl:w-[528px] lg:w-[400px] md:w-[640]">
                     <p className="text-[#858586] font-GilroyRegular font-normal text-[16px]">Our support services allow you focus on what you do best and delegate 
-                    your operational support functions to us in order to significantly lower overhead costs and increase productivity.
+                    your operational support functions to us in order to significantly lower overhead costs and increase productivity.
                     </p>
                     <div className="bg-[#FFFCDE] p-4 flex gap-2 items-start my-4">
-                        <img
+                        <Image
                             src="/icon.png"
                             alt="icon"
+                            width={25}
+                            height={26}
                         />
                         <p className="text-base text-[#858586] font-GilroyRegular text-[16px]">
                         Our 20 year track record has seen us provide operational support to both Small, Medium and Large scale Enterprises.

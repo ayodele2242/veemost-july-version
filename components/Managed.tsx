@@ -6,6 +6,7 @@ import ContactForm from './ContactForm'
 import SubscribeForm from './SubscribeForm'
 import Footer from './Footer'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const Managed = () => {
   return (
@@ -33,7 +34,7 @@ const Managed = () => {
                         Our managed IT services guarantees a 999.99% Uptime.
                     </h2>
                 </div>
-               <img src="/services-img-6.png" alt="Strategy" 
+               <Image src="/services-img-6.png" alt="Strategy"  width={500} height={400}
                className="bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[400px] lg:w-[524px] lg:h-[349px] fadeIn fadeIn" />
             </div>
          </div>
@@ -46,7 +47,7 @@ const Managed = () => {
    
     <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
         <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-            <img src="/implementation-img-1.PNG" alt="solution" className="bg-no-repeat object-cover lg:w-[500px] fadeIn" />
+            <Image src="/implementation-img-1.PNG" alt="solution"  width={600} height={400} className="bg-no-repeat object-cover lg:w-[500px] fadeIn" />
             <div className="flex flex-col lg:mt-[2rem]">
                 <div className="xl:w-[528px] lg:w-[400px] md:w-[640]">
 
@@ -84,7 +85,7 @@ const Managed = () => {
                         </p>
                     </div>
                 </div>
-                <img src="/implementation-img-2.png" alt="solution" className="bg-no-repeat object-cover lg:mt-[2rem] lg:w-[500px] fadeIn" />
+                <Image src="/implementation-img-2.png" alt="solution"  width={600} height={400} className="bg-no-repeat object-cover lg:mt-[2rem] lg:w-[500px] fadeIn" />
             </div>
         </div>
     </div>
@@ -92,7 +93,7 @@ const Managed = () => {
 
     <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
         <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-            <img src="/manage-img-1.png" alt="solution" className="bg-no-repeat object-cover fadeIn lg:w-[500px]" />
+            <Image src="/manage-img-1.png" alt="solution"  width={600} height={400} className="bg-no-repeat object-cover fadeIn lg:w-[500px]" />
             <div className="flex flex-col lg:mt-[6rem]">
                 <div className="xl:w-[528px] lg:w-[400px] md:w-[640]">
 
@@ -133,7 +134,7 @@ const Managed = () => {
                                     </ul>
                                 </div>
                             </div>
-                            <img src="/manage-img-2.png" alt="solution" className="bg-no-repeat object-cover lg:mt-[2rem] fadeIn lg:w-[500px]" />
+                            <Image src="/manage-img-2.png" alt="solution"  width={600} height={400} className="bg-no-repeat object-cover lg:mt-[2rem] fadeIn lg:w-[500px]" />
                         </div>
                     </div>
                 </div>

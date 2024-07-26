@@ -17,6 +17,8 @@ import { Menu, Transition } from "@headlessui/react";
 import { ArrowRight01Icon, ArrowLeft01Icon } from 'hugeicons-react';
 import CartQuantityActionBtns from './cart-quantity-btn';
 import ProductDetails from './products/ProductDetails';
+import BuyNowBtns from './cart-buy-now-btn';
+
 
 const DEFAULT_IMAGE = "/no-image.png";
 
@@ -47,12 +49,13 @@ const ProductCard: React.FC = () => {
         setError(null); // Reset the error before fetching
         const data = await fetchProducts(pageSize, pageNumber);
 
+        const catalog = data.catalog?.catalog || [];
         // Filter products to only include those authorized to purchase
-        const authorizedProducts = data.catalog.filter(product => product.authorizedToPurchase === "True");
+        const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "True");
         setProducts(authorizedProducts);
 
         // Fetch images and price details asynchronously
-        authorizedProducts.forEach(async (product) => {
+        authorizedProducts.forEach(async (product: { vendorName: string; vendorPartNumber: string; ingramPartNumber: string; }) => {
           try {
             // Fetch product images
             const productImageUrls = await fetchProductImage(product.vendorName, product.vendorPartNumber);
@@ -238,8 +241,8 @@ const ProductCard: React.FC = () => {
                             
                             src={image}
                             alt={product.description + ' - '+product.vendorName+ ' - '+product.vendorPartNumber}
-                            layout="fill"
-                            objectFit="cover"
+                            layout="responsive" 
+                             objectFit="cover"
                           />
                           </Zoom>
                         </div>
@@ -249,7 +252,7 @@ const ProductCard: React.FC = () => {
                     <LazyImage
                       src={DEFAULT_IMAGE}
                       alt="Firewalls"
-                      layout="fill"
+                      layout="responsive" 
                       objectFit="cover"
                       
                     />
@@ -266,8 +269,10 @@ const ProductCard: React.FC = () => {
                 </div>
                 <div className="w-full bullet-btn"></div>
                 <div className="flex flex-col p-2 ">
+                <Link href={`/products/${encodeURIComponent(product.ingramPartNumber)}`}>
                   <h2 className="text-md font-bold line-clamp-1">{product.description}</h2>
-                  <div className='flex flex-col text-sm'>
+                </Link> 
+                <div className='flex flex-col text-sm'>
                     <p className='text-[12px]'>VPN: {product.vendorPartNumber}</p>
                     <p className='text-[12px]'>SKU: {product.ingramPartNumber}</p>
                   </div>
@@ -322,7 +327,10 @@ const ProductCard: React.FC = () => {
              >
                &times;
              </button>
-             <h2 className="text-2xl font-bold mb-4">{selectedProduct.description}</h2>
+            
+             <Link href={`/products/${encodeURIComponent(selectedProduct.ingramPartNumber)}`}>
+                  <h2 className="text-2xl font-bold line-clamp-1">{selectedProduct.description}</h2>
+                </Link> 
 
              <div className="flex flex-col lg:flex-row">
               <div className="flex-full lg:flex-[0_0_30%]">
@@ -340,7 +348,7 @@ const ProductCard: React.FC = () => {
                     <LazyImage
                       src={image}
                       alt={selectedProduct.description + ' - ' + selectedProduct.vendorName + ' - ' + selectedProduct.vendorPartNumber}
-                      layout="fill"
+                      layout="responsive" 
                       objectFit="cover"
                     />
                     </Zoom>
@@ -351,8 +359,8 @@ const ProductCard: React.FC = () => {
               <LazyImage
                       src={DEFAULT_IMAGE}
                       alt="Firewalls"
-                      layout="fill"
-                      objectFit="cover"
+                      layout="responsive" 
+                         objectFit="cover"
                     />
             )}
             </div>
@@ -371,9 +379,9 @@ const ProductCard: React.FC = () => {
 
                 <div className="flex flex-row gap-[16px] xl:w-full w-full mt-4">
                     <p className="text-[#858586] text-[12px] font-normal font-GilroyRegular flex gap-3 flex-wrap">
-                    <span className="text-[#121212]">VPN: <b>{selectedProduct?.vendorPartNumber}</b></span>
-                    <span className="text-[#121212]">   SKU: <b>{selectedProduct?.ingramPartNumber}</b></span>
-                    <span className="text-[#121212]">    UPC: <b>{selectedProduct?.upcCode}</b></span>
+                    <span className="text-[#121212]">VPN: <b>{selectedProduct?.vendorPartNumber}</b></span>
+                    <span className="text-[#121212]">   SKU: <b>{selectedProduct?.ingramPartNumber}</b></span>
+                    <span className="text-[#121212]">    UPC: <b>{selectedProduct?.upcCode}</b></span>
                     </p>
                 </div>
                 <div className="flex flex-col mt-8 justify-between">
@@ -381,14 +389,18 @@ const ProductCard: React.FC = () => {
                       $<span>{productDetails[selectedProduct?.ingramPartNumber]?.customerPrice}</span></h2>
                     <div>
                         <p className="text-[#858586] text-[14px] font-normal font-GilroyRegular">
-                          MSRP ${productDetails[selectedProduct?.ingramPartNumber]?.retailPrice}</p>
+                          MSRP ${productDetails[selectedProduct?.ingramPartNumber]?.retailPrice}</p>
                         <p className="text-[#858586] text-[14px] font-normal font-GilroyRegular">EXCL TAX</p>
                     </div>
                 </div>
                 <div className="flex mt-8 gap-5">
-                <button className="2xl:w-[40%] md:w-[40%] w-[191px] h-[53px] rounded-[8px] bg-[#D6A912] 
-                hover:bg-[#9a8439]  text-[white] font-bold text-[14px]" >Buy Now</button>
-                                        
+                
+                <BuyNowBtns 
+                product={selectedProduct} 
+                id={selectedProduct?.ingramPartNumber} 
+                amount={productDetails[selectedProduct?.ingramPartNumber]?.customerPrice} 
+                image={productImages[selectedProduct?.ingramPartNumber]?.[0]} />  
+
                 <CartQuantityActionBtns 
                 product={selectedProduct} 
                 id={selectedProduct?.ingramPartNumber} 
@@ -403,9 +415,9 @@ const ProductCard: React.FC = () => {
               </div>
                           
              </div>
-             <div className="">
-              <ProductDetails ingramPartNumber={selectedProduct.ingramPartNumber} />
-             </div>
+             {/*<div className="">
+              <ProductDetails ingramPartNumber={selectedProduct?.ingramPartNumber} />
+             </div>*/}
 
 
            </div>

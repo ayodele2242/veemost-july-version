@@ -81,7 +81,7 @@ if (Array.isArray(product?.technicalSpecifications)) {
       //setAttributeContent(url)
     }
 
-}, []);
+}, [product?.technicalSpecifications]);
 
 useEffect(() => {
   onLoad();

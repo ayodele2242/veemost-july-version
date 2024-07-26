@@ -9,9 +9,10 @@ import {
     fetchProductImage,
     fetchCategoryProducts,
     searchProducts,
-    searchProductsAndCategories
+    searchProductsAndCategories,
+    fetchVendorProducts
 } from '@/services/apiService';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import Breadcrumb from '../Breadcrumb';
 import SelectedCategoriesList from './SelectedCategoriesList';
 import { GridIcon, ListViewIcon } from 'hugeicons-react';
@@ -19,9 +20,14 @@ import GridView from './GridView';
 import ListView from './ListView';
 import { IngramProductDetailType, IngramProductType } from '@/types/types';
 import debounce from 'lodash.debounce';
-import router from 'next/router';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import Breadcrumbs from '../Breadcrumb';
+import HomeBottomText from '../HomeBottomText';
+import Container from '../Container';
 
 const ProductList: React.FC = () => {
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [products, setProducts] = useState<IngramProductType[]>([]);
@@ -37,6 +43,9 @@ const ProductList: React.FC = () => {
     const [startRecord, setStartRecord] = useState(0);
     const [endRecord, setEndRecord] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
+     const pathname = usePathname();
+     const nextSearchParams = new URLSearchParams(searchParams.toString())
+
 
     // Function to create a new query string with a given key/value pair
     const createQueryString = useCallback(
@@ -60,8 +69,8 @@ const ProductList: React.FC = () => {
         setSelectedCategories([]);
         if (search) {
             // Clear the search query parameter
-            searchParams.delete();
-            router.push({ search: searchParams.toString() });
+            nextSearchParams.delete('search')
+            router.replace(`${pathname}?${nextSearchParams}`)
         }
     };
 
@@ -93,7 +102,17 @@ const ProductList: React.FC = () => {
     
             try {
                 let data;
-                if (selectedCategories.length > 0 || search) {
+                let vendorName = '';
+
+                // Check if the search term matches specific vendor names
+                const vendorNames = ['Dell', 'Cisco', 'Meraki', 'Apple', 'Samsung'];
+                const matchedVendor = vendorNames.find(vendor => search && search.toLowerCase().includes(vendor.toLowerCase()));
+
+                if (matchedVendor) {
+                    // Fetch products for the matched vendor
+                    vendorName = matchedVendor;
+                    data = await fetchVendorProducts(itemsPerPage, pageNumber, vendorName);
+                } else if (selectedCategories.length > 0 || search) {
                     // Prepare keywords
                     const keywords = search ? [search, ...selectedCategories] : selectedCategories;
                     const category = selectedCategories.length === 1 ? selectedCategories[0] : '';
@@ -169,14 +188,22 @@ const ProductList: React.FC = () => {
     
         loadProducts();
     }, [pageNumber, itemsPerPage, selectedCategories, search]);
+
+    const breadcrumbs = [
+        { label: 'Home', href: '/' },
+        { label: 'Products', href: '/products' },
+
+      ];
     
     return (
         <main className="w-full overflow-hidden">
             <Header />
+           
             <div className="w-full p-5 flex flex-col">
-                <div className="w-full mb-4">
-                    {/* Breadcrumb Component <Breadcrumb /> */}
+                <div className="w-full">
+                <Breadcrumbs breadcrumbs={breadcrumbs} />
                 </div>
+                <HomeBottomText />
             </div>
 
             <div className="flex flex-wrap lg:flex-nowrap gap-6">
@@ -191,8 +218,7 @@ const ProductList: React.FC = () => {
                 {/* Products List Starts */}
                 <div className="w-full lg:w-3/4 p-3 flex flex-col gap-4" ref={containerRef}>
                 
-
-                    <div className="flex flex-row justify-between items-center p-5">
+                    <div className="flex flex-row justify-between items-center p-5">    
                         <div className="leftDiv flex flex-row gap-4 lg:gap-6 items-center">
                             {/*<span className="text-base lg:text-lg">{products.length} Products</span>*/}
                             {loading && (
@@ -219,6 +245,9 @@ const ProductList: React.FC = () => {
                             <GridIcon onClick={() => setLayoutType("grid")} />
                         </div>
                     </div>
+                <div className="flex w-full justify-center items-center">
+                 <Image src="/product-banner.png" alt="banner" width={600} height={250} className="w-full lg:h-[200px] lg:w-[700px]" />
+                </div>
 
                     {layoutType === "grid" ? (
                         <GridView
@@ -275,6 +304,7 @@ const ProductList: React.FC = () => {
                 </div>
                 {/* Products List Ends */}
             </div>
+           
             <Footer />
         </main>
     );

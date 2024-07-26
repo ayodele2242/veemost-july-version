@@ -6,6 +6,7 @@ import Container from './Container'
 import Footer from './Footer'
 import Link from 'next/link'
 import Header from './Header'
+import Image from 'next/image'
 
 const Solution = () => {
   return (
@@ -32,7 +33,7 @@ const Solution = () => {
                   </div>
                   <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center lg:text-left">We are experts at sourcing for solutions that are most efficient and budget friendly for our clients.</h2>
                </div>
-               <img src="/services-img-2.png" alt="Strategy" 
+               <Image src="/services-img-2.png" alt="Strategy" width={600} height={400}
                className="bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[400px] lg:w-[524px] lg:h-[349px] fadeIn" />
             </div>
          </div>
@@ -44,7 +45,7 @@ const Solution = () => {
     <Container>
       <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
          <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-            <img src="/solution-img-1.png" alt="solution" 
+            <Image src="/solution-img-1.png" alt="solution" width={600} height={400} 
             className="bg-no-repeat object-cover lg:w-[500px] fadeIn fadeInBottom" />
             <div className="flex flex-col lg:mt-[8rem]">
                <div className="xl:w-[528px] lg:w-[400px] md:w-[640] fadeInBottom">
@@ -64,7 +65,7 @@ const Solution = () => {
                      <p className="text-[#858586] font-GilroyRegular font-normal text-[16px]">VeeMost has the over 20 years of industry experience across the value-chain, and we provide end-to-end strategies to customers looking to use technology to optimize, build and run a resilient business operation and culture, and drive growth.</p>
                   </div>
                </div>
-               <img src="/solution-img-2.png" alt="solution" 
+               <Image src="/solution-img-2.png" alt="solution" width={600} height={400}
                className="bg-no-repeat object-cover lg:mt-[2rem] lg:w-[500px] fadeIn fadeInBottom" />
             </div>
          </div>
@@ -72,8 +73,8 @@ const Solution = () => {
 
       <div className="md:m-[4rem] m-[1rem]  xl:m-0">
          <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-            <img src="/solution-img-3.png" 
-            alt="solution" className="bg-no-repeat object-cover lg:w-[500px] fadeIn fadeInBottom" />
+            <Image src="/solution-img-3.png" 
+            alt="solution" width={600} height={400} className="bg-no-repeat object-cover lg:w-[500px] fadeIn fadeInBottom" />
             <div className="flex flex-col lg:mt-[8rem]">
                <div className="xl:w-[528px] lg:w-[400px] md:w-[640] fadeInBottom">
                   <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] uppercase">WE IDENTIFY NEEDS, REQUIREMENTS, AND STANDARDS. WE THEN DESIGN, DEPLOY, AND MAINTAIN THE SOLUTION.</h2>
@@ -92,7 +93,7 @@ const Solution = () => {
                      <p className="text-[#858586] font-GilroyRegular font-normal text-[16px]">Technology Consulting also known as innovation counseling, it is the way toward giving proficient innovation guidance to a business or association. It might involve recommending and actualizing certain product or equipment arrangements into the business or association keeping in mind the end goal to streamline certain procedures by expanding productivity and cutting expenses.</p>
                   </div>
                </div>
-               <img src="/solution-img-4.png" alt="solution" 
+               <Image src="/solution-img-4.png" alt="solution" width={600} height={400}
                className="bg-no-repeat object-cover lg:mt-[2rem] lg:w-[500px] fadeIn fadeInBottom" />
             </div>
          </div>

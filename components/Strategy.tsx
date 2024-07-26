@@ -6,6 +6,7 @@ import ContactForm from './ContactForm'
 import SubscribeForm from './SubscribeForm'
 import Footer from './Footer'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const Strategy = () => {
   return (
@@ -32,7 +33,7 @@ const Strategy = () => {
                   </div>
                   <h2 className="text-[#858586] font-GilroyRegular font-gilroy-regular font-normal text-[16px] text-center lg:text-left">We are experts at sourcing for solutions that are most efficient and budget friendly for our clients.</h2>
                </div>
-               <img src="/services-img-1.png" alt="Strategy" 
+               <Image src="/services-img-1.png" alt="Strategy" width={600} height={400}
                className="bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[400px] lg:w-[524px] lg:h-[349px] fadeIn" />
             </div>
          </div>
@@ -44,14 +45,14 @@ const Strategy = () => {
     <Container>
     <div className="md:m-[2rem] m-[1rem] md:pt-0 pt-[2rem] xl:m-0">
          <div className="flex flex-col-reverse lg:flex-row md:mt-[6rem] mt-[3rem]  lg:mx-auto justify-center gap-8">
-            <img src="/strategy.png" alt="solution"
+            <Image src="/strategy.png" alt="solution" width={600} height={400}
              className="bg-no-repeat object-cover lg:w-[500px]"/>
             <div className="flex flex-col">
                <div className="xl:w-[528px] lg:w-[400px] md:w-[640] fadeIn">
                   <h2 className="font-GilroySemiBold font-normal text-[#121212] text-[16px] uppercase">IDENTIFYING THE PROBLEM IS HALFWAY TO THE SOLUTION.</h2>
                   <p className="text-[#858586] font-GilroyRegular font-gilroy-regular font-normal text-[16px]">Now the other half is finding the right solution for that problem. Most organizations don’t take planning seriously, and not until their IT infrastructure suffers a breach or user experience and complaints get to an unmanageable level do they begin to do something about rectifying the problem.</p>
                   <div className="bg-[#FFFCDE] p-4 flex gap-2 items-start mt-4">
-                     <img src="/icon.png" alt="icon" />
+                     <Image src="/icon.png" alt="icon" width={25} height={26} />
                      <p className="text-base text-[#858586] font-GilroyRegular fadeIn">VeeMost Technology is not only adept at identifying present challenges to your IT Infrastructure but are capable of forecasting future challenges and creating solutions to resolve them.</p>
                   </div>
                </div>
