@@ -10,6 +10,12 @@ const nextConfig = {
               port: '',
               pathname: '/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'store.veemost.com',
+                port: '',
+                pathname: '/**',
+            }
           ],
   },
   async headers() {

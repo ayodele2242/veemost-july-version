@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { iStates, State } from '@/utils/getStateAbbreviation';
 import Image from 'next/image';
+import { useModal } from '@/contexts/ModalContext';
 
 
 interface ResponseDataItem {
@@ -24,6 +25,7 @@ const SignUp = () => {
     const [loading, setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { push } = useRouter();
+    const { openModal } = useModal();
 
     const [countries, setCountries] = useState<{ id: string; name: string }[]>([]);
     const [selectedCountry, setSelectedCountry] = useState("");
@@ -207,7 +209,8 @@ const SignUp = () => {
                     if (responseData.status === "error") {
                         toast.error("Error occurred: " + responseData.message);
                     } else if (responseData.status === true) {
-                        toast.success("Registration successful. Please check your email for activation link.");
+                        openModal('Registration successful. Please check your email for activation link.', 'success');
+                        
                         setFormData({
                             last_name: "",
                             first_name: "",
@@ -235,15 +238,17 @@ const SignUp = () => {
                     if (response.status === 400) {
                         const responseData = response.data;
                         if (responseData.status === "error") {
-                            toast.error(responseData.message);
+                            openModal(responseData.message, 'warning');
+                            //toast.error(responseData.message);
                         } else if (responseData.status === true) {
-                            toast.success("Unknown error occurred");
+                            openModal('Unknown error occurred', 'error');
+                           
                         }
                     }
                 }
             } catch (error) {
                 setIsLoading(false);
-                toast.error("An error occurred while Registering. Please try again later");
+                openModal('An error occurred while Registering. Please try again later', 'error');
             }
         }
     };
@@ -452,7 +457,8 @@ const SignUp = () => {
 
                            
                            <div className="flex flex-col gap-3">
-                            <div className="flex justify-left items-center">
+                            <div className="flex justify-left items-center gap-2">
+                            <label className="checkbox-btn">
                                 <input
                                     type="checkbox"
                                     name="agreement"
@@ -461,6 +467,8 @@ const SignUp = () => {
                                     onChange={handleChange}
                                     className="mr-2"
                                 />
+                                <span></span>
+                                </label>
 
                                 <label htmlFor="agreement" className="text-[#858586] text-[12px] font-GilroyMedium md:pt-1">
                                     By signing up you agree to our <a href="#" className="text-yellow-600">Terms and Conditions</a>

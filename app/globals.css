@@ -73,6 +73,62 @@
   font-weight: bold;
 }
 
+.radio-btn{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  background-color: transparent;
+  border-radius: 20px;
+  width: 100%;
+  font-weight: 400;
+  color: #c59a0d;
+}
+
+/* Checkbox Input */
+.checkbox-btn{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.checkbox-btn span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #ddd;
+  transition: 0.3s;
+}
+
+.checkbox-btn span::before {
+  /*content: '';
+  display: inline-block;
+  width: 24px;
+  height: 12px;
+  border-bottom: 3px solid #fff;
+  border-left: 3px solid #fff;
+  transform: scale(0) rotate(-45deg);*/
+  position: relative;
+  bottom: 4px;
+  transition: 0.6s;
+}
+
+.checkbox-btn input {
+  display: none;
+}
+
+.checkbox-btn input:checked ~ span {
+  background-color: #27C479;
+}
+
+.checkbox-btn input:checked ~ span::before {
+  transform: scale(1) rotate(-45deg);
+}
+
+
 
 /* Styling the horizontal scrollbar */
 ::-webkit-scrollbar {

@@ -10,12 +10,15 @@ import { Search01Icon, MultiplicationSignIcon,
 import { getUserData, isUserLoggedIn, redirectToLoginPage } from '@/auth/auth';
 import { useImage } from '@/providers/ImageContext';
 
+
  
 
 const UserTopMenu = () => {
   const userData = getUserData();
   
   const [isLogin, setIsLogin] = useState(false);
+  const { uploadedImage, uploadStatus, resetUploadStatus } = useImage();
+  const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const profileName =
       userData && userData.profile_name ? userData.profile_name : "Guest"
   useEffect(() => {
@@ -38,6 +41,16 @@ const UserTopMenu = () => {
     }
     return text;
   };
+
+  useEffect(() => {
+    // Check if localStorage is available (client-side)
+    if (typeof window !== 'undefined' && localStorage.getItem('uploadedImage')) {
+      const img = localStorage.getItem('uploadedImage');
+      setProfilePicture(img);
+    } else {
+      setProfilePicture(uploadedImage);
+    }
+  }, [uploadedImage]);
 
   return (
     <div className="flex flex-col gap-1">
@@ -89,16 +102,32 @@ const UserTopMenu = () => {
 
           <div className="py-1">
 
-            <div className="flex items-center cursor-pointer mx-2 gap-1">
+            <div className="flex items-center cursor-pointer mx-2 gap-1 py-3">
 
-            <Image 
-                src={userData?.profilePicture || '/login-img.jpg'} 
-                alt="Profile" 
-                width="20" 
-                height="20" 
-                className="w-6 h-6 md:w-8 md:h-8 rounded-full" 
-              />
-              <div className="hidden lg:flex items-left flex-col">
+           
+                 {profilePicture && (
+                
+                <Image 
+                  src={profilePicture} 
+                  alt="Profile" 
+                  width="20" 
+                  height="20" 
+                  className="w-6 h-6 md:w-8 md:h-8 rounded-full" 
+                />
+              )}
+              {!profilePicture && (
+                 <Image 
+                 src={'/no-image-icon.png'} 
+                 alt="Profile" 
+                 width="20" 
+                 height="20" 
+                 className="w-6 h-6 md:w-8 md:h-8 rounded-full" 
+               />
+                
+              )}
+
+
+              <div className="hidden lg:flex items-left flex-col gap-2">
 
                 <span className="userText text-sm truncate">Welcome Back, <span>{truncateText(profileName, 12)}</span></span>
                 <div className="font-bold text-sm flex flex-row gap-1 text-red-600" onClick={ redirectToLoginPage } ><Logout02Icon size={17} /> Logout </div>

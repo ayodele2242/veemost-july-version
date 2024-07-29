@@ -232,128 +232,47 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
 
                 // Check if details is undefined
                 if (!details) return (
-                    <div key={product.ingramPartNumber} className="px-2 mb-5 rounded-xl duration-500 hover:scale-105 
-                    hover:shadow-xl">
-                        <div className="flex flex-wrap md:-mx-2">
-                            <div className="w-full md:w-1/2 lg:w-1/5 px-2 mb-4 md:mb-0">
-                                <div className="relative">
-                                    <div className="h-26 rounded-lg bg-default-300 mt-3">
-                                        <LazyImage
-                                            src={DEFAULT_IMAGE}
-                                            alt="No Details Available"
-                                            layout="responsive" 
-                                             objectFit="cover"
-                                        />
-                                    </div>
-                                    <div className="favourite absolute top-5 left-2">
-                                        <FavouriteIcon
-                                            onClick={() => handleAddToFavorites(product?.ingramPartNumber || '')}
-                                            className=""
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="w-full md:w-1/2 lg:w-1/2 px-2 mb-4 md:mb-0">
-                                <div className="">
-                                    <div className="mb-2 text-lg font-bold">
-                                        <Link href={`/product-details/${encodeURIComponent(product.ingramPartNumber)}`} className="text-lg">
-                                            {product.description}
-                                        </Link>
-                                    </div>
-                                   
-                                    <div className="product-description text-sm font-normal" dangerouslySetInnerHTML={{ __html: highlightText(product.extraDescription, search) }} />
-                                    <div className="w-full mt-2">
-                                        <div className="flex justify-left gap-3 text-xs">
-                                            <span className="uppercase">
-                                                <b>VPN:</b> {product.vendorPartNumber}
-                                            </span>
-                                            <span className="uppercase">
-                                                <b>SKU:</b> {product.ingramPartNumber}
-                                            </span>
-                                            <span className="uppercase">
-                                                <b>UPC:</b> {product.upcCode}
-                                            </span>
-                                        </div>
-                                       
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="w-full md:w-1/2 lg:w-1/5 px-2 mb-4 md:mb-0 lg:ml-8">
-                                
-                                <div className="">
-                                    <div className="h-24">
-                                        <div className="">
-                                            <h6 className="text-1xl lg:text-2xl font-bold mb-3">
-                                                {new Intl.NumberFormat('en-US', {
-                                                    style: 'currency',
-                                                    currency: 'USD',
-                                                }).format(0.0)}
-                                            </h6>
-                                            <p className="text-[14px] font-normal">MSRP {new Intl.NumberFormat('en-US', {
-                                                style: 'currency',
-                                                currency: 'USD',
-                                            }).format(0.0)} </p>
-                                            <p className="text-[14px] font-normal">EXCL TAX</p>
-                                        </div>
-                                        {/*<div className="itemListMe">
-                                            <CartQuantityActionBtns 
-                                                product={product} 
-                                                id={product?.ingramPartNumber} 
-                                                amount={0.0} 
-                                                image={DEFAULT_IMAGE} />
-                                        </div>*/}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-
-                const retailPrice = details.retailPrice ?? 0;
-                const customerPrice = details.customerPrice ?? 0;
-                const discount = details.discount ?? 0;
-
-                return (
-                    <div className="px-2 mb-5 rounded-xl duration-500 hover:scale-105 hover:shadow-xl" 
-                    key={product.ingramPartNumber}>
-                        <div className="flex flex-wrap md:-mx-2">
-                            <div className="w-full md:w-1/2 lg:w-1/5 px-2 mb-4 md:mb-0">
-                                <div className="relative">
-                                    <div className="h-29 rounded-lg bg-default-300 mt-3">
-                                        {images.length > 0 ? (
-                                            <Slider {...sliderSettings} className="slider">
-                                                {images.slice(0, 4).map((image, index) => (
-                                                    <div key={index} className='slide'>
-                                                        <Zoom>
-                                                            <LazyImage
-                                                                src={image}
-                                                                alt={product.description + ' - '+product.vendorName+ ' - '+product.vendorPartNumber}
-                                                                layout="responsive"
-                                                                objectFit="cover"
-                                                            />
-                                                        </Zoom>
-                                                    </div>
-                                                ))}
-                                            </Slider>
-                                        ) : (
+                    <div className="flex flex-col lg:flex-row duration-500 hover:scale-105 hover:shadow-xl mb-3 gap-3 py-3 px-3 justify-center items-center" key={product.ingramPartNumber}>
+                    {/* Image Container */}
+                    <div className="lg:w-[20%] sm:w-[20%] w-full relative">
+                        {images.length > 0 ? (
+                            <Slider {...sliderSettings} className="slider">
+                                {images.slice(0, 4).map((image, index) => (
+                                    <div key={index} className='slide'>
+                                        <Zoom>
                                             <LazyImage
-                                                src={DEFAULT_IMAGE}
-                                                alt="No Image Available"
-                                                layout="responsive" 
-                                                 objectFit="cover"
+                                                src={image}
+                                                alt={product.description + ' - '+product.vendorName+ ' - '+product.vendorPartNumber}
+                                                layout="responsive"
+                                                objectFit="cover"
                                             />
-                                        )}
+                                        </Zoom>
                                     </div>
-                                    <div className="favourite absolute top-5 lg:top-2 left-2">
-                                        <FavoriteBorderOutlinedIcon
-                                            onClick={() => handleAddToFavorites(product?.ingramPartNumber || '')}
-                                            className=""
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="w-full md:w-1/2 lg:w-1/2 px-2 mb-4 md:mb-0">
-                                <div className="">
+                                ))}
+                            </Slider>
+                        ) : (
+                            <LazyImage
+                                src={DEFAULT_IMAGE}
+                                alt="No Image Available"
+                                layout="responsive" 
+                                    objectFit="cover"
+                            />
+                        )}
+                         <div className="favourite absolute top-5 lg:top-2 left-2">
+                            <FavoriteBorderOutlinedIcon
+                                onClick={() => handleAddToFavorites(product?.ingramPartNumber || '')}
+                                className=""
+                            />
+                         </div>
+                    </div>
+                  
+                    {/* Right Div */}
+                    <div className="lg:w-[80%] sm:w-[100%] w-full">
+                      
+                      <div className="flex flex-col lg:flex-row gap-4">
+                
+                      <div className="lg:w-[80%] sm:w-[100%] w-full flex flex-col justify-center">
+
                                     <div className="mb-2 text-lg font-bold">
                                         <Link href={`/products/${encodeURIComponent(product.ingramPartNumber)}`} 
                                         className="text-lg">
@@ -376,13 +295,123 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                         </div>
                                         
                                     </div>
-                                </div>
-                            </div>
-                            <div className="w-full md:w-1/2 lg:w-1/5 px-2 mb-4 md:mb-0 lg:ml-8">
-                               
-                                <div className="">
-                                    <div className="h-24">
-                                        <div className="">
+
+
+                      </div>
+                
+                      <div className="lg:w-[20%] sm:w-[100%] w-full flex flex-col">
+
+                      <div className="">
+                      <h6 className="text-1xl lg:text-2xl font-bold mb-3">
+                                                {new Intl.NumberFormat('en-US', {
+                                                    style: 'currency',
+                                                    currency: 'USD',
+                                                }).format(0.0)}
+                                            </h6>
+                                            <p className="text-[14px] font-normal">MSRP {new Intl.NumberFormat('en-US', {
+                                                style: 'currency',
+                                                currency: 'USD',
+                                            }).format(0.0)} </p>
+                                            <p className="text-[14px] font-normal">EXCL TAX</p>
+                                        </div>
+                                        <div className="itemListMe mt-2 flex gap-2 flex-wrap lg:flex-row justify-beteem items-center">
+                                            {/*<BuyNowBtns  product={product} 
+                                                id={product?.ingramPartNumber} 
+                                                amount={customerPrice} 
+                                                image={images[0] || DEFAULT_IMAGE} />
+
+                                            <CartQuantityActionBtns 
+                                                product={product} 
+                                                id={product?.ingramPartNumber} 
+                                                amount={customerPrice} 
+                                                image={images[0] || DEFAULT_IMAGE} />*/}
+
+                                        </div>
+
+
+                      </div>
+                
+                      </div>
+                      
+                    </div>
+                  </div>
+                );
+
+                const retailPrice = details.retailPrice ?? 0;
+                const customerPrice = details.customerPrice ?? 0;
+                const discount = details.discount ?? 0;
+
+                return (
+                  <div className="flex flex-col lg:flex-row duration-500 hover:scale-105 hover:shadow-xl mb-3 gap-3 py-3 px-3 justify-center items-center" key={product.ingramPartNumber}>
+                    {/* Image Container */}
+                    <div className="lg:w-[20%] sm:w-[20%] w-full relative">
+                        {images.length > 0 ? (
+                            <Slider {...sliderSettings} className="slider">
+                                {images.slice(0, 4).map((image, index) => (
+                                    <div key={index} className='slide'>
+                                        <Zoom>
+                                            <LazyImage
+                                                src={image}
+                                                alt={product.description + ' - '+product.vendorName+ ' - '+product.vendorPartNumber}
+                                                layout="responsive"
+                                                objectFit="cover"
+                                            />
+                                        </Zoom>
+                                    </div>
+                                ))}
+                            </Slider>
+                        ) : (
+                            <LazyImage
+                                src={DEFAULT_IMAGE}
+                                alt="No Image Available"
+                                layout="responsive" 
+                                    objectFit="cover"
+                            />
+                        )}
+                         <div className="favourite absolute top-5 lg:top-2 left-2">
+                            <FavoriteBorderOutlinedIcon
+                                onClick={() => handleAddToFavorites(product?.ingramPartNumber || '')}
+                                className=""
+                            />
+                         </div>
+                    </div>
+                  
+                    {/* Right Div */}
+                    <div className="lg:w-[80%] sm:w-[100%] w-full">
+                      
+                      <div className="flex flex-col lg:flex-row gap-4">
+                
+                      <div className="lg:w-[70%] sm:w-[100%] w-full flex flex-col justify-center">
+
+                                    <div className="mb-2 text-lg font-bold">
+                                        <Link href={`/products/${encodeURIComponent(product.ingramPartNumber)}`} 
+                                        className="text-lg">
+                                            {product.description}
+                                        </Link>
+                                    </div>
+                                    <div className="product-description text-sm font-normal" dangerouslySetInnerHTML={{ __html: highlightText(product.extraDescription, search) }} />
+                                   
+                                    <div className="w-full mt-3">
+                                        <div className="flex justify-left gap-3 text-xs">
+                                            <span className="uppercase">
+                                                <b>VPN:</b> {product.vendorPartNumber}
+                                            </span>
+                                            <span className="uppercase">
+                                                <b>SKU:</b> {product.ingramPartNumber}
+                                            </span>
+                                            <span className="uppercase">
+                                                <b>UPC:</b> {product.upcCode}
+                                            </span>
+                                        </div>
+                                        
+                                    </div>
+
+
+                      </div>
+                
+                      <div className="lg:w-[30%] sm:w-[100%] w-full flex flex-col">
+
+                     
                                             {customerPrice > 0 ? (
                                                 <>
                                                     <h6 className="text-xl lg:2xl font-bold mb-3">
@@ -408,8 +437,8 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                                     }).format(0.0)}
                                                 </h6>
                                             )}
-                                        </div>
-                                        <div className="itemListMe mt-2 flex gap-2">
+
+                                       <div className="flex mt-2 flex gap-2 flex-wrap lg:flex-row md:flex-row justify-beteem items-center">
                                             <BuyNowBtns  product={product} 
                                                 id={product?.ingramPartNumber} 
                                                 amount={customerPrice} 
@@ -422,11 +451,16 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                                 image={images[0] || DEFAULT_IMAGE} />
 
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        </div>
+                                       
+
+
+                  
+                
+                      </div>
+                      
                     </div>
+                  </div>
                 );
             })}
             <ToastContainer />

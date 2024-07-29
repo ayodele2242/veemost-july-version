@@ -86,7 +86,7 @@ const CartQuantityActionBtns: React.FC<CartQuantityActionBtnsProps> = ({ product
   };
 
   return (
-    <div className="flex items-center w-[100px]">
+    <>
       {isInCart ? (
         <div className="flex self-center items-center justify-center gap-2">
           <button
@@ -107,10 +107,17 @@ const CartQuantityActionBtns: React.FC<CartQuantityActionBtnsProps> = ({ product
           </button>
         </div>
       ) : (
-        <button className="lg:w-[130px] w-[106px] h-[53px] rounded-[8px] bg-[#FFFCDE] hover:bg-[#e9e6c3] 
-        text-[#D6A912] font-bold text-[14px]" onClick={_handleAddToCart}>Add to cart</button>
+        
+        <button
+        className="2xl:w-[40%] md:w-[100%] w-[210px] h-[53px] rounded-[8px] bg-lightBg text-primaryText font-bold text-[14px]"
+        onClick={_handleAddToCart}
+      >
+        Add to cart
+      </button>
+      
+       
       )}
-    </div>
+    </>
   );
 };
 

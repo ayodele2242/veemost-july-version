@@ -18,7 +18,7 @@ interface BreadcrumbsProps {
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ breadcrumbs, loading }) => {
   return (
     <nav aria-label="Breadcrumb">
-      <ul className="flex space-x-2 text-sm text-gray-700">
+      <ul className="flex space-x-2 text-[16px] text-gray-700">
         {breadcrumbs.map((breadcrumb, index) => (
           <li key={index} className="flex items-center">
             {index < breadcrumbs.length - 1 ? (

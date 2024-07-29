@@ -37,7 +37,7 @@ const Login = () => {
 
     useEffect(() => {
         if (isLogin) {
-            push("/account/my_orders"); // Redirect to dashboard if already logged in
+            push("/account/orders"); // Redirect to dashboard if already logged in
         }
     }, [isLogin, push]);
 
@@ -90,14 +90,14 @@ const Login = () => {
                 if (responseData.status === "error") {
                     toast.error("Error occurred: " + responseData.message);
                 } else if (responseData.status === "success") {
-                    toast.success("Login successful");
+                    toast.success("Login you in. Please wait...");
                     if (responseData.token) {
                         localStorage.setItem("token", responseData.token);
                     }
                     localStorage.setItem("user", JSON.stringify(responseData.userinfo));
                     localStorage.setItem('uploadedImage', responseData.image.toString());
                     localStorage.setItem('expire_period', responseData.xpire.toString());
-                    push("/account/my_orders");
+                    push("/account/orders");
                 }
             } else {
                 setIsLoading(false);
@@ -176,8 +176,11 @@ const Login = () => {
 
                         <div className="mb-4 flex flex-row justify-between">
                             <div className="flex flex-row gap-1">
+                            <label className="checkbox-btn">
                                 <input type='checkbox' />
-                                <label htmlFor="remember_me" className="text-[#858586] font-GilroyMedium">Remember me</label>
+                                <span></span>
+                                Remember me
+                                </label>
                             </div>
                             <Link href="/auth/forgot-password">
                                 <h2 className="text-[#121212] font-gilroy-medium cursor-pointer">Forgot Password</h2>
@@ -204,7 +207,7 @@ const Login = () => {
             </div>
 
             <div
-                className="right flex flex-1 items-center justify-center hidden lg:flex h-screen bg-red-500"
+                className="right flex flex-1 items-center justify-center hidden lg:flex h-screen"
                 style={{
                     backgroundImage: "url('/login-img.jpg')",
                     backgroundPosition: 'center center',

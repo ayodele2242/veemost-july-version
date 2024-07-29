@@ -295,7 +295,7 @@ const ProductList: React.FC = () => {
                 <HomeBottomText />
             </div>
 
-            <div className="flex flex-wrap lg:flex-nowrap gap-6">
+            <div className="flex flex-wrap lg:flex-nowrap mx-auto py-10 px-4">
                 {/* Categories List Starts */}
                 <div className="hidden lg:block lg:w-1/4 p-5">
                     <Menus 

@@ -81,7 +81,7 @@ const BuyNowBtns: React.FC<CartQuantityActionBtnsProps> = ({ product, id, hideBu
   return (
     <>
       <button
-        className="2xl:w-[40%] md:w-[40%] w-[191px] h-[53px] rounded-[8px] bg-primaryBg text-white font-bold text-[14px]"
+        className="2xl:w-[40%] md:w-[100%] w-[210px] h-[53px] rounded-[8px] bg-primaryBg text-white font-bold text-[14px]"
         onClick={_handleAddToCart}
       >
         Buy Now

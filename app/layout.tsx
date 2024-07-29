@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ImageProvider } from "@/providers/ImageContext";
+import { ModalProvider } from '../contexts/ModalContext';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,6 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" >
+      <ModalProvider>
       <ImageProvider>
         <body className={inter.className} suppressHydrationWarning>
           
@@ -23,6 +25,7 @@ export default function RootLayout({
           
         </body>
         </ImageProvider>
+        </ModalProvider>
     </html>
   );
 }

@@ -216,13 +216,29 @@ useEffect(() => {
             
           {isLogin ? (
             <MenuButton className="flex items-center cursor-pointer mx-2 gap-1">
-              <Image 
-                src={userData?.profilePicture || '/login-img.jpg'} 
-                alt="Profile" 
-                width="20" 
-                height="20" 
-                className="w-6 h-6 md:w-8 md:h-8 rounded-full" 
-              />
+
+                 {profilePicture && (
+                
+                  <Image 
+                    src={profilePicture} 
+                    alt="Profile" 
+                    width="20" 
+                    height="20" 
+                    className="w-6 h-6 md:w-8 md:h-8 rounded-full" 
+                  />
+                )}
+                {!profilePicture && (
+                   <Image 
+                   src={'/no-image-icon.png'} 
+                   alt="Profile" 
+                   width="20" 
+                   height="20" 
+                   className="w-6 h-6 md:w-8 md:h-8 rounded-full" 
+                 />
+                  
+                )}
+
+              
               <div className="hidden lg:flex items-left flex-col">
 
                 <span className="userText text-sm truncate">Hi <span>{truncateText(profileName, 12)}</span></span>
