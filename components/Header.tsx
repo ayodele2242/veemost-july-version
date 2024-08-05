@@ -55,6 +55,7 @@ const Header: React.FC = () => {
           if (typeof window === 'undefined') return false;
           const loggedIn = isUserLoggedIn();
           setIsLogin(loggedIn);
+          
     
           if (loggedIn) {
            

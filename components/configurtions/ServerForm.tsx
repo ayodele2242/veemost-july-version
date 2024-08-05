@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AddCircleIcon, Delete01Icon, Delete02Icon, MultiplicationSignIcon } from 'hugeicons-react';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ApiRequestService } from "@/services/apiRequest.service";
+import { getUserData, isUserLoggedIn } from '@/auth/auth';
+import { MyProfile } from '@/types/types';
+import { useModal } from '@/contexts/ModalContext';
 
 interface ResponseDataItem {
   status: string;
@@ -64,13 +67,33 @@ interface ServerFormProps {
 }
 
 const ServerForm: React.FC = () => {
-
+  const { openModal } = useModal();
   const [customStorageType, setCustomStorageType] = useState('');
   const [selectedStorageType, setSelectedStorageType] = useState(null);
   const [showInput, setShowInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const userData = getUserData();
+  const [isLogin, setIsLogin] = useState(false);
+ 
+  const [profile, setProfile] = React.useState<MyProfile | null>(null);
 
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      if (typeof window === 'undefined') return false;
+      const loggedIn = isUserLoggedIn();
+      setIsLogin(loggedIn);
+
+      if (loggedIn) {
+        const profile = userData as MyProfile;
+         setProfile(profile); 
+      }else{
+        setProfile(null);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
 
  
   const [servers, setServers] = useState<Server[]>([
@@ -567,14 +590,14 @@ const ServerForm: React.FC = () => {
     event.preventDefault();
 
     const data = { 
-      email: "",
-      name: "",
-      phone_number: "",
+      email: profile?.email,
+      name: profile?.last_name + ' '+profile?.first_name,
+      phone_number: profile?.phone,
       billing_address: basicDetails.billing_address,
       shipping_address: basicDetails.shipping_address,
       bill_to_name: basicDetails.bill_to_name,
       servers: servers.map((server, index) => ({
-        server: index + 1, // Assuming server number starts from 1
+        server: index + 1,
         brand: server.brand,
         processor_manufacturer: server.processor_manufacturer,
         gpu_brand: server.gpu_brand,
@@ -590,7 +613,7 @@ const ServerForm: React.FC = () => {
         additional_notes: server.additional_notes,
         server_type: server.server_type,
         server_form_factor: server.server_form_factor,
-        server_quantity: server.server_quantity,
+        quantity: server.server_quantity,
       }))
     };
     
@@ -602,7 +625,9 @@ const ServerForm: React.FC = () => {
       const responseData = response.data;
 
       if (responseData.status === true) {
-        toast.success(responseData.message);
+      // toast.success(responseData.message);
+       openModal(responseData.message, 'success'); 
+
         // Reset form data on success
       setBasicDetails({
         billing_address: '',

@@ -95,7 +95,8 @@ interface AvailabilityByWarehouse {
     availability: number;
     retailPrice: number;
     customerPrice: number;
-    discount?: any 
+    discount?: any;
+    warehouseId?: string
   }
 
   interface CartItem {
@@ -110,6 +111,7 @@ interface AvailabilityByWarehouse {
     detail?: string;
     descr?: string;
     VeeCartItem?: string,
+    warehouseId?: string
   }
 
   interface FormData {
@@ -185,6 +187,19 @@ interface AvailabilityByWarehouse {
     pageNumber: number;
     data: Product[];
   }
+
+
+  interface UserProfile {
+    user_id: number;
+    account_type: string;
+    xpire: number;
+    phone: string;
+    email: string;
+    country: string;
+    first_name: string;
+    last_name: string;
+    profile_name: string;
+  }
   
   export type VeeProductType = Product;
   export type VeeApiResponse = ApiResponse;
@@ -193,3 +208,4 @@ interface AvailabilityByWarehouse {
   export type VeeCheckoutFormData = FormData;
   export type IngramProductType = IngramProduct;
   export type IngramProductDetailType = IngramProductDetails;
+  export type MyProfile = UserProfile;

@@ -235,6 +235,7 @@ const sendProductToBackend = async (productId: string) => {
                 const retailPrice = details?.retailPrice ?? 0;
                 const customerPrice = details?.customerPrice ?? 0;
                 const discount = details?.discount ?? 0;
+                const warehouseId = details?.warehouseId ?? '';
 
             
 
@@ -302,13 +303,15 @@ const sendProductToBackend = async (productId: string) => {
                                 <BuyNowBtns  product={product} 
                                                 id={product?.ingramPartNumber} 
                                                 amount={customerPrice} 
-                                                image={images[0] || DEFAULT_IMAGE} />
+                                                image={images[0] || DEFAULT_IMAGE} 
+                                                warehouseId={warehouseId}/>
 
                                 <CartQuantityActionBtns 
                                     product={product} 
                                     id={product.ingramPartNumber} 
                                     amount={customerPrice} 
-                                    image={images[0] || DEFAULT_IMAGE} />
+                                    image={images[0] || DEFAULT_IMAGE} 
+                                    warehouseId={warehouseId}/>
                             </div>
                         </div>
                     </div>

@@ -30,7 +30,7 @@ const LazyImage: React.FC<LazyImageProps> = ({ src, alt, layout, objectFit }) =>
       </div>
       )}
 
-      {/*<img src={src}
+      {/*<img src={src} 
         alt={alt} 
         style={{ width: '100%', maxWidth: '100%', height: '100%'}}  
         className={`${isLoading ? styles.hidden : ''} ${styles.image} fadeIn group-hover:scale-110 duration-300`}

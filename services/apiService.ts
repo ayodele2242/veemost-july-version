@@ -333,7 +333,7 @@ export const getFreightEstimate = async (requestData: {
     const token = await getToken('ieljYW23S3CZKITfDFynkA3qAF7D3dy2', 'dFpwrJxph9T7szOc');
     const headers = await getCommonHeaders(token);
     const response = await axios.post(
-      `${API_URL}/sandbox/resellers/v6/freightestimate`,
+      `${API_URL}freightestimate`,
       requestData,
       { headers }
     );
@@ -344,6 +344,9 @@ export const getFreightEstimate = async (requestData: {
     throw error;
   }
 };
+
+
+
 
 
 /*export const fetchProductImage = async (vendorName: string, partNumber: string): Promise<string[]> => {

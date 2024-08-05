@@ -26,6 +26,18 @@ import Breadcrumbs from '../Breadcrumb';
 import HomeBottomText from '../HomeBottomText';
 import Container from '../Container';
 
+interface Warehouse {
+    quantityAvailable: number;
+    warehouseId: string | null;
+    location: string;
+    quantityBackordered: number;
+    quantityBackorderedEta: string | null;
+    quantityOnOrder: number | null;
+    backOrderInfo: string | null;
+    leadTimeEta: string | null;
+  }
+  
+
 const ProductList: React.FC = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -47,6 +59,7 @@ const ProductList: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
      const pathname = usePathname();
      const nextSearchParams = new URLSearchParams(searchParams.toString())
+     const [warehouseId, setWareHouseId] = useState<any>(null);
 
 
     // Function to create a new query string with a given key/value pair
@@ -193,17 +206,37 @@ const ProductList: React.FC = () => {
                             ...prevImages,
                             [product.ingramPartNumber]: productImageUrls,
                         }));
-    
-                        // Fetch product details
+                
+                        // Fetch product details 
                         const priceAvailability = await fetchProductPrice(product.ingramPartNumber);
                         const details = priceAvailability[0];
                         const productAvailability = details.availability.totalAvailability;
                         const retailPrice = details.pricing.retailPrice;
+                        const warehouseIdDetails = details.availability.availabilityByWarehouse;
+                       // console.log("Warehouse Details ",JSON.stringify(details));
+                
+                        let highestAvailabilityWarehouse = null;
+                
+                        // Check if availabilityByWarehouse is not null
+                        if (warehouseIdDetails !== null) {
+                            // Filter out warehouses with a null warehouseId
+                            const validWarehouses = warehouseIdDetails.filter(
+                                (warehouse: Warehouse) => warehouse.warehouseId !== null
+                            );
+                
+                            // Find the warehouse with the highest quantity available
+                            highestAvailabilityWarehouse = validWarehouses.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) =>
+                                prev.quantityAvailable > curr.quantityAvailable ? prev : curr
+                            );
+                        }
+                
+                        setWareHouseId(highestAvailabilityWarehouse);
+                
                         const customerPriceWithMarkup = details.pricing.customerPrice * 1.06;
                         const discount = (retailPrice > customerPriceWithMarkup)
                             ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
                             : 0;
-    
+                
                         setProductDetails(prevDetails => ({
                             ...prevDetails,
                             [product.ingramPartNumber]: {
@@ -211,13 +244,15 @@ const ProductList: React.FC = () => {
                                 availability: productAvailability,
                                 retailPrice,
                                 customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
-                                discount: parseFloat(discount.toFixed(2))
+                                discount: parseFloat(discount.toFixed(2)),
+                                warehouseId: highestAvailabilityWarehouse ? highestAvailabilityWarehouse.warehouseId : null,
                             },
                         }));
                     } catch (error) {
                         console.error(`Error fetching details or images for ${product.ingramPartNumber}:`, error);
                     }
                 });
+                
     
                  // Calculate start and end records
                 const totalRecordsDisplayed = pageNumber * itemsPerPage;

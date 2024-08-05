@@ -52,7 +52,7 @@ const Wishlist = () => {
 
   const expirePeriod =
     typeof window !== "undefined" ? localStorage.getItem("expire_period") : null;
-  const expireTime = expirePeriod ? parseInt(expirePeriod, 10) : 0;
+  const expireTime = expirePeriod ? parseInt(expirePeriod, 10) : 0; 
   const isLoggedIn = useAutoLogout(expireTime);
   
 

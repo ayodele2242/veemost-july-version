@@ -1,48 +1,151 @@
-import React from 'react'
-import Image from 'next/image'
-import Container from './Container'
-import HomeBottomText from "./HomeBottomText";
+"use client"
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import DOMPurify from 'dompurify';
+import Container from './Container';
+import HomeBottomText from './HomeBottomText';
+import { fetchSliders } from '@/services/requestAll.service';
+import Link from 'next/link';
 
-const TopSlider = () => {
-  return (
-  <div 
-  className="w-[100%]" 
-  style={{
-    backgroundImage: "url('/home-bg.png')",
-    backgroundPosition: 'center center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    width: '100%'
-  }}>
-    <Container className="flex flex-col items-center justify-center w-full">
-            <div className="flex flex-col md:flex-row items-center justify-center p-6">
-                <div className="flex-1  md:mr-6 flex items-center justify-center">
-                    <div className="flex justify-center items-center flex-col">
-                    <h1 className="text-2xl font-extrabold mb-2 flex flex-col items-center justify-center  extrabolder">
-                       <span>The Smart Store</span> <span>for digital</span> <span className="text-primaryText">Transformation</span>
-                     </h1>
-                    <p className="flex items-center text-grayText justify-center text">Transform your business with our products and services.</p>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-yellow-700 mt-[40px]   bg-primaryBg">Learn More</button>
-                    </div>
-                </div>
-                <div className="flex-1 mt-6 md:mt-0 flex items-center justify-center">
-                <Image 
-                    src="/Union-img.png"
-                    width={1000}
-                    height={200}
-                    alt="" 
-                    className="cursor-pointer fadeIn homeTopImg lg:mx-10 xlg:mx-10 h-[200px] desktop:h-[400px] w-540 md:w-740 md:h-[417px] tablet:h-[200px] largeTablet:h-[200px]" 
-                />
-                </div>
-                
-            </div>
-            <HomeBottomText />
-    </Container>
-
-</div>
-
-
-  )
+interface Banner {
+  id: number;
+  banner_image: string;
+  pageLink: string;
+  page_name: string;
+  banner_placement_position: string;
+  banner_text: string;
+  banner_text_placement: string;
+  button_text: string;
+  status: string;
 }
 
-export default TopSlider
+const TopSlider = () => {
+  const [banners, setBanners] = useState<Banner[]>([]);
+
+  useEffect(() => {
+    fetchSliders()
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setBanners(data);
+        } else {
+          console.error('Data is not an array:', data);
+        }
+      })
+      .catch((error) => {
+        console.log('Error occurred:', error);
+      });
+  }, []);
+
+  const decodeHtml = (html: string) => {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  };
+
+  const preprocessBannerText = (text: string) => {
+    // Convert &nbsp; to spaces and replace inline styles
+    let formattedText = text
+      .replace(/&nbsp;/g, ' ')
+      .replace(/style=\\\"[^\\\"]*\\\"/g, '');
+  
+    // Add specific classes or adjust as needed
+    return formattedText;
+  };
+  
+  const parseBannerText = (text: string) => {
+    // Create a DOM parser
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+    
+    // Extract parts of the text
+    const spans = doc.querySelectorAll('span');
+    const paragraphs = doc.querySelectorAll('p');
+    
+    // Format the text
+    const formattedText = (
+      <>
+        {spans[0] && <span className="text-xl md:text-4xl font-extrabold">{spans[0].textContent}</span>}
+        {spans[1] && <span className="text-xl md:text-4xl font-extrabold">{spans[1].textContent}</span>}
+        {spans[2] && <span className="text-primaryText text-xl md:text-4xl font-extrabold">{spans[2].textContent}</span>}
+        {paragraphs[0] && <p className="text-center text-grayText text-[12px] md:text-[14px] ">{paragraphs[0].textContent}</p>}
+      </>
+    );
+    
+    return formattedText;
+  };
+
+  const topBanners = banners.filter((banner) => banner.banner_placement_position === 'top');
+
+  return (
+    <div 
+    className="w-full flex flex-col p-0"
+    style={{
+      backgroundImage: "url('/home-bg.png')",
+      backgroundPosition: 'center center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      width: '100%',
+    }}
+  >
+   
+   {topBanners.map((banner) => {
+          const formattedText = preprocessBannerText(banner.banner_text);
+          const sanitizedText = DOMPurify.sanitize(formattedText);
+
+          return (
+            <div
+            key={banner.id}
+            className="relative h-[300px] md:h-[500px] w-full"
+            style={{ 
+              backgroundImage: `url(${banner.banner_image})`, 
+              backgroundSize: 'cover', 
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              width: '100%',
+              marginTop: '0'
+            }}
+          >
+            <div className="flex flex-col md:flex-row w-full h-full">
+              {/* Left Div */}
+              <div className="flex-1 flex items-center justify-center flex-col">
+                  <div
+                  className={`
+                    flex flex-col items-center justify-center text-xl md:text-2xl font-extrabold  md:gap-3
+                     ${banner.banner_text_placement === 'left' ? 'text-left' : 'text-center'}`}
+                >
+                  {parseBannerText(banner.banner_text)}
+                </div>
+                {banner.button_text && (
+              <Link
+                href={banner.pageLink}
+                className="text-white px-4 py-2 rounded hover:bg-yellow-700 mt-4 bg-primaryBg"
+              >
+                {banner.button_text}
+              </Link>
+            )}
+              </div>
+              
+              {/* Right Div */}
+              <div className="flex-1 hidden md:flex items-center justify-center">
+                {/* Content for the right div */}
+                
+              </div>
+            </div>
+          </div>
+          );
+        })}
+
+
+
+<Container>
+        <HomeBottomText />
+      </Container>
+
+
+  </div>
+  
+
+  );
+}
+
+export default TopSlider;

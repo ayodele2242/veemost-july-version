@@ -11,11 +11,11 @@ interface EmptyListProps {
 const EmptyList: React.FC<EmptyListProps> = ({ title }) => {
 
     const pathname = usePathname();
-    const linkDestination = location.pathname === '/account/configuration-orders'
+    const linkDestination = pathname === '/account/configuration-orders'
       ? '/configurations'
       : '/products';
   
-    const linkDest = location.pathname === '/account/configuration-orders'
+    const linkDest = pathname === '/account/configuration-orders'
       ? 'gap-8 '
       : 'gap-4';
 

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ContactForm from '../ContactForm'
 import Footer from '../Footer'
 import Header from '../Header'
@@ -24,10 +24,16 @@ import ServerForm from './ServerForm'
 const Main = () => {
 
   const { setParam } = useRouting();
-  const isLogin = isUserLoggedIn();
+  const [isLogin, setIsLogin] = useState(false);
 const goToProduct = (path: string) => {
     setParam(path, "products", "search");
   };
+
+  useEffect(() => {
+    // Only run on the client
+    const loginStatus = isUserLoggedIn();
+    setIsLogin(loginStatus);
+  }, []);
 
  
     const [open, setOpen] = useState(false);

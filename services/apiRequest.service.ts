@@ -2,6 +2,9 @@ import axios, { AxiosResponse } from 'axios';
 
 // Define an interface for your response data
 interface ApiResponse<T> {
+  clientSecret?: string;
+  freightEstimateResponse: any;
+  errors(errors: any): any;
   xpire(arg0: string, xpire: any): unknown;
   image(arg0: string, image: any): unknown;
   totalRecords(totalRecords: any): unknown;
@@ -11,6 +14,8 @@ interface ApiResponse<T> {
   token?: string;
   userinfo?: T;
   status?: any;
+  customer_email?: any;
+  orderID?: string;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;

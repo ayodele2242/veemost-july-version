@@ -54,6 +54,8 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
     const [processingItemId, setProcessingItemId] = useState<string | null>(null);
     const [ingramId, setIngramId] = useState<string | null>(null);
 
+    //console.log(JSON.stringify(productDetails));
+
     const sliderSettings: Settings = {
         dots: true,
         infinite: true,
@@ -340,6 +342,8 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                 const retailPrice = details.retailPrice ?? 0;
                 const customerPrice = details.customerPrice ?? 0;
                 const discount = details.discount ?? 0;
+                const warehouseId = details?.warehouseId ?? '';
+               
 
                 return (
                   <div className="flex flex-col lg:flex-row duration-500 hover:scale-105 hover:shadow-xl mb-3 gap-3 py-3 px-3 justify-center items-center" key={product.ingramPartNumber}>
@@ -442,13 +446,15 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                                             <BuyNowBtns  product={product} 
                                                 id={product?.ingramPartNumber} 
                                                 amount={customerPrice} 
-                                                image={images[0] || DEFAULT_IMAGE} />
+                                                image={images[0] || DEFAULT_IMAGE}
+                                                warehouseId={warehouseId} />
 
                                             <CartQuantityActionBtns 
                                                 product={product} 
                                                 id={product?.ingramPartNumber} 
                                                 amount={customerPrice} 
-                                                image={images[0] || DEFAULT_IMAGE} />
+                                                image={images[0] || DEFAULT_IMAGE}
+                                                warehouseId={warehouseId} />
 
                                         </div>
                                         </div>

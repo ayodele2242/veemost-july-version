@@ -9,6 +9,7 @@ import ProductPlaceholder from '@/loaders/ProductPlaceholder';
 import Slider, { Settings } from 'react-slick';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import ProductCardSideNav from './ProductCardSideNav';
@@ -17,8 +18,16 @@ import { Menu, Transition } from "@headlessui/react";
 import { ArrowRight01Icon, ArrowLeft01Icon } from 'hugeicons-react';
 import CartQuantityActionBtns from './cart-quantity-btn';
 import ProductDetails from './products/ProductDetails';
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import BuyNowBtns from './cart-buy-now-btn';
-
+import { ApiRequestService } from '@/services/apiRequest.service';
+import { isUserLoggedIn } from '@/auth/auth';
+interface ResponseDataItem {
+  status: string;
+  message: string;
+  data: any;
+}
 
 const DEFAULT_IMAGE = "/no-image.png";
 
@@ -35,6 +44,16 @@ const ProductCard: React.FC = () => {
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const modalContentRef = useRef<HTMLDivElement>(null);
+  const [processingItemId, setProcessingItemId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [backendResponse, setBackendResponse] = useState(null);
+  const [backendMsg, setBackendMsg] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>("");
+  const [iStatus, setIStatus] = useState(false);
+  const [processing, setProcessing] = useState(false);
+
+  const [ingramId, setIngramId] = useState<string | null>(null);
+  const isLoggedIn = isUserLoggedIn();
 
   const handleSlideClick = (index: number) => {
     setCurrentSlide(index);
@@ -195,6 +214,70 @@ const ProductCard: React.FC = () => {
     afterChange: (current: number) => setCurrentSlide(current),
   };
 
+  const handleAddToFavorites = (productId: string) => {
+    // Check if the user is logged in
+    if (!isUserLoggedIn()) {
+        toast.error("Please log in to add item to wishlist.", {});
+        return;
+    }
+
+    // Send the request to the backend with the productId
+    sendProductToBackend(productId);
+};
+
+const sendProductToBackend = async (productId: string) => {
+  const formData = {
+      action: 'add',
+      ingramPartNumber: productId
+  };
+
+  setProcessingItemId(productId);
+
+  try {
+      const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(formData), "wishlist/wishlist");
+      const responseData = response.data;
+
+      if (response.status === 200) {
+          const { status, message } = responseData;
+          setIsLoading(false);
+          setProcessingItemId(null);
+
+          if (status === false) {
+              toast.error(message, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+              });
+
+              setBackendMsg(message);
+              setBackendResponse(status);
+              setIStatus(status);
+              setIngramId(null);
+          } else if (status === true) {
+              setBackendResponse(status);
+              setBackendMsg(message);
+              setIsLoading(false);
+              toast.success(message);
+              setIngramId(productId);
+              setIStatus(true);
+          }
+      } else {
+          setProcessingItemId(null);
+          setIsLoading(false);
+          if (response.status === 400) {
+              const { status, message } = responseData;
+              toast.error(message);
+              setBackendResponse(status);
+              setIStatus(false);
+          }
+      }
+  } catch (error) {
+      setProcessingItemId(null);
+      setIsLoading(false);
+      toast.error("Error adding to favorites");
+  }
+};
+
   return (
     <div>
       <Container>
@@ -257,7 +340,13 @@ const ProductCard: React.FC = () => {
                       
                     />
                   )}
-                  <ProductCardSideNav onViewDetails={() => handleViewDetails(product)} />
+                        <div className="favourite absolute top-5 lg:top-2 right-2">
+                            <FavoriteBorderOutlinedIcon
+                                onClick={() => handleAddToFavorites(product?.ingramPartNumber || '')}
+                                className=""
+                            />
+                         </div>
+                  {/*<ProductCardSideNav onViewDetails={() => handleViewDetails(product)} />*/}
                   {productDetails[product.ingramPartNumber]?.discount > 0 && (
                     <span
                       className="bg-black text-white absolute left-0 top-[2px] w-18 text-xs text-center
@@ -424,7 +513,7 @@ const ProductCard: React.FC = () => {
          </div>
         )}
       </Transition>
-      
+      {/*<ToastContainer />*/}
     </div>
   );
 };

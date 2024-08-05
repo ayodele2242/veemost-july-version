@@ -223,6 +223,8 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
       }
   };
 
+  
+
 
 
   const handlePageChange = (pageNumber: number) => {
@@ -400,7 +402,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           <div className="w-full md:w-3/4">
             <div className="w-full flex gap-4 justify-between items-center">
               <p className="font-extrabold text-lg lg:text-2xl fadeIn mb-4">Address Book</p>
-              <button className="flex justify-center items-center bg-primaryBg text-white font-bold p-3 rounded-lg" onClick={openOverlay}>Add New Address</button>
+              <button className="flex justify-center items-center bg-primaryBg text-white font-bold p-3 rounded-lg btn-sm" onClick={openOverlay}>Add New Address</button>
             </div>
             <hr className="mt-6 mb-6 border-2"/>
 
@@ -541,6 +543,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                 <div className="w-full">{product.state}</div>
                 <div className="w-full">{product.street}</div>
                 <div className="w-full">{product.city} - {product.zip}</div>
+                
               </div>
               <div className="flex justify-between lg:flex-row w-full items-left">
              

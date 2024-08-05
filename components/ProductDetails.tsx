@@ -19,6 +19,17 @@ import VendorProducts from './products/VendorProducts';
 interface ProductDetailsProps {
   ingramPartNumber: string;
 }
+
+interface AvailabilityByWarehouse {
+  quantityAvailable: number;
+  warehouseId: string | null;
+  location: string;
+  quantityBackordered: number;
+  quantityBackorderedEta: string | null;
+  quantityOnOrder: number | null;
+  backOrderInfo: string | null;
+  leadTimeEta: string | null;
+}
 const DEFAULT_IMAGE = "/no-image.png";
 
 const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
@@ -29,6 +40,9 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
   const [error, setError] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imgloading, setImgLoading] = useState<boolean>(true);
+  const [warehouseId, setWareHouseId] = useState<string | null>(null);
+
+
 
 
   useEffect(() => {
@@ -45,22 +59,36 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
 
         // Find the warehouse with the highest quantity available
         const availabilityData = priceData[0].availability.availabilityByWarehouse;
+        let highestAvailabilityWarehouse = null;
 
-        // Check if availabilityByWarehouse is not null
         if (availabilityData !== null) {
+          const validWarehouses = availabilityData.filter(
+            (warehouse: AvailabilityByWarehouse) => warehouse.warehouseId !== null
+          );
+        
+          const highestAvailabilityWarehouse = validWarehouses.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) =>
+            prev.quantityAvailable > curr.quantityAvailable ? prev : curr
+          );
+        
+          setWareHouseId(highestAvailabilityWarehouse.warehouseId); // Set the warehouseId
+        } else {
+          setWareHouseId(null);
+        }
+        
+
+      
+        // Check if availabilityByWarehouse is not null
+        /*if (availabilityData !== null) {
             // Find the warehouse with the highest quantity available
             const highestAvailabilityWarehouse = availabilityData.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) => 
               prev.quantityAvailable > curr.quantityAvailable ? prev : curr
             );
         
-            // Do something with highestAvailabilityWarehouse
-            console.log('Warehouse with highest availability:', highestAvailabilityWarehouse);
-        
-        } else {
-            // Handle the case where availabilityByWarehouse is null
-            console.log('No availability data available.');
-            // Optionally, you could set a default value or state here
-        }
+            setWareHouseId(highestAvailabilityWarehouse)
+            
+        } else { 
+          setWareHouseId(null);
+        }*/
 
         // Calculate the price with an additional 6%
         const customerPrice = productPrice * 1.06;
@@ -224,17 +252,20 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
 
                         {product ? (
                         <div className="flex flex-row mt-8 justify-left items-center mt-4 gap-4">
+                          
                             <BuyNowBtns 
                              product={product} 
                              id={product?.ingramPartNumber} 
                              amount={product?.customerPrice} 
-                             image={product?.ingramPartNumber} />
+                             image={product?.ingramPartNumber} 
+                             warehouseId={warehouseId || ''}/>
 
                                 <CartQuantityActionBtns 
                                     product={product} 
                                     id={product?.ingramPartNumber} 
                                     amount={product?.customerPrice} 
-                                    image={product?.ingramPartNumber} />
+                                    image={product?.ingramPartNumber} 
+                                    warehouseId={warehouseId || ''}/>
 
                                     <WishBtn ingramPartNumber={product?.ingramPartNumber} />
                         </div>

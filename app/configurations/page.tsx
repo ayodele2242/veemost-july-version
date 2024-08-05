@@ -1,4 +1,3 @@
-import Configurations from '@/components/Configurations'
 import Main from '@/components/configurtions/Main'
 import React, { Suspense } from 'react'
 

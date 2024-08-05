@@ -15,6 +15,12 @@ const nextConfig = {
                 hostname: 'store.veemost.com',
                 port: '',
                 pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'smartstore.veemost.com',
+                port: '',
+                pathname: '/**',
             }
           ],
   },

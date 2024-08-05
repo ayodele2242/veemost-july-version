@@ -4,16 +4,16 @@ import instance from '.';
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Function to fetch countries
-export async function fetchCountries() {
+export async function fetchCustomerRepresentatives() {
   try {
-    const response = await axios.get(`${API_URL}auth/countries`);
+    const response = await axios.get(`${API_URL}messaging/fetch_customers_representatives`);
     return response.data;
   } catch (error) {
     throw error;
   }
 }
 
-// Function to fetch states for a specific country
+// Function to fetch states for a specific country 
 export async function fetchStatesByCountry(countryId: string) {
   try {
     const response = await axios.get(
@@ -119,3 +119,43 @@ export async function createShippingAddress(payload: any) {
 		throw error
 	}
 }
+
+
+export async function fetchCountries() {
+  try {
+    const response = await axios.get(`${API_URL}auth/countries`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function fetchSliders() {
+  try {
+    const response = await axios.get(`${API_URL}/banners/getBanner`);
+    if (response.data.status) {
+      return response.data.data; // Ensure this is an array
+    } else {
+      throw new Error('Failed to fetch sliders');
+    }
+  } catch (error) {
+    console.error('Error fetching sliders:', error);
+    throw error;
+  }
+}
+
+export const fetchMessages = async (senderId: number, receiverId: number, dept: string) => {
+  try {
+    const response = await axios.get(`${API_URL}messaging/fetch_message_records`, {
+      params: {
+        senderId,
+        receiverId,
+        dept,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    throw error;
+  }
+};

@@ -177,7 +177,7 @@ const Details: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         <main className="w-full overflow-hidden">
         <Header />
 
-        <Container className="mx-auto py-10 px-4 flex flex-col mx-3">
+        <Container>
             <div className="w-full mb-5">
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>

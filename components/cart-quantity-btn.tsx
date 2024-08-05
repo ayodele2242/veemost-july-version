@@ -28,14 +28,16 @@ interface CartQuantityActionBtnsProps {
     descr?: string;
     extraDescription?: string,
     customerPrice?: any;
+    warehouseId?: string
   } | null;
   id: string;
   amount: any,
   image: string,
   hideButton?: boolean;
+  warehouseId?: string
 }
 
-const CartQuantityActionBtns: React.FC<CartQuantityActionBtnsProps> = ({ product, id, hideButton, amount, image }) => {
+const CartQuantityActionBtns: React.FC<CartQuantityActionBtnsProps> = ({ product, id, hideButton, amount, image, warehouseId }) => {
   const { cartItems, addItemToCart, increaseQuantity, decreaseQuantity } = useCartStore();
   const [itemInCart, setItemInCart] = useState<VeeCartItem | undefined>();
   const isLoggedIn = isUserLoggedIn();
@@ -62,7 +64,8 @@ const CartQuantityActionBtns: React.FC<CartQuantityActionBtnsProps> = ({ product
       vendorPartNumber: product?.vendorPartNumber,
       vendorName: product?.vendorName,
       upc: product?.price_details?.upc || product?.upcCode,
-      descr: product?.descr || product?.extraDescription
+      descr: product?.descr || product?.extraDescription,
+      warehouseId: warehouseId
     };
 
     if (!isLoggedIn) {

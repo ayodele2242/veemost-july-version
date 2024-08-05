@@ -1,6 +1,14 @@
 import axios from 'axios';
 import instance from './';
 
+interface FetchConfigurationParams {
+  userEmail: string;
+  startDate?: string;
+  endDate?: string;
+  page?: number;
+  limit?: number;
+}
+
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -23,6 +31,39 @@ export async function fetchStatesByCountry(countryId: string) {
     throw error;
   }
 }
+
+export const fetchConfiguration = async ({
+  userEmail,
+  startDate,
+  endDate,
+  page = 1,
+  limit = 10
+}: {
+  userEmail: string;
+  startDate?: string; 
+  endDate?: string; 
+  page?: number;
+  limit?: number;
+}) => {
+  try {
+  
+    const url = new URL(`${API_URL}configurations/fetch_by_email`);
+    url.searchParams.append('user_email', userEmail);
+    if (startDate) url.searchParams.append('start_date', startDate);
+    if (endDate) url.searchParams.append('end_date', endDate);
+    url.searchParams.append('page', String(page));
+    url.searchParams.append('limit', String(limit));
+
+
+    const response = await axios.get(url.toString());
+
+    return response.data;
+  } catch (error) {
+    // Handle errors
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
 
 export async function fetchCart() {
   try {
@@ -59,6 +100,8 @@ export async function removeFromCart(id: string) {
     throw error;
   }
 }
+
+
 
 export async function getWishList() {
   try {
