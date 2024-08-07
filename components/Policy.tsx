@@ -84,14 +84,14 @@ const Policy = () => {
      aggregation, cybersecurity solutions, data center management, logistics,
      technology distribution, mobility device life cycle, and training for our
      enterprise customers, VeeMost Technologies Inc. provides global technology
-     and supply chain services. See the "Services" and "About Us" sections of
+     and supply chain services. See the &quot;Services&quot; and &quot;About Us&quot; sections of
      our website for additional details about VeeMost Technologies Inc.
    </p>
    <p>
      Enterprise clients of VeeMost Technologies Inc. have the option to buy or
      utilize a range of goods and services that are made available by VeeMost
      Technologies Inc. and different outside vendors (collectively,
-     "Offerings"), both directly from VeeMost Technologies Inc. and via
+      &quot;Offerings&quot;), both directly from VeeMost Technologies Inc. and via
      distributors and resellers. The terms of this privacy statement may be
      superseded or supplemented by offering-specific privacy policies, WHICH
      MAY APPLY TO EVERY OFFERING. Before accessing or using any offering,
@@ -102,7 +102,7 @@ const Policy = () => {
      This Protection Articulation portrays how we collect, utilize, store, and
      share your Individual Information, both offline and online, and your
      rights and choices in association your Individual Information. On the off
-     chance that you're a representative, temporary worker, or work candidate,
+     chance that you&apos;re a representative, temporary worker, or work candidate,
      your Individual Information collected in those settings will be subject to
      an isolated privacy notice that we offer to you where and when suitable.
      This Security Explanation does not apply to any Individual Information we
@@ -236,7 +236,7 @@ const Policy = () => {
      providers, customers, subsidiaries, and the website itself, may be used by
      VeeMost Technologies Inc. to obtain Personal Data about you. <br />
      Depending on the details of your interactions with us, the following types
-     of "Personal Data" may be gathered by VeeMost Technologies Inc. or on its
+     of &quot;Personal Data&quot; may be gathered by VeeMost Technologies Inc. or on its
      behalf:
    </p>
    <p style={{ marginBottom: "0pt", lineHeight: "normal", fontSize: "12pt" }}>
@@ -503,8 +503,8 @@ const Policy = () => {
    </p>
    <p style={{ marginLeft: "36pt" }}>
      Some of this information may be acquired via cookies and other tracking
-     technology, as detailed more under the title "Cookies and Other Website
-     Usage Information" below.
+     technology, as detailed more under the title &quot;Cookies and Other Website
+     Usage Information&quot; below.
    </p>
    <ul style={{ margin: "0pt", paddingLeft: "0pt" }}>
      <li
@@ -517,7 +517,7 @@ const Policy = () => {
      >
        <span style={{ fontFamily: "Aptos" }}>
          We, or our vendors operating on our behalf, also gather information
-         via "session replay technology," which automatically collects your
+         via &quot;session replay technology,&quot; which automatically collects your
          keystrokes, mouse movements, text entered forms, and text entered chat
          boxes on our website, for example.
        </span>
@@ -697,11 +697,11 @@ const Policy = () => {
    <p>
      The Website, our digital content, and our communications may automatically
      monitor and collect information about your access, use, and interaction
-     with them using "cookies," "web beacons," and other automated monitoring
+     with them using &quot;cookies,&quot; &quot;web beacons,&quot; and other automated monitoring
      technology.
    </p>
    <p>
-     A "cookie" is a short text file saved on the user's device. Cookies enable
+     A &quot;cookie&quot; is a short text file saved on the user's device. Cookies enable
      us to gather information such as your browser type, time spent on the
      Website, pages visited, and language preferences. We and our service
      partners use the information to improve security, make navigation easier,
@@ -798,7 +798,7 @@ const Policy = () => {
        <span className="selectable-text1" style={{ fontFamily: "Aptos" }}>
          Cookies that track and function. We are able to identify returning
          users of our websites thanks to these cookies. A tracking cookie
-         records a user's origin, the search engine they may have used, the
+         records a user&apos;s origin, the search engine they may have used, the
          link they clicked, the term they entered, and their location when they
          viewed the website by comparing it to an anonymous, randomly generated
          identifier. Through the tracking of this data, we can enhance our
@@ -853,8 +853,8 @@ const Policy = () => {
        <span
          style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
        >
-         Cookies used during sessions. These cookies are used "in-session" each
-         time you visit and then expire soon after; they don't include any
+         Cookies used during sessions. These cookies are used &quot;in-session&quot; each
+         time you visit and then expire soon after; they don&apos;t include any
          Personal Data, are not saved on your device indefinitely, and reduce
          the amount of Personal Data that needs to be transferred over the
          internet. You have the option to remove these cookies or to reject
@@ -887,10 +887,10 @@ const Policy = () => {
      </li>
    </ul>
    <p>
-     Please go to the "Your Privacy Rights" section below to find out how to
+     Please go to the &quot;Your Privacy Rights&quot; section below to find out how to
      modify your cookie settings.
      <br />
-     <br />A “web beacon” (also known as a clear pixel or pixel tag) includes
+     <br />A &quot;web beacon&quot; (also known as a clear pixel or pixel tag) includes
      an electronic image embedded in the Website interface that allows us to
      recognize when you visit that area of the Website. These may also be used
      in connection with some Website pages and HTML-formatted email messages
@@ -901,10 +901,10 @@ const Policy = () => {
    <p>&nbsp;</p>
    <p>
      Additionally, when you voluntarily click on one or more third-party
-     "widgets" on our website (typically indicated by a third-party platform
+     &quot;widgets&quot; on our website (typically indicated by a third-party platform
      logo in the top or bottom corner of the website), you can choose to
      consciously interact with one or more third parties. When you click on and
-     activate a company's widget, that company will automatically gather data
+     activate a company&apos;s widget, that company will automatically gather data
      about your activities on the website.
    </p>
    <p>
@@ -919,7 +919,7 @@ const Policy = () => {
    </p>
    <p>
      VeeMost Technologies Inc. may use your Personal Data, including Sensitive
-     Personal Data, for a number of purposes (the "Purposes"), depending on the
+     Personal Data, for a number of purposes (the &quot;Purposes&quot;), depending on the
      nature of your interactions with us. These purposes may include:
    </p>
    <p>&nbsp;</p>
@@ -1139,7 +1139,7 @@ const Policy = () => {
        <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
          For security and safety reasons, including safeguarding the Website
          and our business from online threats, defending our legal rights and
-         our customers' legal rights, and identifying, looking into, and
+         our customers&apos; legal rights, and identifying, looking into, and
          stopping fraud or other illicit activity;{" "}
        </span>
      </li>
@@ -1154,8 +1154,8 @@ const Policy = () => {
      • Have direct communication with you by periodically providing you with
      newsletters, surveys, special offers, promotions, and information about
      new goods and services in line with your marketing preferences. By
-     selecting "Unsubscribe" at the bottom of the email or contacting us using
-     the information listed under "Questions and Contact Information," you can
+     selecting &quot;Unsubscribe&quot; at the bottom of the email or contacting us using
+     the information listed under &quot;Questions and Contact Information,&quot; you can
      stop receiving our marketing emails at any time. Communicate directly with
      you by phone to respond to customer service inquiries or comments through
      the Website, social
@@ -1535,7 +1535,7 @@ const Policy = () => {
        interests. You can stop being tracked online for targeted ads by
        visiting https://optout. aboutadsinfo or
        https://optoutnetworkadvertisingorg You can also turn off advertising
-       cookies by clicking the "Do Not Sell or Share my Personal Information"
+       cookies by clicking the &quot;Do Not Sell or Share my Personal Information&quot;
        link at the bottom of{" "}
      </span>
    </p>
@@ -1562,16 +1562,16 @@ const Policy = () => {
      <u>Marketing Communications.</u> refers to the ways a business talks to
      its customers about its products or services. You can choose not to
      receive marketing messages from us whenever you want. You can use this
-     option by clicking the "unsubscribe" or "opt-out" link in the marketing
+     option by clicking the &quot;unsubscribe&quot; or &quot;opt-out&quot; link in the marketing
      emails we send you. If you want to stop receiving other types of
      marketing, like mail or phone calls, please reach out to us using the
-     contact info below under “Questions and Contact information,” or visit our
+     contact info below under &quot;Questions and Contact information,&quot; or visit our
      preference center.
    </p>
    <p>
      <u>Do Not Track.</u> Some web browsers and devices you use to visit the
-     Website allow you to say that you do not want to be "tracked" online.
-     Right now, the website does not react to "Do Not Track" requests. We don't
+     Website allow you to say that you do not want to be &quot;tracked&quot; online.
+     Right now, the website does not react to &quot;Do Not Track&quot; requests. We don't
      change your experience on the website or the personal information we
      collect from you based on your preferences.
    </p>
@@ -1592,10 +1592,10 @@ const Policy = () => {
      because of our legal rights and responsibilities. If you work for us, are
      a contractor, or are applying for a job, we will give you a separate
      privacy notice that explains your rights about your Personal Data. You
-     will receive this notice when it's needed.
+     will receive this notice when it&apos;s needed.
    </p>
    <p>
-     You cannot be treated unfairly for using your right to privacy. We won't
+     You cannot be treated unfairly for using your right to privacy. We won&apos;t
      refuse to give you products or services, and we won't charge you higher
      prices just because you are using your privacy rights.
    </p>
@@ -1763,8 +1763,8 @@ const Policy = () => {
          by clicking the "Do Not Sell or Share My Personal Information" link at
          the bottom of this page. If you want to stop cookie-based tracking for
          ads (which may be considered a "sale" or "sharing" by law), you need
-         to change your cookie settings on this page or use the "Do Not Sell or
-         Share My Personal Information" link at the bottom of the page.
+         to change your cookie settings on this page or use the &quot;Do Not Sell or
+         Share My Personal Information&quot; link at the bottom of the page.
        </span>
      </li>
      <li
@@ -2048,7 +2048,7 @@ const Policy = () => {
          {" "}
          If we have gathered and used your personal information because you
          agreed, you can take back your agreement anytime. If you take back
-         your consent, it won't change the legality of any processing we did
+         your consent, it won&apos;t change the legality of any processing we did
          before you withdrew it. It also won't affect the processing of your
          Personal Data that is based on other legal reasons besides consent.
        </span>
@@ -2128,7 +2128,7 @@ const Policy = () => {
      The reason we collect and use your Personal Data will vary based on what
      information we collect and how we collect it. We usually collect your
      Personal Data only in the following situations: (i) when we need it to
-     complete a contract with you (like when you buy something), (ii) when it's
+     complete a contract with you (like when you buy something), (ii) when it&apos;s
      in our interests and doesn't go against your rights, or (iii) when you
      give us permission to collect it. Sometimes, we might be required by law
      to collect your Personal Data, or we might need it to keep you or someone
@@ -2144,7 +2144,7 @@ const Policy = () => {
    <p>&nbsp;</p>
    <p>
      If we gather and use your Personal Data because we have a good reason to
-     do so (or someone else does), it's usually to run our platform and talk to
+     do so (or someone else does), it&apos;s usually to run our platform and talk to
      you as needed to provide our services. This can also be for our business
      interests, like answering your questions, making our platform better,
      doing marketing, or finding and stopping illegal activities. We might have
@@ -2289,7 +2289,7 @@ const Policy = () => {
        <span
          style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
        >
-         We might "sell" or "share" some of these types of personal
+         We might &quot;sell&quot; or &quot;share&quot; some of these types of personal
          information: names and other identifiers, and personal information
          categories mentioned in California law. Civil Code § 1798. 80(e) talks
          about business information, online activities, and location data from
@@ -2311,7 +2311,7 @@ const Policy = () => {
        <span
          style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
        >
-         We don’t use or share your private information for anything other than
+         We don&apos;t use or share your private information for anything other than
          what California privacy laws allow.
        </span>
      </li>
@@ -2335,10 +2335,10 @@ const Policy = () => {
      California's "Shine the Light" law allows people in California to ask
      companies how they have shared their personal information with other
      parties for advertising purposes. There is a rule that some businesses
-     don’t have to follow. If a business has a privacy policy saying they won’t
-     share a person’s personal information with others for advertising, and
+     don&apos;t have to follow. If a business has a privacy policy saying they won&apos;t
+     share a person&apos;s personal information with others for advertising, and
      that person has chosen not to allow their information to be shared, then
-     the business doesn’t need to share it. We have a policy that lets you
+     the business doesn&apos;t need to share it. We have a policy that lets you
      choose not to share your personal information with other companies for
      marketing purposes. If you want to stop us from sharing your personal
      information with other companies for marketing or if you want to use your
@@ -2410,14 +2410,14 @@ const Policy = () => {
      Personal Information collected within the nations of the European
      Financial Range and/or the UK and transferred or gotten to by VeeMost
      Advances Inc. within the Joined together States, VeeMost Advances Inc.,
-     Inc. has executed the European Commission’s Standard Legally binding
+     Inc. has executed the European Commission&apos;s Standard Legally binding
      Clauses and their UK and Swiss counterparts in expansion to suitable
      specialized and organization controls.
    </p>
    <p>
      For extra exchanges of Individual Information between our Auxiliaries
      exterior the EEA and/or the UK and the Joined together States we have
-     executed the European Commission’s Standard Legally binding Clauses and
+     executed the European Commission&apos;s Standard Legally binding Clauses and
      their UK and Swiss reciprocals in expansion to suitable specialized and
      organization controls, which require us to ensure Individual Information
      they prepare from the EEA or the UK in agreement with European Union and
@@ -2434,7 +2434,7 @@ const Policy = () => {
    </p>
    <p>&nbsp;</p>
    <p>
-     Advertising you've got asked or to comply with applicable legal, tax or
+     Advertising you&apos;ve got asked or to comply with applicable legal, tax or
      bookkeeping necessities). The criteria we utilize to decide whether we
      have an continuous genuine trade have to be hold Individual Data include
      among others: (i) administrative prerequisites that we are subject to,
