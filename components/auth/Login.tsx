@@ -209,7 +209,7 @@ const Login = () => {
             <div
                 className="right flex flex-1 items-center justify-center hidden lg:flex h-screen"
                 style={{
-                    backgroundImage: "url('/login-img.jpg')",
+                    backgroundImage: "url('/Login-amico-min.png')",
                     backgroundPosition: 'center center',
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',

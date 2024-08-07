@@ -32,8 +32,7 @@ const Services = () => {
   </div>
   <div className="w-full lg:w-[862px] md:w-[600px] flex flex-col items-center gap-[16px] px-5">
     <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center pr-5">
-      VeeMost&apos;s specialty is in architecting, deploying, and managing secure digital solutions 
-      and platforms for customers to be more efficient, profitable, and relevant in their businesses.
+    Transform your business with expertly designed, seamlessly deployed, and meticulously managed secure digital solutions tailored to drive innovation and protect your assets.
     </h2>
   </div>
         

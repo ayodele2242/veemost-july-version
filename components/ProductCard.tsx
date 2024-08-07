@@ -287,7 +287,8 @@ const sendProductToBackend = async (productId: string) => {
               Products
             </p>
             <div className="font-GilroyRegular lg:w-[480px] text-sm text-primaryGray lg:mt-2">
-              Stay ahead of the curve with cutting-edge IT products, power your success today
+              {/*Stay ahead of the curve with cutting-edge IT products, power your success today*/}
+              Elevate your digital experience with our curated collection of top-tier IT products and services, designed to boost your productivity, spark innovation, and keep you effortlessly connected.
             </div>
           </div>
           <Link href={"/products"} className="bg-lightBg text-primaryText p-2 text-sm self-start font-bold whitespace-nowrap rounded-lg">

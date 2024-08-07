@@ -95,13 +95,9 @@ const FooterTop = () => {
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
           >
-            Solutions
+            Services
           </p>
-          <p
-            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
-          >
-            Case Studies
-          </p>
+          
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
           >

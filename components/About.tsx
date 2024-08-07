@@ -22,9 +22,7 @@ const About = () => {
                             mission
                         </span></h2>
                     <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center lg:w-[610px]">
-                    Discover VeeMost Smart Store - your premier
-                        destination for digital transformation
-                        solutions and IT products.
+                    Embark on a journey of unparalleled success with us, as we blend innovative technology, exceptional customer service, and a relentless commitment to excellence to deliver IT solutions that not only meet but exceed your business goals and aspirations.
                     </h2>
                 </div>
             </div>

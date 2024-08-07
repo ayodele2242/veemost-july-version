@@ -11,11 +11,11 @@ const Brands = () => {
     <main className="w-full overflow-hidden">
       <Header />
       <div className="lg:mb-[5rem] my-[1rem] mb-[4rem]">
-                    <div className="bg-[#FAFAFA] w-[100%] h-[296px] gap-[16px] flex justify-center items-center">
-                        <div className="lg:w-[862px] md:w-[600px] w-[350px]">
-                            <h2 className="text-center text-[#0B0B0C] font-GilroySemiBold font-normal text-[38px] md:text-[48px]">Brands we work with</h2>
+                    <div className="bg-[#FAFAFA] w-[100%]  gap-[16px] flex justify-center items-center">
+                        <Container>
+                            <h2 className="text-center text-[#0B0B0C] font-GilroySemiBold font-normal text-[38px] md:text-[48px]">Discover the power of collaboration as we partner with the industry's leading brands to bring you an unparalleled selection of premium IT products and services, ensuring you have access to the most innovative, reliable, and high-performance solutions on the market.</h2>
                             <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center">VeeMost’s specialty is in architecting, deploying, and managing secure digital solutions and platforms for customers to be more efficient, profitable and relevant in their businesses.</h2>
-                        </div>
+                        </Container>
                     </div>
 
                     <div className="md:m-[4rem] m-[1rem] xl:mx-[6rem] hidden lg:block">

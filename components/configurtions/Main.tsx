@@ -76,10 +76,10 @@ const goToProduct = (path: string) => {
                        <div className="flex flex-col lg:w-[528px] 2xl:ml-[6rem] xl:ml-[6rem] 
                        lg:ml-[1rem] lg:gap-[2rem] gap-[1rem]">
                            <div className="">
-                               <h2 className="text-[#0B0B0C] font-GilroySemiBold font-normal text-[32px] lg:text-[48px] md:text-[40px] text-center lg:text-left">Server configuration</h2>
+                               <h2 className="text-[#0B0B0C] font-GilroySemiBold font-normal text-[32px] lg:text-[48px] md:text-[40px] text-center lg:text-left">Product configuration</h2>
                            </div>
                            <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center lg:text-left">
-                               Customize Your Server Configuration
+                               Build your Product Configurations
                            </h2>
                            {isLogin ? (
                                <button className="w-[139px] h-[53px] bg-[#D6A912] cursor-pointer text-[#FFFFFF] 
@@ -120,7 +120,7 @@ const goToProduct = (path: string) => {
         <div className="flex justify-between items-start">
           <div className="mx-6">
             <p className="font-GilroySemiBold lg:text-[18px] sm:text-[14px] font-bold">
-            Select Server Configurations
+            Select Product Configurations
             </p>
             <div className="font-GilroyRegular flex  flex-col font-gilroy-regular font-normal text-[16px] text-[#858586] lg:mt-2">
             <span>Your server is defined by your needs. To achieve optimal business results, choose the OS, server component specs, and other </span>
@@ -152,7 +152,7 @@ const goToProduct = (path: string) => {
                             <h1 className="font-GilroySemiBold font-normal text-[24px] text-[#121212]">How configuration works</h1>
                             {isLogin ? (
                                 <button className="w-[139px] md:h-[53px] h-[37px] rounded-[8px] bg-[#FFFCDE] text-[#D6A912] 
-                                font-SemiBold font-normal text-[14px]" onClick={handleOpen}>Configure server</button>
+                                font-SemiBold font-normal text-[14px]" onClick={handleOpen}>Configure products</button>
                             ): (
                                 <button className="w-[139px] md:h-[53px] h-[37px] rounded-[8px] bg-[#FFFCDE] text-[#D6A912]
                                  font-SemiBold font-normal text-[14px]" >Login to continue</button>
@@ -169,11 +169,10 @@ const goToProduct = (path: string) => {
               
               <div className="rounded-[24px] border border-[#EEEEEE] 2xl:p-[3rem] p-[1rem] flex flex-col items-center">
                 <h2 className="font-GilroyBold text-[72px] text-[#121212] text-center">01</h2>
-                <p className="font-GilroySemiBold text-[14px] text-[#121212] text-center font-bold">Submit Your Configuration Details</p>
+                <p className="font-GilroySemiBold text-[14px] text-[#121212] text-center font-bold">Submit your configuration details</p>
                 <div className="mt-2 text-center">
                   <p className="font-GilroyRegular text-[14px] text-[#858586]">
-                    Choose configuration options, fill the form,
-                    and submit your server configuration details to connect with our server experts.
+                  Choose configurations options, fill the form, and submit your server configuration details to connect with our products experts.
                   </p>
                 </div>
               </div>
@@ -183,8 +182,7 @@ const goToProduct = (path: string) => {
                 <p className="font-GilroySemiBold text-[14px] text-[#121212] text-center font-bold">Get a Quick Quote</p>
                 <div className="mt-2 text-center">
                   <p className="font-GilroyRegular text-[14px] text-[#858586]">
-                    Choose configuration options, fill the form,
-                    and submit your server configuration details to connect with our server experts.
+                  You will receive a quote shortly after a review from our expert.
                   </p>
                 </div>
               </div>
@@ -194,7 +192,7 @@ const goToProduct = (path: string) => {
                 <p className="font-GilroySemiBold text-[14px] text-[#121212] text-center font-bold">Payment</p>
                 <div className="mt-2 text-center">
                   <p className="font-GilroyRegular text-[14px] text-[#858586]">
-                    When assured of our server deal, you can pay us via multiple easy payment channels.
+                  When you approve our quote you can pay us via multiple payment channels.
                   </p>
                 </div>
               </div>
@@ -204,7 +202,7 @@ const goToProduct = (path: string) => {
                 <p className="font-GilroySemiBold text-[14px] text-[#121212] text-center font-bold">Get Server Delivered</p>
                 <div className="mt-2 text-center">
                   <p className="font-GilroyRegular text-[14px] text-[#858586]">
-                    Your server is dispatched right away and delivered to you within 3-5 business days.
+                  Your product is promptly built and delivered to you.
                   </p>
                 </div>
               </div>

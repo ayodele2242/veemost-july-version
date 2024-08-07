@@ -35,7 +35,7 @@ const Partners = () => {
             <div className="flex flex-col">
                 <div className="">
                     <h2 className="text-[#0B0B0C] font-GilroySemiBold font-normal text-[32px] lg:text-[36px] xl:text-[42px] 2xl:text-[48px] text-left leading-normal">Before we began our <br className="hidden lg:block" />
-                        journet, we realized one <br className="hidden lg:block" /> thing: “No one can do it <br className="hidden lg:block" /> alone, we all need <br className="hidden lg:block" />  <span className="text-[#D6A912]">partners.</span>”</h2>
+                    journey, we realized one <br className="hidden lg:block" /> thing: “No one can do it <br className="hidden lg:block" /> alone, we all need <br className="hidden lg:block" />  <span className="text-[#D6A912]">partners.</span>”</h2>
                 </div>
                 <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-left leading-normal">
                     We assist you plan strategically by <br className="hidden lg:block 2xl:hidden" /> consulting with your various  departments, tracking <br className="hidden lg:block" /> existing data to prove ROI, rolling forecasting etc.
