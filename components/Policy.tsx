@@ -701,7 +701,7 @@ const Policy = () => {
      technology.
    </p>
    <p>
-     A &quot;cookie&quot; is a short text file saved on the user's device. Cookies enable
+     A &quot;cookie&quot; is a short text file saved on the user&apos;s device. Cookies enable
      us to gather information such as your browser type, time spent on the
      Website, pages visited, and language preferences. We and our service
      partners use the information to improve security, make navigation easier,
@@ -1493,7 +1493,7 @@ const Policy = () => {
      <u>Cookies.</u> You can choose to allow or reject cookies. Many of our
      websites have cookie banners that let you pick the types of cookies you
      want. Most web browsers automatically accept cookies, but you can change
-     your browser settings to refuse cookies if you want. If you don't want to
+     your browser settings to refuse cookies if you want. If you don&apos;t want to
      accept cookies, most web browsers let you: (i) change settings so you get
      a warning when a cookie is coming, so you can decide if you want to accept
      it; (ii) turn off cookies that are already saved; or (iii) make your
