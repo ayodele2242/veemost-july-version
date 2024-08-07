@@ -25,15 +25,8 @@ import {
 	EmbeddedCheckoutProvider,
 	EmbeddedCheckout,
 } from "@stripe/react-stripe-js"
-import {
-  PayPalScriptProvider, 
-  PayPalButtons,  
-  ReactPayPalScriptOptions,
-  PayPalHostedFieldsProvider,
-  PayPalHostedField,
-  usePayPalHostedFields, } from '@paypal/react-paypal-js';
+import {PayPalScriptProvider, PayPalButtons,  ReactPayPalScriptOptions } from '@paypal/react-paypal-js';
 import Script from 'next/script';
-import Link from 'next/link';
 
 interface UserProfile {
     user_id: number;
@@ -519,7 +512,6 @@ const breadcrumbs = [
   };
 
 
-
   const handlePayPalButtonRender = () => {
     if (window.paypal && window.paypal.Buttons) {
         window.paypal.Buttons({
@@ -554,7 +546,7 @@ const breadcrumbs = [
             }
         }).render('#paypal-button-container');
     } else {
-        setPaypalError(`There is an issue loading PayPal SDK. You can contact PayPal Developer Support for further assistance or visit https://developer.paypal.com/docs/support/`);
+        setPaypalError('PayPal SDK not loaded correctly');
     }
 };
 
@@ -564,10 +556,6 @@ useEffect(() => {
         handlePayPalButtonRender();
     }
 }, [paypalLoaded]);
-
-
-
-
 
 
   return (
@@ -668,7 +656,7 @@ useEffect(() => {
                         <h2 className="text-xl font-semibold mb-4">Complete PayPal Payment</h2>
                         <div id="paypal-button-container"></div>
                         <Script
-                            src="https://www.paypal.com/sdk/js?client-id=ASTIJ2GwX1sMRZmycl1c_npOSLq5MJhFuP10tZcMyFm2khQfemdFeteDHWXeHFwEj89NXvtM6A2qzLZN&currency=USD&components=buttons,marks&debug=true"
+                            src={`https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&currency=USD`}
                             strategy="lazyOnload"
                             onLoad={() => setPaypalLoaded(true)}
                             onError={(e) => {
