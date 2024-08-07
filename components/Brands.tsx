@@ -13,8 +13,8 @@ const Brands = () => {
       <div className="lg:mb-[5rem] my-[1rem] mb-[4rem]">
                     <div className="bg-[#FAFAFA] w-[100%]  gap-[16px] flex justify-center items-center">
                         <Container>
-                            <h2 className="text-center text-[#0B0B0C] font-GilroySemiBold font-normal text-[38px] md:text-[48px]">Discover the power of collaboration as we partner with the industry's leading brands to bring you an unparalleled selection of premium IT products and services, ensuring you have access to the most innovative, reliable, and high-performance solutions on the market.</h2>
-                            <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center">VeeMost’s specialty is in architecting, deploying, and managing secure digital solutions and platforms for customers to be more efficient, profitable and relevant in their businesses.</h2>
+                            <h2 className="text-center text-[#0B0B0C] font-GilroySemiBold font-normal text-[38px] md:text-[48px]">Discover the power of collaboration as we partner with the industry&apos;s leading brands to bring you an unparalleled selection of premium IT products and services, ensuring you have access to the most innovative, reliable, and high-performance solutions on the market.</h2>
+                            <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center">VeeMost&apos;s specialty is in architecting, deploying, and managing secure digital solutions and platforms for customers to be more efficient, profitable and relevant in their businesses.</h2>
                         </Container>
                     </div>
 
