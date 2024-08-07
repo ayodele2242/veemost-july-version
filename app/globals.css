@@ -450,7 +450,39 @@ table th {
 }
 
 
+.custom-bullet, .parent {
+  list-style: none; /* Remove default list styling */
+}
 
+.parent li{
+  position: relative;
+  padding-left: 1.5rem; 
+  margin-bottom: 14px;
+}
+
+.parent li::before {
+  content: '•'; /* Bullet character */
+  position: absolute;
+  left: 0; /* Position the bullet on the left */
+  color: #202224; /* Customize the color */
+  font-size: 1.5rem !important; /* Customize the size */
+  line-height: 1; /* Adjust line height */
+}
+
+.custom-bullet li {
+  position: relative; /* Position relative for positioning the custom bullet */
+  padding-left: 1.5rem; /* Space for custom bullet */
+  margin-bottom: 14px;
+}
+
+.custom-bullet li::before {
+  content: '•'; /* Bullet character */
+  position: absolute;
+  left: 0; /* Position the bullet on the left */
+  color: #202224; /* Customize the color */
+  font-size: 2.5rem; /* Customize the size */
+  line-height: 0.6; /* Adjust line height */
+}
 
 
 .capture-overlay {

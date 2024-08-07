@@ -198,7 +198,7 @@ const Login = () => {
                         </div>
                     </form>
                     <div className="flex flex-row justify-center md:justify-start gap-4 md:gap-6 lg:mt-[129px] absolute bottom-0 mb-3">
-                        <h2 className="font-GilroyRegular text-[#121212]">Privacy policies</h2>
+                        <h2 className="font-GilroyRegular text-[#121212]"><Link href={"/privacy-policy"}>Privacy policies</Link></h2>
                         <h2 className="font-GilroyRegular text-[#121212]"><Link href={"/help-and-faq"}>FAQs</Link></h2>
                         <h2 className="font-GilroyRegular text-[#121212]"><Link href={"/contact-us"}>Support</Link></h2>
                     </div>
@@ -209,7 +209,7 @@ const Login = () => {
             <div
                 className="right flex flex-1 items-center justify-center hidden lg:flex h-screen"
                 style={{
-                    backgroundImage: "url('/Login-amico-min.png')",
+                    backgroundImage: "url('/lock.jpg')",
                     backgroundPosition: 'center center',
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',

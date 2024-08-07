@@ -127,6 +127,23 @@ const FooterTop = () => {
             Support
             </Link>
           </p>
+
+          <p
+            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
+          >
+            <Link href="privacy-policy">
+            Privacy Policy
+            </Link>
+          </p>
+
+          <p
+            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
+          >
+            <Link href="terms-and-conditions">
+            Terms & Conditions
+            </Link>
+          </p>
+
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
           >
