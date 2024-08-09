@@ -162,11 +162,7 @@ const FooterTop = () => {
             </Link>
           </p>
 
-          <p
-            className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
-          >
-            Live Chat
-          </p>
+         
                 </div>
             </div>
     </div>

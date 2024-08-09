@@ -109,7 +109,7 @@ const TopSlider = () => {
             <div className="absolute inset-0 h-[100%] flex items-center justify-center"
            >
               {/* Left Div */}
-              <div className="sm:flex-1 md:flex-1 lg:w-[80%] flex items-center justify-center flex-col">
+              <div className="sm:flex-1 md:flex-1 lg:w-[80%] lg:pl-[190px] flex items-center justify-center flex-col">
                   <div
                   className={`
                     flex flex-col items-center justify-center text-xl md:text-4xl font-extrabold  md:gap-3 

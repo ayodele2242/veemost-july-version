@@ -54,7 +54,7 @@ const Partners = () => {
 
     <Container>
     
-    <HomeBottomText /> 
+ 
 
     <div className="md:mx-[4rem] mx-[1rem] pb-[1rem] flex md:justify-center md:items-center 2xl:gap-[2rem] gap-[1rem] scroll-container overflow-x-auto custom-scrollbar">
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-[1rem] md:gap-[2rem]">

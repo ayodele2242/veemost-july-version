@@ -75,13 +75,13 @@ const Login = () => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+    
         if (!validate()) {
             return;
         }
-
+    
         setIsLoading(true);
-
+    
         try {
             const response = await ApiRequestService.callAPI<ResponseDataItem>(formData, "auth/login");
             if (response.status === 200) {
@@ -94,9 +94,15 @@ const Login = () => {
                     if (responseData.token) {
                         localStorage.setItem("token", responseData.token);
                     }
-                    localStorage.setItem("user", JSON.stringify(responseData.userinfo));
-                    localStorage.setItem('uploadedImage', responseData.image.toString());
-                    localStorage.setItem('expire_period', responseData.xpire.toString());
+                    if (responseData.userinfo) {
+                        localStorage.setItem("user", JSON.stringify(responseData.userinfo));
+                    }
+                    if (responseData.image) {
+                        localStorage.setItem('uploadedImage', responseData.image.toString());
+                    }
+                    if (responseData.xpire) {
+                        localStorage.setItem('expire_period', responseData.xpire.toString());
+                    }
                     push("/account/orders");
                 }
             } else {
@@ -106,11 +112,25 @@ const Login = () => {
                     toast.error(responseData.message);
                 }
             }
-        } catch (error) {
+        } catch (error: any) {
             setIsLoading(false);
-            toast.error("An error occurred while logging in.");
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                toast.error(`Server responded with status ${error.response.status}`);
+                console.error("Server error:", error.response.data);
+            } else if (error.request) {
+                // The request was made but no response was received
+                toast.error("No response received from the server.");
+                console.error("Request error:", error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                toast.error("Error in setting up the request.");
+                console.error("Error message:", error.message);
+            }
         }
     };
+    
 
     const Spinner = () => (
         <div className="spinner-border animate-spin inline-block w-4 h-4 border-4 rounded-full 

@@ -63,9 +63,7 @@ const About = () => {
 
             </div>
 
-            <Container>
-              <HomeBottomText />
-            </Container>
+           
 
         <Container className="mb-0">
           <div className="md:px-4 lg:pl-10 xl:pl-20  w-full">
@@ -110,7 +108,7 @@ const About = () => {
                   </p>
                 </div>
               </div>
-              <div className="w-full h-full">
+              {/*<div className="w-full h-full">
                 <Image
                   src="/about.png"
                   alt="about"
@@ -118,7 +116,7 @@ const About = () => {
                   width={"700"}
                   height={"500"}
                 />
-              </div>
+              </div>*/}
             </div>
           </div>
         </Container>

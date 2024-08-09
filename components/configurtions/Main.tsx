@@ -69,9 +69,9 @@ const goToProduct = (path: string) => {
       width: '100%'
       }}>
       <div className="absolute inset-0" />
-      <Container className="flex flex-col items-center gap-4 justify-center text-center relative z-10 overflow-hidden">
+      <div className="flex flex-col items-left gap-4 justify-center text-center relative z-10 overflow-hidden ">
         
-      <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
+      <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0 lg:w-[1220px]">
             <div className="flex flex-col lg:flex-row justify-center items-center gap-8">
             <div className="flex flex-col">
                 <div className="mb-5">
@@ -102,7 +102,7 @@ const goToProduct = (path: string) => {
             </div>
       </div>
         
-    </Container>
+    </div>
     
     </div>
 

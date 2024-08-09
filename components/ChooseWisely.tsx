@@ -7,7 +7,7 @@ import LazyImage from './LazyImage'
 
 const ChooseWisely = () => {
   return (
-    <div className="w-full">
+    <div className="w-full" id="services">
       <Container >
         <div className="flex justify-between items-start">
           <div>

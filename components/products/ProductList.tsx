@@ -323,15 +323,12 @@ const ProductList: React.FC = () => {
         <main className="w-full overflow-hidden">
             <Header />
            
-            <div className="w-full p-5 flex flex-col">
-                <div className="w-full">
+            
+                <div className="w-full pl-6 md:pl-[70px]">
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
                 </div>
-                <Container>
-                     <HomeBottomText />
-                </Container>
                 
-            </div>
+        
 
             <div className="flex flex-wrap lg:flex-nowrap mx-auto py-10 px-4">
                 {/* Categories List Starts */}
@@ -372,11 +369,11 @@ const ProductList: React.FC = () => {
                             <GridIcon onClick={() => setLayoutType("grid")} />
                         </div>
                     </div>
-                {shouldShowBanner && (
+                {/*shouldShowBanner && (
                 <div className="flex w-full justify-center items-center">
                  <Image src="/product-banner.png" alt="banner" width={1200} height={250} className="w-full lg:h-[400px] lg:w-full" />
                 </div>
-                )}
+                )*/}
 
                     {layoutType === "grid" ? (
                         <GridView
