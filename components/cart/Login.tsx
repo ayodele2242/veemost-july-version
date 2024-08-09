@@ -88,7 +88,7 @@ const Login = () => {
                 const responseData = response.data;
                 setIsLoading(false);
                 if (responseData.status === "error") {
-                    toast.error("Error occurred: " + responseData.message);
+                    toast.error(responseData.message);
                 } else if (responseData.status === "success") {
                     toast.success("Login you in. Please wait...");
                     if (responseData.token) {
@@ -122,8 +122,8 @@ const Login = () => {
                 console.error("Server error:", error.response.data);
             } else if (error.request) {
                 // The request was made but no response was received
-                toast.error("No response received from the server.");
-                console.error("Request error:", error.request);
+                toast.error(error.data.message);
+                //console.error("Request error:", error.request);
             } else {
                 // Something happened in setting up the request that triggered an Error
                 toast.error("Error in setting up the request.");

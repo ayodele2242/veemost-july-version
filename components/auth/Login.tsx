@@ -84,13 +84,17 @@ const Login = () => {
     
         try {
             const response = await ApiRequestService.callAPI<ResponseDataItem>(formData, "auth/login");
+    
             if (response.status === 200) {
                 const responseData = response.data;
                 setIsLoading(false);
+    
                 if (responseData.status === "error") {
+                    // Display the error message from the response
                     toast.error("Error occurred: " + responseData.message);
                 } else if (responseData.status === "success") {
-                    toast.success("Login you in. Please wait...");
+                    toast.success("Login successful. Please wait...");
+                    
                     if (responseData.token) {
                         localStorage.setItem("token", responseData.token);
                     }
@@ -105,24 +109,28 @@ const Login = () => {
                     }
                     push("/account/orders");
                 }
+            } else if (response.status === 400) {
+                // Handle status 400 separately
+                const responseData = response.data;
+                toast.error(responseData.message || "Invalid request.");
+                console.log("Response data:", responseData);
             } else {
-                setIsLoading(false);
-                if (response.status === 400) {
-                    const responseData = response.data;
-                    toast.error(responseData.message);
-                }
+                // Handle other non-200 responses
+                toast.error("Unexpected response status: " + response.status);
             }
         } catch (error: any) {
             setIsLoading(false);
+    
             if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
                 toast.error(`Server responded with status ${error.response.status}`);
-                console.error("Server error:", error.response.data);
+                //console.error("Server error:", error.response.data);
             } else if (error.request) {
                 // The request was made but no response was received
-                toast.error("No response received from the server.");
-                console.error("Request error:", error.request);
+                toast.error(error.data.message);
+                //console.error("Request error:", error.request);
+                //console.log(error.data.message);
             } else {
                 // Something happened in setting up the request that triggered an Error
                 toast.error("Error in setting up the request.");
@@ -130,6 +138,8 @@ const Login = () => {
             }
         }
     };
+    
+    
     
 
     const Spinner = () => (
