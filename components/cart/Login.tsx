@@ -103,7 +103,8 @@ const Login = () => {
                     if (responseData.xpire) {
                         localStorage.setItem('expire_period', responseData.xpire.toString());
                     }
-                    push("/account/orders");
+                    //push("/account/orders");
+                    location.reload();
                 }
             } else {
                 setIsLoading(false);
