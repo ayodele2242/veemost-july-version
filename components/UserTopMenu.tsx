@@ -54,7 +54,7 @@ const UserTopMenu = () => {
 
   return (
     <div className="flex flex-col gap-1">
-      {!isLogin && (
+      {!isLogin && profileName === "Guest" && (
         <div className='w-full flex flex-col p-3'>
         {/*Not yet logged In */}
         <Link href={"/auth/register"} className="bg-primaryBg p-1
@@ -68,45 +68,37 @@ const UserTopMenu = () => {
        )}
 
          <hr />
-         {!isLogin ? (
-        <div className="py-1">
-            <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><UserSharingIcon size={18} /> Account Information</span>
+         {!isLogin && profileName === "Guest" ? (
+    <div className="py-1">
+        <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><UserSharingIcon size={18} /> Account Information</span>
             <ArrowRight01Icon size={16} />
-            </Link>
+        </Link>
 
-            <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><FavouriteIcon size={18} /> Wishlist</span>
+        <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><FavouriteIcon size={18} /> Wishlist</span>
             <ArrowRight01Icon size={16} />
-            </Link>
+        </Link>
 
-            <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><TruckDeliveryIcon size={18} /> Orders History</span>
+        <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><TruckDeliveryIcon size={18} /> Orders History</span>
             <ArrowRight01Icon size={16} />
-            </Link>
-            
-            <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><LocationUpdate01Icon size={18} /> Address Book</span>
+        </Link>
+        
+        <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><LocationUpdate01Icon size={18} /> Address Book</span>
             <ArrowRight01Icon size={16} />
-            </Link>
+        </Link>
 
-            <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><Tag01Icon size={18} /> Configurations Orders</span>
+        <Link href="#" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><Tag01Icon size={18} /> Configurations Orders</span>
             <ArrowRight01Icon size={16} />
-            </Link>
-          
-        </div>
-        ) : (
-
-          
-
-          <div className="py-1">
-
-            <div className="flex items-center cursor-pointer mx-2 gap-1 py-3">
-
-           
-                 {profilePicture && (
-                
+        </Link>
+    </div>
+) : (
+    <div className="py-1">
+        <div className="flex items-center cursor-pointer mx-2 gap-1 py-3">
+            {profilePicture ? (
                 <Image 
                   src={profilePicture} 
                   alt="Profile" 
@@ -114,63 +106,58 @@ const UserTopMenu = () => {
                   height="20" 
                   className="w-6 h-6 md:w-8 md:h-8 rounded-full" 
                 />
-              )}
-              {!profilePicture && (
-                 <Image 
-                 src={'/no-image-icon.png'} 
-                 alt="Profile" 
-                 width="20" 
-                 height="20" 
-                 className="w-6 h-6 md:w-8 md:h-8 rounded-full" 
-               />
-                
-              )}
+            ) : (
+                <Image 
+                  src={'/no-image-icon.png'} 
+                  alt="Profile" 
+                  width="20" 
+                  height="20" 
+                  className="w-6 h-6 md:w-8 md:h-8 rounded-full" 
+                />
+            )}
 
-
-              <div className="hidden lg:flex items-left flex-col gap-2">
-
+            <div className="hidden lg:flex items-left flex-col gap-2">
                 <span className="userText text-sm truncate">Welcome Back, <span>{truncateText(profileName, 12)}</span></span>
-                <div className="font-bold text-sm flex flex-row gap-1 text-red-600" onClick={ redirectToLoginPage } ><Logout02Icon size={17} /> Logout </div>
-                
-              </div>
-
+                <div className="font-bold text-sm flex flex-row gap-1 text-red-600" onClick={redirectToLoginPage}>
+                    <Logout02Icon size={17} /> Logout
+                </div>
             </div>
-
-            <hr />
-
-            <Link href="/account/profile" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><UserSharingIcon size={18} /> Account Information</span>
-            <ArrowRight01Icon size={16} />
-            </Link>
-
-            <Link href="/account/wishlist" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><FavouriteIcon size={18} /> Wishlist</span>
-            <ArrowRight01Icon size={16} />
-            </Link>
-
-            <Link href="/account/orders" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><TruckDeliveryIcon size={18} /> Orders History</span>
-            <ArrowRight01Icon size={16} />
-            </Link>
-            
-            <Link href="/account/address-book" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><LocationUpdate01Icon size={18} /> Address Book</span>
-            <ArrowRight01Icon size={16} />
-            </Link>
-
-            <Link href="/account/configuration-orders" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><Tag01Icon size={18} /> Configurations Orders</span>
-            <ArrowRight01Icon size={16} />
-            </Link>
-
-            <Link href="/account/messages" className="flex justify-between items-center text-[14px] font-normal text-default-black  px-4 py-1 hover:bg-gray-100">
-            <span className='flex items-center gap-2 justify-center gap-2'><Message02Icon size={18} /> Messages</span>
-            <ArrowRight01Icon size={16} />
-            </Link>
-          
         </div>
 
-        )}
+        <hr />
+
+        <Link href="/account/profile" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><UserSharingIcon size={18} /> Account Information</span>
+            <ArrowRight01Icon size={16} />
+        </Link>
+
+        <Link href="/account/wishlist" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><FavouriteIcon size={18} /> Wishlist</span>
+            <ArrowRight01Icon size={16} />
+        </Link>
+
+        <Link href="/account/orders" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><TruckDeliveryIcon size={18} /> Orders History</span>
+            <ArrowRight01Icon size={16} />
+        </Link>
+        
+        <Link href="/account/address-book" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><LocationUpdate01Icon size={18} /> Address Book</span>
+            <ArrowRight01Icon size={16} />
+        </Link>
+
+        <Link href="/account/configuration-orders" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><Tag01Icon size={18} /> Configurations Orders</span>
+            <ArrowRight01Icon size={16} />
+        </Link>
+
+        <Link href="/account/messages" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+            <span className='flex items-center gap-2 justify-center'><Message02Icon size={18} /> Messages</span>
+            <ArrowRight01Icon size={16} />
+        </Link>
+    </div>
+)}
+
 
         <hr />
         <div className="py-1">

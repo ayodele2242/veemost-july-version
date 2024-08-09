@@ -267,17 +267,26 @@ const SignUp = () => {
             <div className="left flex flex-1 relative">
                 {/* Background image and overlay for mobile */}
                 <div className="lg:hidden block absolute inset-0">
-                    <Image src="/signup-img.jpg" alt="Background" width={"500"} height={"500"} className="w-full h-full object-cover" />
+                    <Image src="/lock.jpg" alt="Background" width={"500"} height={"500"} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black opacity-50"></div> {/* Overlay */}
                 </div>
                 {/* Form */}
-                <div className="relative z-10 p-4 lg:p-8 w-full h-full max-w-md mx-auto bg-white bg-opacity-50 lg:bg-transparent lg:bg-opacity-100">
-                    <Link href="/" className="flex justify-left items-left mb-4">
-                    <Image src="/logoheader.png" alt="logo" width={"150"} height={"50"} className="mt-[2rem] md:w-[150px] md:h-[58px] w-[80px] h-[28px]" />
+                <div className="relative z-10 p-4 lg:p-8 w-full h-full max-w-md mx-auto bg-white bg-opacity-50 
+                lg:bg-transparent lg:bg-opacity-100">
+                    
+                    <div className="w-full flex flex-col justify-center items-center">
+                    <Link href="/" className="flex justify-left items-center mb-4">
+                    <Image 
+          src="/logoheader/logoheader.png" 
+          sizes="(max-width: 1400px) 100vw, 1400px"
+          alt="Logo" 
+          width={200} 
+          height={60} 
+          className="cursor-pointer mx-3" 
+        />
                     </Link>
-                    <div className="w-full mt-4">
-                        <h1 className="font-GilroySemiBold font-normal text-[24px] text-[#0B0B0C]">Get started with Us</h1>
-                        <h2 className="font-GilroyRegular font-normal text-[16px] text-[#858586]">Create an account</h2>
+                        <h1 className="font-gilroy-extrabold font-normal text-[24px] text-[#0B0B0C]">Get started with Us</h1>
+                        <h2 className="font-gilroy-regular text-white font-bold text-[16px] lg:text-[#858586]">Create an account</h2>
                     </div>
                     {step === 1 && (
                         <form className="mt-4 flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
@@ -288,7 +297,9 @@ const SignUp = () => {
                                     id="first_name"
                                     value={formData.first_name}
                                     onChange={handleChange}
-                                    className="appearance-none border rounded-[5px] h-[3rem] w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    className="appearance-none border rounded-[5px] h-[3rem] 
+                                    w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none 
+                                    focus:shadow-outline"
                                     placeholder="First Name *"
                                 />
                                 {errors.first_name && <p className="text-red-500 text-xs mt-1">{errors.first_name}</p>}
@@ -470,8 +481,8 @@ const SignUp = () => {
                                 <span></span>
                                 </label>
 
-                                <label htmlFor="agreement" className="text-[#858586] text-[12px] font-GilroyMedium md:pt-1">
-                                    By signing up you agree to our <a href="#" className="text-yellow-600">Terms and Conditions</a>
+                                <label htmlFor="agreement" className="text-[#858586] text-[12px] font-gilroy-medium font-semibold md:pt-1">
+                                    By signing up you agree to our <a href="/terms-and-conditions" className="text-yellow-600">Terms and Conditions</a>
                                 </label>
                                 
                             </div>
@@ -551,7 +562,7 @@ const SignUp = () => {
                 </div>
             </div>
             <div className="right flex flex-1 items-center justify-center hidden lg:flex">
-                <Image src="/signup-img.jpg" alt="Background" width={500} height={800} className="w-full h-full object-cover" />
+                <Image src="/lock.jpg" alt="Background" width={500} height={800} className="w-full h-full object-cover" />
             </div>
         </main>
     );

@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ApiRequestService } from "@/services/apiRequest.service";
 import SocialLinks from './SocialLinks';
+import Image from 'next/image';
 
 interface ResponseDataItem {
   status: string;
@@ -131,10 +132,20 @@ const ContactForm = () => {
       <div className="xl:mt-[8rem] mt-[5rem] md:m-[4rem] xl:mx-[6rem] xl:my-[8rem]">
         <div className="w-full ">
           <div className="">
-            <div className="flex lg:flex-row flex-col lg:items-center lg:justify-center">
-              <div className="flex flex-col gap-[64px] md:w-[418px] h-[331px] w-[350px] md:m-0 m-[1rem]">
+            <div className="flex lg:flex-row flex-col lg:items-top lg:justify-center">
+              <div className="flex flex-col gap-[34px] md:w-[418px] h-[331px] w-[350px] md:m-0 m-[1rem] ">
+                <div className="flex justify-left items-center">
+                  <Image
+                  alt="contact Us"
+                  width={120}
+                  height={120}
+                    src="/contactImg.png"
+                  
+                    className="w-auto max-w-[500px] h-auto max-h-[150px] object-cover"
+                  />
+                </div>
                 <div>
-                  <h2 className="font-GilroySemiBold text-[#0B0B0C] font-normal text-[24px]">Interested in connecting with Veemost?</h2>
+                  <h2 className="font-gilroy-extrabold text-[#0B0B0C] font-normal text-[24px]">Interested in connecting with Veemost?</h2>
                   <h2 className="font-Regular text-[#858586] font-normal text-[16px]">We want to hear from you</h2>
                 </div>
                 <div className="flex flex-col gap-[8px]">

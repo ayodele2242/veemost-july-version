@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import SecondHeader from '../SecondHeader'
-import Container from '../Container'
+import React, { useEffect, useState } from 'react';
+import SecondHeader from '../SecondHeader';
+import Container from '../Container';
 import Breadcrumbs from '@/components/Breadcrumb';
 import LazyImage from '@/components/LazyImage';
 import { ApiRequestService } from '@/services/apiRequest.service';
 import Link from 'next/link';
 import Spinner from '../Spinner';
 import { CheckIcon } from '@heroicons/react/24/outline';
-import { format, addDays } from 'date-fns'; 
+import { format, addDays } from 'date-fns';
 
 interface OrderDetailsProps {
     groupOrderNumber: string;
@@ -77,14 +77,11 @@ interface ResponseDataItem {
 }
 
 const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
-    const [loading, setLoading] = useState<boolean>(true); 
-    const [orders, setOrders] = useState<OrderItem[]>([]); 
+    const [loading, setLoading] = useState<boolean>(true);
+    const [orders, setOrders] = useState<OrderItem[]>([]);
     const [backendResponse, setBackendResponse] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    
 
-
-    
     useEffect(() => {
         const fetchDetails = async () => {
             setLoading(true);
@@ -99,8 +96,6 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                 if (response.status === 200) {
                     const { status, message, data, totalRecords } = responseData;
                     setOrders(data);
-                    
-                   
                     setError(null);
                 } else {
                     setBackendResponse(responseData.message);
@@ -122,9 +117,9 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         { label: 'Home', href: '/' },
         { label: 'My Orders', href: '/account/orders' },
         { label: loading ? 'Loading...' : `${groupOrderNumber}`, href: loading ? '#' : `${encodeURIComponent(groupOrderNumber || '')}` }
-      ];
+    ];
 
-      const formatDate = (dateString: string): string => {
+    const formatDate = (dateString: string): string => {
         const date = new Date(dateString);
         const options: Intl.DateTimeFormatOptions = { 
             year: 'numeric', 
@@ -136,7 +131,7 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
 
     const getImageUrl = (images_url: string | string[] | { url: string }): string => {
         let imageUrl = '/no-image.png'; // Default image URL
-    
+
         if (typeof images_url === 'string') {
             try {
                 // Try to parse as JSON
@@ -157,14 +152,11 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         } else if (typeof images_url === 'object' && images_url?.url) {
             imageUrl = images_url.url.startsWith('http') ? images_url.url : imageUrl;
         }
-    
+
         return imageUrl;
     };
-    
-    
-    
-      // Function to parse profile JSON
-      const parseProfile = (profileString: string) => {
+
+    const parseProfile = (profileString: string) => {
         try {
             return JSON.parse(profileString);
         } catch (error) {
@@ -172,8 +164,6 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
             return null;
         }
     };
-
-
 
     const totalAmount = orders.reduce((sum, order) => {
         const itemPrice = Number(order.product_price);
@@ -184,10 +174,8 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         const itemTotal = isNaN(itemPrice) || isNaN(quantity) ? 0 : itemPrice * quantity;
         return sum + itemTotal + (isNaN(freightCharge) ? 0 : freightCharge);
     }, 0);
-    
-    // Render total amount
-    const finalAmount = totalAmount;
 
+    const finalAmount = totalAmount;
 
     const getDeliveryDateRange = (deliveryDays: string) => {
         const days = parseInt(deliveryDays, 10);
@@ -202,164 +190,158 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         return `${formattedStartDate} - ${formattedEndDate}`;
     };
 
+    // Extract the shipping address and personal information from the first order
+    const shippingAddress = orders.length > 0 ? orders[0].shipping_address : null;
+    const profile = orders.length > 0 ? parseProfile(orders[0].profile) : null;
 
-  return (
-    <main className="w-full overflow-hidden">
-    <SecondHeader />
-    <Container>
-           
-            {loading ? (
-                <div className="text-center py-10 flex justify-center items-center gap-2">
-                    <Spinner size='sm' />
-                    <div>Loading Order Details...</div>
-                </div>
-            ) : error ? (
-                <div className="text-center py-10 flex justify-center items-center">
-                    <p className="text-red-500">Error: {error}</p>
-                </div>
-            ) : (
-                <div className="flex flex-col w-full ustify-center items-center mt-5">
-                    <div className="w-[136px] h-[136px] bg-[#23A26D] rounded-full p-8 font-semibold 
-                    flex justify-center items-center fadeIn text-white mb-3"><CheckIcon /></div>
-                    <h2 className="text-2xl mb-1 mt-2 font-bold">Thank your for your Purchase</h2>
-                    <p className="mb-4">We will email you an order confirmation details and tracking infomation</p>
+    return (
+        <main className="w-full overflow-hidden">
+            <SecondHeader />
+            <Container>
+                {loading ? (
+                    <div className="text-center py-10 flex justify-center items-center gap-2">
+                        <Spinner size='sm' />
+                        <div>Loading Order Details...</div>
+                    </div>
+                ) : error ? (
+                    <div className="text-center py-10 flex justify-center items-center">
+                        <p className="text-red-500">Error: {error}</p>
+                    </div>
+                ) : (
+                    <div className="flex flex-col w-full justify-center items-center mt-5">
+                        <div className="w-[136px] h-[136px] bg-[#23A26D] rounded-full p-8 font-semibold 
+                            flex justify-center items-center fadeIn text-white mb-3">
+                            <CheckIcon />
+                        </div>
+                        <h2 className="text-2xl mb-1 mt-2 font-bold">Thank you for your Purchase</h2>
+                        <p className="mb-4">We will email you an order confirmation details and tracking information</p>
 
-                    {orders.length > 0 ? (
-                        orders.map(order => {
-                            const profile = parseProfile(order.profile);
-
-                            return (
-                                <div key={order.id} className="order-item border-b py-4 flex flex-col w-full justify-center p-8">
-                                    {/*<div className="w-full text-center mb-2">
-                                        <img src={getImageUrl(order.images_url)} alt={order.description} className="w-32 h-32 object-cover mx-auto" />
-                                    </div>*/}
-                                    <div className="w-full text-center mb-2">
-                                        <b>Vendor part number:</b> {order.vendorPartNumber}
-                                    </div>
-                                    <div className="w-full text-center mb-2">
-                                        <b>Order number:</b> {order.order_number}
-                                    </div>
-                                    <div className="w-full text-center mb-2">
-                                            <b>Delivery date:</b> {getDeliveryDateRange(order.deliveryDays)}
-                                    </div>
-
-
-                                     
-                                    <div className="flex flex-col lg:flex-row gap-3 mb-2 justify-center items-center w-full">
-                                        {/* Left Div */}
-                                        <div className="lg:w-[20%] sm:w-[100%] w-full">
-                                        <LazyImage
-                                            src={getImageUrl(order.images_url)}
-                                            alt={order.description}
-                                            layout="responsive"
-                                            objectFit="cover"
-                                        />
-
+                        {orders.length > 0 ? (
+                            orders.map(order => {
+                                const profile = parseProfile(order.profile);
+    
+                                return (
+                                    <div key={order.id} className="order-item border-b py-4 flex flex-col w-full justify-center">
+                                        {/*<div className="w-full text-center mb-2">
+                                            <img src={getImageUrl(order.images_url)} alt={order.description} className="w-32 h-32 object-cover mx-auto" />
+                                        </div>*/}
+                                        <div className="w-full text-center mb-2">
+                                            <b>Vendor part number:</b> {order.vendorPartNumber}
                                         </div>
-                                    
-                                        {/* Right Div */}
-                                        <div className="lg:w-[100%] sm:w-[100%] w-full">
-                                            <div className="flex flex-col lg:flex-row gap-4">
-                                                <div className="lg:w-[100%] sm:w-[100%] w-full">
-                                                    <Link href={`/products/${order.ingramPartNumber}`} className="text-lg font-bold hover:text-primaryText">
-                                                        {order.description}
-                                                    </Link>
-                                                    <p className="mt-2 text-[12px]">{order.descr}</p>
-                                                </div>
-
-                                                <div className="lg:w-[20%] sm:w-[20%] w-full flex-col">
-                                                    <h6 className="text-1xl lg:text-xl font-bold">
-                                                        {new Intl.NumberFormat('en-US', {
-                                                            style: 'currency',
-                                                            currency: 'USD'
-                                                        }).format(Number(order.product_price) * order.quantity)}
-                                                    </h6>
-                                                    <p>Qty.: {order.quantity}</p>
-                                                </div>
-                                            </div>
+                                        <div className="w-full text-center mb-2">
+                                            <b>Order number:</b> {order.order_number}
                                         </div>
-                                    </div>
-
-                                    <div className="w-full flex justify-between items-center mt-6">
-                                        <div className="font-bold">Sub Total</div>
-                                        <div className="">
-                                        {new Intl.NumberFormat('en-US', {
-                                                            style: 'currency',
-                                                            currency: 'USD'
-                                                        }).format(Number(order.product_price))}
+                                        <div className="w-full text-center mb-2">
+                                            <b>Order date:</b> {formatDate(order.date)}
                                         </div>
-                                    </div>
-
-                                    <div className="w-full flex justify-between items-center mt-6">
-                                        <div className="font-bold">Shipping</div>
-                                        <div className="">
-                                        {new Intl.NumberFormat('en-US', {
-                                                            style: 'currency',
-                                                            currency: 'USD'
-                                                        }).format(Number(order.totalFreightAmount))}
-                                        </div>
-                                    </div>
-
-                                    <div className="w-full flex justify-between items-center mt-6">
-                                        <div className="font-bold">Total</div>
-                                        <div className="">
-                                        
-                                        ${Number(finalAmount).toFixed(2)}
-                                        </div>
-                                    </div>
-
-                                    <div className="w-full flex flex-col sm:flex-row justify-between ">
-                                        <div className="box p-5 flex flex-col lg:w-[33%]">
-                                            <div className="font-bold mb-3">Personal Information</div>
-                                            {profile ? (
-                                                <>
-                                                    <p><b>Phone:</b> {profile?.phone}</p>
-                                                    <p><b>Email:</b> {profile?.email}</p>
-                                                    <p><b>Address:</b> {profile?.street}</p>
-
-                                                </>
-                                            ) : (
-                                                <p>No profile information available</p>
-                                            )}
-                                        </div>
-
-                                        <div className="box p-5 flex flex-col w-full lg:w-[33%]">
-                                                <div className="font-bold mb-3">Shipping Address</div>
-                                                <p><b>Name:</b> {order?.shipping_address?.nickname}</p>
-                                                <p><b>Street:</b> {order?.shipping_address?.street}</p>
-                                                <p><b>City:</b> {order?.shipping_address?.city}</p>
-                                                <p><b>State:</b> {order?.shipping_address?.state}</p>
-                                                <p><b>Zip:</b> {order?.shipping_address?.zip}</p>
-                                                <p><b>Country:</b> US</p>
-                                                <p><b>Phone:</b> {order?.shipping_address?.phone}</p>
-                                                <p><b>Email:</b> {order?.shipping_address?.email}</p>
-                                        </div>
-
-                                        {order.carrier_name && (
-                                            <div className="box p-5 flex flex-col w-full lg:w-[33%]">
-                                                <div className="font-bold mb-3">Shipping Method</div>
-                                                <p><b>Carrier Name:</b> {order.carrier_name}</p>
-                                                <p><b>Ship from Location:</b> {order.ship_from_location}</p>
+                                        {order.deliveryDays && (
+                                            <div className="w-full text-center mb-2">
+                                                <b>Delivery date:</b> {getDeliveryDateRange(order.deliveryDays)}
                                             </div>
                                         )}
+
+                                        
+                                        <div className="flex flex-col lg:flex-row gap-3 mb-2 justify-center items-center">
+                                            {/* Left Div */}
+                                            <div className="lg:w-[20%] sm:w-[100%] w-full">
+                                            <LazyImage
+                                                src={getImageUrl(order.images_url)}
+                                                alt={order.description}
+                                                layout="responsive"
+                                                objectFit="cover"
+                                            />
+    
+                                            </div>
+                                        
+                                            {/* Right Div */}
+                                            <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                                <div className="flex flex-col lg:flex-row gap-4">
+                                                    <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                                        <Link href={`/products/${order.ingramPartNumber}`} className="text-lg font-bold hover:text-primaryText">
+                                                            {order.description}
+                                                        </Link>
+                                                        <p className="mt-2 text-[12px]">{order.descr}</p>
+                                                    </div>
+    
+                                                    <div className="lg:w-[20%] sm:w-[20%] w-full flex-col">
+                                                        <h6 className="text-1xl lg:text-xl font-bold">
+                                                            {new Intl.NumberFormat('en-US', {
+                                                                style: 'currency',
+                                                                currency: 'USD'
+                                                            }).format(Number(order.product_price) * order.quantity)}
+                                                        </h6>
+                                                        <p>Qty.: {order.quantity}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        {/*<div className="w-full flex flex-col sm:flex-row justify-between ">
+                                            
+    
+                                           
+                                            {order.carrier_name && (
+                                                <div className="box p-5 flex flex-col w-full lg:w-[33%]">
+                                                    <div className="font-bold mb-3">Shipping Method</div>
+                                                    <p><b>Carrier Name:</b> {order.carrier_name}</p>
+                                                    <p><b>Ship from Location:</b> {order.ship_from_location}</p>
+                                                </div>
+                                            )}
+                                        </div>*/}
                                     </div>
+                                );
+                            })
+                        ) : (
+                            <div className="text-center py-10 flex justify-center items-center">
+                                <p>No orders found</p>
+                            </div>
+                        )}
 
-                                   
-                                    <div className="w-full flex flex-col justify-center items-center mt-8 "><Link href="/account/orders" className="bg-primaryBg text-white p-2 w-[200px] flex justify-center items-center">Check Order</Link></div>
-
+                        {orders.length > 0 && (
+                            <div className="w-full mt-8  pt-4">
+                                <div className="flex justify-between mb-2 text-[24px] text-red-400">
+                                    <b>Total:</b>
+                                    <div>{finalAmount.toFixed(2)}</div>
                                 </div>
-                                
-                            );
-                        })
-                    ) : (
-                        <p className="text-center py-10">No orders found</p>
-                    )}
-                </div>
-            )}
-        </Container>
-   
-    </main>
-  )
-}
 
-export default Success
+
+                                <div className="flex flex-col md:flex-row justify-between items-center">
+                                <div className="mt-8">
+                                    <h3 className="text-xl font-bold mb-2">Shipping Information:</h3>
+                                    {shippingAddress && (
+                                        <div className="flex flex-col">
+                                            <p><b>Name:</b> {shippingAddress.nickname}</p>
+                                            <p><b>Address:</b> {shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state}, {shippingAddress.country} {shippingAddress.zip}</p>
+                                            <p><b>Phone:</b> {shippingAddress.phone}</p>
+                                            <p><b>Email:</b> {shippingAddress.email}</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="mt-8">
+                                    <h3 className="text-xl font-bold mb-2">Personal Information:</h3>
+                                    {profile && (
+                                        <div className="flex flex-col">
+                                            <p><b>Name:</b> {profile.first_name} {profile.last_name}</p>
+                                            <p><b>Email:</b> {profile.email}</p>
+                                            <p><b>Phone:</b> {profile.phone}</p>
+                                        </div>
+                                    )}
+                                </div>
+                                </div>
+                                <div className="w-full flex flex-col justify-center items-center mt-8 ">
+                                    <Link href="/account/orders" 
+                                    className="bg-primaryBg text-white p-2 w-[200px] flex justify-center items-center rounded-[30px]">
+                                        Check Order
+                                        </Link></div>
+
+                            </div>
+                        )}
+                    </div>
+                )}
+            </Container>
+        </main>
+    );
+};
+
+export default Success;

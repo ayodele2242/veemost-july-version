@@ -327,7 +327,10 @@ const ProductList: React.FC = () => {
                 <div className="w-full">
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
                 </div>
-                <HomeBottomText />
+                <Container>
+                     <HomeBottomText />
+                </Container>
+                
             </div>
 
             <div className="flex flex-wrap lg:flex-nowrap mx-auto py-10 px-4">
@@ -371,7 +374,7 @@ const ProductList: React.FC = () => {
                     </div>
                 {shouldShowBanner && (
                 <div className="flex w-full justify-center items-center">
-                 <Image src="/product-banner.png" alt="banner" width={600} height={250} className="w-full lg:h-[200px] lg:w-[700px]" />
+                 <Image src="/product-banner.png" alt="banner" width={1200} height={250} className="w-full lg:h-[400px] lg:w-full" />
                 </div>
                 )}
 

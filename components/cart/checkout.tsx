@@ -111,7 +111,7 @@ interface ResponseDataItem {
   }
 
 const Checkout = () => {
-  
+  const userData = getUserData();
   const [loading, setLoading] = useState(true);
   const [loadingEstimate, setLoadingEstimate] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -149,6 +149,8 @@ const Checkout = () => {
   const [totalWeight, setTotalWeight] = useState(0); 
   const [transitDays, setTransitDays] = useState(''); 
 
+  const profileName =
+      userData && userData.profile_name ? userData.profile_name : "Guest"
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -532,7 +534,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
         const transitDays = freightEstimate.distribution[0]?.transitDays?.toString() || '';
         localStorage.setItem('totalFreightAmount', totalFreightAmount);
         localStorage.setItem('totalWeight', totalWeight);
-        localStorage.setItem('transitDays', transitDays);
+        localStorage.setItem('transitDays', transitDays); 
         setTotalFreightAmount(totalFreightAmount);
         setTotalWeight(totalWeight);
         setTransitDays(transitDays);
@@ -618,7 +620,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
               <div className="lg:p-2 mb-4 flex flex-col">
                 
                 
-                {!isLogin && (
+                {!isLogin && profileName === "Guest" && (
                     <Login />
                 )}
 

@@ -48,7 +48,15 @@ const Header: React.FC = () => {
   const [isLogin, setIsLogin] = useState(false);
  
   const profileName =
-      userData && userData.profile_name ? userData.profile_name : "Guest"
+      userData && userData.profile_name ? userData.profile_name : "Guest";
+
+       // Redirect to login page if profileName is 'Guest'
+ /* useEffect(() => {
+    if (profileName === "Guest") {
+      redirectToLoginPage();
+    }
+  }, [profileName]);*/
+
  
       useEffect(() => {
         const checkLoginStatus = async () => {
@@ -176,11 +184,12 @@ useEffect(() => {
         </div>
         <Link href={"/"}>
         <Image 
-          src="/logoheader.png" 
+          src="/logoheader/logoheader.png" 
+          sizes="(max-width: 1400px) 100vw, 1400px"
           alt="Logo" 
-          width={130} 
+          width={200} 
           height={60} 
-          className="cursor-pointer mx-3 lg:mx-10 xlg:mx-10 w-24 md:w-36 lg:w-44" 
+          className="cursor-pointer mx-3" 
         />
         </Link>
 
@@ -310,7 +319,9 @@ useEffect(() => {
               <MenuItems
                 id="transition-menu"
                 anchor="bottom end"
-                className="w-[600px] origin-top-right rounded-xl border ml-20 border-white/5 bg-white p-1 text-sm/6 text-gray-600 [--anchor-gap:var(--spacing-1)] focus:outline-none z-50 shadow-left shadow-right shadow-bottom"
+                className="w-[600px] origin-top-right rounded-xl border ml-20 border-white/5 
+                bg-white p-1 text-sm/6 text-gray-600 [--anchor-gap:var(--spacing-1)] focus:outline-none z-50 
+                shadow-left shadow-right shadow-bottom"
               >
                 <HeaderCategories />
               </MenuItems>

@@ -49,9 +49,9 @@ const Faq = () => {
 
       <div className="xl:px-[4.3rem] 2xl:px-[13rem] lg:px-[3rem] py-[3rem] relative px-[1rem] mb-16">
           <div className="md:px-4 lg:px-10 xl:pl-0">
-            <div className="flex lg:flex-row flex-col justify-between items-center gap-6">
-              <div className="bg-[#FAFAFA] rounded-lg lg:w-[529px] px-4 py-8 flex flex-col items-center lg:mt-[-67rem]">
-                <div className="flex flex-col gap-10 items-center">
+            <div className="flex lg:flex-row flex-col justify-between items-center gap-[94px]">
+              <div className="bg-[#FAFAFA] rounded-lg lg:w-[529px] px-4 py-8 flex flex-col items-center lg:mt-[-67rem] ">
+                <div className="flex flex-col gap-10 items-center lg:mr-[30px]">
                   <Image
                     src="/question-mark.png"
                     alt="icon" width={"72"} height={"72"}

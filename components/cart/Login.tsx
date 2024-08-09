@@ -183,6 +183,7 @@ const Login = () => {
                         </div>
 
                         <div className="flex items-center justify-center mt-7">
+                        <div className="flex flex-col gap-5 items-center justify-center mt-7">
                             <button
                                 type="submit"
                                 disabled={isLoading}
@@ -190,6 +191,11 @@ const Login = () => {
                             >
                                 {isLoading ? <Spinner /> : "Login"}
                             </button>
+
+                            <Link href="/auth/register">
+                                <h2 className="text-[#121212] font-gilroy-medium cursor-pointer font-bold hover:text-primaryText">Sign Up</h2>
+                            </Link>
+                        </div>
                         </div>
                     </form>
                     <div className="flex flex-row justify-center md:justify-start gap-4 md:gap-6 lg:mt-[129px] absolute bottom-0 mb-3">

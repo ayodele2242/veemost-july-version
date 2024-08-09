@@ -10,6 +10,7 @@ import Footer from './Footer'
 import Link from 'next/link'
 import { ArrowRight01Icon, ArrowLeft01Icon } from 'hugeicons-react'
 import Image from 'next/image'
+import HomeBottomText from './HomeBottomText'
 
 const Partners = () => {
 
@@ -19,29 +20,30 @@ const Partners = () => {
     <main className="w-full overflow-hidden">
       <Header />
 
-      <div className="mt-10 relative text-white overflow-hidden" 
+    <div className="mt-10 relative text-white overflow-hidden" 
     style={{ 
-      backgroundImage: "url('/services-banner.png')",
-      backgroundPosition: 'center center',
+      backgroundImage: "url('/partnersHeader.jpg')",
+      backgroundPosition: 'top center',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       width: '100%'
       }}>
-      <div className="absolute inset-0 bg-grey bg-grayTransparent" />
+      <div className="absolute inset-0" />
       <Container className="flex flex-col items-center gap-4 justify-center text-center relative z-10 overflow-hidden">
         
       <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
             <div className="flex flex-col lg:flex-row justify-center items-center gap-8">
             <div className="flex flex-col">
                 <div className="">
-                    <h2 className="text-[#0B0B0C] font-GilroySemiBold font-normal text-[32px] lg:text-[36px] xl:text-[42px] 2xl:text-[48px] text-left leading-normal">Before we began our <br className="hidden lg:block" />
+                    <h2 className="text-[#0B0B0C] font-gilroy-extrabold font-bold text-[32px] lg:text-[36px] xl:text-[42px]
+                     2xl:text-[48px] text-left leading-tight">Before we began our <br className="hidden lg:block" />
                     journey, we realized one <br className="hidden lg:block" /> thing: “No one can do it <br className="hidden lg:block" /> alone, we all need <br className="hidden lg:block" />  <span className="text-[#D6A912]">partners.</span>”</h2>
                 </div>
-                <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-left leading-normal">
+                <h2 className="text-[#858586] font-gilroy-extrabold font-normal text-[16px] text-left leading-tight lg:w-[500px] mt-6">
                     We assist you plan strategically by <br className="hidden lg:block 2xl:hidden" /> consulting with your various  departments, tracking <br className="hidden lg:block" /> existing data to prove ROI, rolling forecasting etc.
                 </h2>
             </div>
-            <Image src="/partners.jpg" alt="PartnerImg"  width={600} height={400} className="mt-[3rem] md:mt-[1.5rem] pb-[2rem] bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[600px] xl:w-[640px] lg:w-[524px] lg:h-[425px]" />
+            <div className="mt-[3rem] md:mt-[1.5rem] pb-[2rem] bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[600px] xl:w-[640px] lg:w-[524px] lg:h-[425px]" />
                     
             </div>
       </div>
@@ -52,6 +54,7 @@ const Partners = () => {
 
     <Container>
     
+    <HomeBottomText /> 
 
     <div className="md:mx-[4rem] mx-[1rem] pb-[1rem] flex md:justify-center md:items-center 2xl:gap-[2rem] gap-[1rem] scroll-container overflow-x-auto custom-scrollbar">
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-[1rem] md:gap-[2rem]">

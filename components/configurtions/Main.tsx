@@ -59,45 +59,51 @@ const goToProduct = (path: string) => {
   return (
     <main className="w-full overflow-hidden">
     <Header />
+
     <div className="mt-10 relative text-white overflow-hidden" 
     style={{ 
-      backgroundImage: "url('/services-banner.png')",
-      backgroundPosition: 'center center',
+      backgroundImage: "url('/configHeader.jpg')",
+      backgroundPosition: 'top center',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       width: '100%'
       }}>
-      <div className="absolute inset-0 bg-grey bg-grayTransparent" />
-      <div className=" gap-4 justify-center text-center relative z-10 overflow-hidden">
+      <div className="absolute inset-0" />
+      <Container className="flex flex-col items-center gap-4 justify-center text-center relative z-10 overflow-hidden">
         
-      <div className="md:m-[4rem] m-[1rem] lg:py-0 py-[4rem] xl:m-0">
-                   
-                   <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
-                       <div className="flex flex-col lg:w-[528px] 2xl:ml-[6rem] xl:ml-[6rem] 
-                       lg:ml-[1rem] lg:gap-[2rem] gap-[1rem]">
-                           <div className="">
-                               <h2 className="text-[#0B0B0C] font-GilroySemiBold font-normal text-[32px] lg:text-[48px] md:text-[40px] text-center lg:text-left">Product configuration</h2>
-                           </div>
-                           <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center lg:text-left">
-                               Build your Product Configurations
-                           </h2>
-                           {isLogin ? (
+      <div className="md:m-[4rem] m-[1rem] md:pt-0 pt-[4rem] xl:m-0">
+            <div className="flex flex-col lg:flex-row justify-center items-center gap-8">
+            <div className="flex flex-col">
+                <div className="mb-5">
+                    <h2 className="mb-2 flex flex-col">
+                      <span className="text-[#0B0B0C] font-gilroy-extrabold font-bold text-[32px] lg:text-[36px] xl:text-[42px]
+                     2xl:text-[48px] text-left leading-tight">Product</span> 
+                      <span className="text-[#0B0B0C] font-gilroy-extrabold font-bold text-[32px] lg:text-[36px] xl:text-[42px]
+                     2xl:text-[48px] text-left leading-tight"> Configuration </span>
+
+                 <div className="font-gilroy-extrabold font-normal text-[16px] text-[#858586] text-left">
+                   Build you product configuration
+                </div>
+                    </h2>
+                    
+                </div>
+               
+                {isLogin ? (
                                <button className="w-[139px] h-[53px] bg-[#D6A912] cursor-pointer text-[#FFFFFF] 
-                               font-SemiBold font-normal text-[14px] rounded-[8px] lg:mx-0 mx-auto" onClick={handleOpen}>Configure</button>
+                               font-SemiBold font-normal text-[14px] rounded-[28px] lg:mx-0 mx-auto" onClick={handleOpen}>Configure</button>
                            ): (
                                <button className="w-[139px] h-[53px] bg-[#D6A912] cursor-pointer text-[#FFFFFF] 
-                               font-SemiBold font-normal text-[14px] rounded-[8px] lg:mx-0 mx-auto" 
+                               font-SemiBold font-normal text-[14px] rounded-[28px] lg:mx-0 mx-auto" 
                                >Login to continue</button>
                            )}
-                           
-                       </div>
-                       <Image src='/config-img.png' alt="Serverimg" width={"600"} height={"350"} className="hidden lg:block bg-no-repeat object-cover 2xl:w-[50%]  md:w-[400px] lg:w-[524px] lg:h-[349px]" />
-                   </div>
-
-               </div>     
-          
+            </div>
+            <div className="mt-[3rem] md:mt-[1.5rem] pb-[2rem] bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[600px] xl:w-[640px] lg:w-[524px] lg:h-[425px]" />
+                    
+            </div>
       </div>
-
+        
+    </Container>
+    
     </div>
 
     <Transition
@@ -149,7 +155,7 @@ const goToProduct = (path: string) => {
                 <div className="xl:mx-[6rem] md:mx-[4rem] mx-[1rem]">
                     <div className="mt-[4rem]">
                         <div className="flex flex-row justify-between">
-                            <h1 className="font-GilroySemiBold font-normal text-[24px] text-[#121212]">How configuration works</h1>
+                            <h1 className="font-GilroySemiBold font-normal text-[24px] text-[#121212]">How configurations work</h1>
                             {isLogin ? (
                                 <button className="w-[139px] md:h-[53px] h-[37px] rounded-[8px] bg-[#FFFCDE] text-[#D6A912] 
                                 font-SemiBold font-normal text-[14px]" onClick={handleOpen}>Configure products</button>

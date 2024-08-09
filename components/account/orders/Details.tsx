@@ -56,6 +56,7 @@ interface OrderItem {
     date: string;
     freight_charge: number;
     total_tax: string;
+    deliveryDays: string;
     order_status: string | null;
     carrier_name: string | null;
     carrier_code: string | null;
@@ -63,6 +64,7 @@ interface OrderItem {
     ship_from_ware_house_id: string | null;
     profile: string; // JSON string
     shipping_address: ShippingAddress;
+    totalFreightAmount: number;
 }
 
 interface ResponseDataItem {
@@ -160,6 +162,17 @@ const Details: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         return imageUrl;
     };
     
+    const totalAmount = orders.reduce((sum, order) => {
+        const itemPrice = Number(order.product_price);
+        const quantity = Number(order.quantity);
+        const freightCharge = Number(order.totalFreightAmount); // Use totalFreightAmount instead of freight_charge
+        
+        // Calculate item total and ensure it's a number
+        const itemTotal = isNaN(itemPrice) || isNaN(quantity) ? 0 : itemPrice * quantity;
+        return sum + itemTotal + (isNaN(freightCharge) ? 0 : freightCharge);
+    }, 0);
+
+    const finalAmount = totalAmount;
     
     
       // Function to parse profile JSON
@@ -172,6 +185,9 @@ const Details: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         }
     };
 
+      // Extract the shipping address and personal information from the first order
+      const shippingAddress = orders.length > 0 ? orders[0].shipping_address : null;
+      const profile = orders.length > 0 ? parseProfile(orders[0].profile) : null;
 
     return (
         <main className="w-full overflow-hidden">
@@ -249,47 +265,54 @@ const Details: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                                         </div>
                                     </div>
 
-                                    <div className="w-full flex flex-col sm:flex-row justify-between ">
-                                        <div className="box p-5 flex flex-col lg:w-[33%]">
-                                            <div className="font-bold mb-3">Personal Information</div>
-                                            {profile ? (
-                                                <>
-                                                    <p><b>Phone:</b> {profile?.phone}</p>
-                                                    <p><b>Email:</b> {profile?.email}</p>
-                                                    <p><b>Address:</b> {profile?.street}</p>
-
-                                                </>
-                                            ) : (
-                                                <p>No profile information available</p>
-                                            )}
-                                        </div>
-
-                                        <div className="box p-5 flex flex-col w-full lg:w-[33%]">
-                                                <div className="font-bold mb-3">Shipping Address</div>
-                                                <p><b>Name:</b> {order?.shipping_address?.nickname}</p>
-                                                <p><b>Street:</b> {order?.shipping_address?.street}</p>
-                                                <p><b>City:</b> {order?.shipping_address?.city}</p>
-                                                <p><b>State:</b> {order?.shipping_address?.state}</p>
-                                                <p><b>Zip:</b> {order?.shipping_address?.zip}</p>
-                                                <p><b>Country:</b> US</p>
-                                                <p><b>Phone:</b> {order?.shipping_address?.phone}</p>
-                                                <p><b>Email:</b> {order?.shipping_address?.email}</p>
-                                        </div>
-
-                                        {order.carrier_name && (
-                                            <div className="box p-5 flex flex-col w-full lg:w-[33%]">
-                                                <div className="font-bold mb-3">Shipping Method</div>
-                                                <p><b>Carrier Name:</b> {order.carrier_name}</p>
-                                                <p><b>Ship from Location:</b> {order.ship_from_location}</p>
-                                            </div>
-                                        )}
-                                    </div>
+                                 
                                 </div>
                             );
                         })
                     ) : (
                         <p className="text-center py-10">No orders found</p>
                     )}
+
+                         {orders.length > 0 && (
+                            <div className="w-full mt-8 pt-4">
+                                <div className="flex justify-between mb-2 text-[24px] text-red-400">
+                                    <b>Total:</b>
+                                    <div>{finalAmount.toFixed(2)}</div>
+                                </div>
+
+
+                                <div className="flex flex-col md:flex-row justify-between items-center">
+                                <div className="mt-8">
+                                    <h3 className="text-xl font-bold mb-2">Shipping Information:</h3>
+                                    {shippingAddress && (
+                                        <div className="flex flex-col">
+                                            <p><b>Name:</b> {shippingAddress.nickname}</p>
+                                            <p><b>Address:</b> {shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state}, {shippingAddress.country} {shippingAddress.zip}</p>
+                                            <p><b>Phone:</b> {shippingAddress.phone}</p>
+                                            <p><b>Email:</b> {shippingAddress.email}</p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="mt-8">
+                                    <h3 className="text-xl font-bold mb-2">Personal Information:</h3>
+                                    {profile && (
+                                        <div className="flex flex-col">
+                                            <p><b>Name:</b> {profile.first_name} {profile.last_name}</p>
+                                            <p><b>Email:</b> {profile.email}</p>
+                                            <p><b>Phone:</b> {profile.phone}</p>
+                                        </div>
+                                    )}
+                                </div>
+                                </div>
+                                <div className="w-full flex flex-col justify-center items-center mt-8 ">
+                                    <Link href="/account/orders" 
+                                    className="bg-primaryBg text-white p-2 w-[200px] flex justify-center items-center rounded-[30px]">
+                                        Back to Order
+                                        </Link></div>
+
+                            </div>
+                        )}
                 </div>
             )}
         </Container>

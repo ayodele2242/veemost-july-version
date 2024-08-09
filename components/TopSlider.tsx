@@ -6,6 +6,7 @@ import Container from './Container';
 import HomeBottomText from './HomeBottomText';
 import { fetchSliders } from '@/services/requestAll.service';
 import Link from 'next/link';
+import Slider from 'react-slick';
 
 interface Banner {
   id: number;
@@ -64,9 +65,9 @@ const TopSlider = () => {
     // Format the text
     const formattedText = (
       <>
-        {spans[0] && <span className="text-xl md:text-4xl font-extrabold">{spans[0].textContent}</span>}
-        {spans[1] && <span className="text-xl md:text-4xl font-extrabold">{spans[1].textContent}</span>}
-        {spans[2] && <span className="text-primaryText text-xl md:text-4xl font-extrabold">{spans[2].textContent}</span>}
+        {spans[0] && <span className="text-xl 2xl:text-[60px] md:text-[50px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[0].textContent}</span>}
+        {spans[1] && <span className="text-xl 2xl:text-[60px] md:text-[50px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[1].textContent}</span>}
+        {spans[2] && <span className="text-primaryText text-xl 2xl:text-[60px] md:text-[50px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[2].textContent}</span>}
         {paragraphs[0] && <p className="text-center text-grayText text-[12px] md:text-[14px] ">{paragraphs[0].textContent}</p>}
       </>
     );
@@ -85,6 +86,7 @@ const TopSlider = () => {
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       width: '100%',
+     
     }}
   >
    
@@ -95,22 +97,22 @@ const TopSlider = () => {
           return (
             <div
             key={banner.id}
-            className="relative h-[300px] md:h-[500px] w-full"
+            className="relative h-[300px] md:h-[600px] w-full bg-white "
             style={{ 
-              backgroundImage: `url(${banner.banner_image})`, 
-              backgroundSize: 'cover', 
-              backgroundPosition: 'center',
+              backgroundImage: `url(${banner.banner_image})`,
+              backgroundPosition: 'top center',
+              backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
               width: '100%',
-              marginTop: '0'
             }}
           >
-            <div className="flex flex-col md:flex-row w-full h-full">
+            <div className="absolute inset-0 h-[100%] flex items-center justify-center"
+           >
               {/* Left Div */}
-              <div className="flex-1 flex items-center justify-center flex-col">
+              <div className="sm:flex-1 md:flex-1 lg:w-[80%] flex items-center justify-center flex-col">
                   <div
                   className={`
-                    flex flex-col items-center justify-center text-xl md:text-2xl font-extrabold  md:gap-3
+                    flex flex-col items-center justify-center text-xl md:text-4xl font-extrabold  md:gap-3 
                      ${banner.banner_text_placement === 'left' ? 'text-left' : 'text-center'}`}
                 >
                   {parseBannerText(banner.banner_text)}
@@ -118,7 +120,7 @@ const TopSlider = () => {
                 {banner.button_text && (
               <Link
                 href={banner.pageLink}
-                className="text-white px-4 py-2 rounded hover:bg-yellow-700 mt-4 bg-primaryBg"
+                className="text-white px-4 py-2 hover:bg-yellow-700 mt-4 bg-primaryBg rounded-[40px]"
               >
                 {banner.button_text}
               </Link>

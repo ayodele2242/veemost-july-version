@@ -26,12 +26,12 @@ const Services = () => {
       <Container className="flex flex-col items-center gap-4 justify-center text-center relative z-10 overflow-hidden">
         
       <div className="w-full lg:w-[640px] md:w-[600px] text-center">
-    <h2 className="text-[#0B0B0C] font-GilroySemiBold font-gilroy-semibold font-normal md:text-[48px] text-[40px]">
-      Architecting, deploying, and managing secure <span className="text-[#D6A912]">digital solution</span>
+    <h2 className="text-[#0B0B0C] font-gilroy-extrabold font-normal md:text-[48px] text-[40px] tracking-tight leading-tight">
+      Architecting, deploying, and managing secure <span className="text-[#D6A912] font-gilroy-extrabold ">digital solution</span>
     </h2>
   </div>
   <div className="w-full lg:w-[862px] md:w-[600px] flex flex-col items-center gap-[16px] px-5">
-    <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center pr-5">
+    <h2 className="text-[#858586] font-gilroy-regular font-bold text-[16px] text-center pr-5 ">
     Transform your business with expertly designed, seamlessly deployed, and meticulously managed secure digital solutions tailored to drive innovation and protect your assets.
     </h2>
   </div>

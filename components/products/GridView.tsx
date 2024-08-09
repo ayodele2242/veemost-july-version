@@ -246,24 +246,26 @@ const sendProductToBackend = async (productId: string) => {
                                 <Slider {...sliderSettings} className="slider">
                                     {images.slice(0, 4).map((image, index) => (
                                         <div key={index} className='slide'>
-                                            <Zoom>
+                                           <Link href={`/products/${encodeURIComponent(product.ingramPartNumber)}`}>
                                                 <LazyImage
                                                     src={image}
                                                     alt={`${product.description} - ${product.vendorName} - ${product.vendorPartNumber}`}
                                                     layout="responsive" 
                                                     objectFit="cover"
                                                 />
-                                            </Zoom>
+                                            </Link>
                                         </div>
                                     ))}
                                 </Slider>
                             ) : (
+                                <Link href={`/products/${encodeURIComponent(product.ingramPartNumber)}`}>
                                 <LazyImage
                                     src={DEFAULT_IMAGE}
                                     alt="No Image Available"
                                     layout="responsive" 
                                     objectFit="cover"
                                 />
+                                </Link>
                             )}
                             {/*<ProductCardSideNav onViewDetails={() => handleViewDetails(product)} />*/}
                             {discount > 0 && (

@@ -18,8 +18,8 @@ const FooterTop = () => {
                 className="object-cover w-[186px] h-[69px] mb-2"/>
 
                 <p className="text-[16px] text-[#FAFAFA] font-normal text-gilroy-regular text-footer-main">
-                Elevate Your Tech Experience with VeeMost: Where Innovation Meets Affordability. 
-                Your One-Stop Shop for Cutting-Edge IT products and Solutions.
+                Elevate your digital experience with our curated collection of top-tier IT products and services, 
+                designed to boost your productivity, spark innovation, and keep you effortlessly connected.
                 </p>
                 <p
                 className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular mt-10 mb-2 cursor-pointer"
@@ -38,7 +38,8 @@ const FooterTop = () => {
                 </div>
             </div>
             <div className="flex-grow-0 flex-shrink-0 basis-7/10 sm:basis-3/4 flex flex-wrap lg:mx-6">
-                <div className="w-1/2 md:w-1/4">
+            <div className="w-1/2 md:w-1/4"></div>
+                {/*<div className="w-1/2 md:w-1/4">
                 <h2 className="text-[18px] text-[#FFFFFF] font-normal GilroySemiBold">
                     Shopping
                 </h2>
@@ -52,15 +53,21 @@ const FooterTop = () => {
                 >
                     Explore our Collections
                 </p>
-                </div>
+                </div>*/}
                 <div className="w-1/2 md:w-1/4">
                 <h2 className="text-[18px] text-[#FFFFFF] font-normal GilroySemiBold">
             Our products
           </h2>
+         
           <p 
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular py-3 cursor-pointer">
           <Link href="/products?search=firewalls">
             Firewalls
+          </Link>
+          </p>
+          <p className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
+          <Link href="/products?search=switch">
+            Switches
           </Link>
           </p>
           <p className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
@@ -69,15 +76,26 @@ const FooterTop = () => {
             Routers
           </Link>
           </p>
-          <p className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
-          <Link href="/products?search=switch">
-            Switch
-          </Link>
-          </p>
+          
           <p  className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
           <Link href="/products?search=wireless"
           >
             Wireless
+          </Link>
+          </p>
+          <p className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
+          <Link href="/products?search=computer">
+            Computing
+          </Link>
+          </p>
+          <p className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
+          <Link href="/products?search=storage">
+            Storage
+          </Link>
+          </p>
+          <p className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer">
+          <Link href="/products?search=accessories">
+            Accessories
           </Link>
           </p>
                 </div>

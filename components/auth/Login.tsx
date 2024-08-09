@@ -125,12 +125,20 @@ const Login = () => {
         <main className="w-full h-screen overflow-hidden flex lg:flex-row 2lg:flex-row flex-col">
             <div className="left flex flex-1 relative">
                 <div className="lg:hidden block absolute inset-0">
-                    <Image src="/login-img.jpg" alt="Background" width={"500"} height={"500"} className="w-full h-full object-cover" />
+                    <Image src="/lock.jpg" alt="Background" width={"500"} height={"500"} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black opacity-50"></div>
                 </div>
-                <div className="relative z-10 p-4 lg:p-8 w-full h-screen mx-auto bg-white bg-opacity-50 lg:bg-transparent lg:bg-opacity-100">
+                
+                <div className="relative z-10 p-4 lg:p-8 w-full lg:w-[500px] h-screen mx-auto bg-white bg-opacity-50 lg:bg-transparent lg:bg-opacity-100">
                     <Link href="/" className="flex justify-left items-left mb-4">
-                        <Image src="/logoheader.png" alt="logo" width={"150"} height={"50"} className="mt-[2rem] md:w-[150px] md:h-[58px] w-[80px] h-[28px]" />
+                    <Image 
+                            src="/logoheader/logoheader.png" 
+                            sizes="(max-width: 1400px) 100vw, 1400px"
+                            alt="Logo" 
+                            width={200} 
+                            height={60} 
+                            className="cursor-pointer mx-3" 
+                            />
                     </Link>
                     <div className="w-full mt-[120px]">
                         <h1 className="font-gilroy-semiBold font-normal text-[24px] text-[#0B0B0C] sm:font-extrabold">Log into Account</h1>
@@ -187,14 +195,18 @@ const Login = () => {
                             </Link>
                         </div>
 
-                        <div className="flex items-center justify-center mt-7">
+                        <div className="flex flex-col gap-5 items-center justify-center mt-7">
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="bg-[#D6A912] h-[3rem] text-white font-bold py-2 px-4 rounded-[8px] lg:w-[160px] focus:outline-none focus:shadow-outline"
+                                className="bg-[#D6A912] w-full h-[3rem] text-white font-bold py-2 px-4 rounded-[8px] lg:w-[160px] focus:outline-none focus:shadow-outline"
                             >
                                 {isLoading ? <Spinner /> : "Login"}
                             </button>
+
+                            <Link href="/auth/register">
+                                <h2 className="text-[#121212] font-gilroy-medium cursor-pointer font-bold hover:text-primaryText">Sign Up</h2>
+                            </Link>
                         </div>
                     </form>
                     <div className="flex flex-row justify-center md:justify-start gap-4 md:gap-6 lg:mt-[129px] absolute bottom-0 mb-3">

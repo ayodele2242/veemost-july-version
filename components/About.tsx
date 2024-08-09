@@ -7,25 +7,65 @@ import Container from './Container'
 import Link from 'next/link'
 import BrandIcons from './BrandIcons'
 import Image from 'next/image'
+import HomeBottomText from './HomeBottomText'
 
 const About = () => {
   return (
     <main className="w-full overflow-hidden">
       <Header />
-      <div className="lg:mb-[3rem] my-[1rem] mb-[2rem]">
+      <div 
+      
+      className="lg:mb-[3rem] my-[1rem] mb-[2rem]">
 
-            <div className="bg-[#FAFAFA] w-[100%] h-[296px] gap-[16px] flex justify-center items-center">
-                <div className="lg:w-[700px] md:w-[600px] w-[350px] flex justify-center items-center flex-col">
-                    <h2 className="text-center text-[#0B0B0C] font-GilroySemiBold font-bold text-[38px] md:text-[48px]">
-                    Discover Veemost E-commerce store&apos;s story
-                    and  <span className="text-[#D6A912]">
-                            mission
-                        </span></h2>
-                    <h2 className="text-[#858586] font-GilroyRegular font-normal text-[16px] text-center lg:w-[610px]">
-                    Embark on a journey of unparalleled success with us, as we blend innovative technology, exceptional customer service, and a relentless commitment to excellence to deliver IT solutions that not only meet but exceed your business goals and aspirations.
+            <div className="
+            bg-[#FAFAFA] w-[100%] md:h-[330px] gap-[16px] flex justify-center items-center flex fl p-5"
+            style={{ 
+              backgroundImage: "url('/aboutHeader.jpg')",
+              backgroundPosition: 'top center',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              width: '100%'
+              }}
+            > 
+                <div className="sm:flex-1 md:flex-1 lg:w-[80%] flex flex-col items-center justify-center">
+                  {/* Container for both headers */}
+                  <div className="flex flex-col items-center justify-left w-full">
+                    {/* Main Heading */}
+                    <h2 className="text-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
+                    text-[38px] md:text-[48px] leading-tight flex flex-col">
+                      <div className=" ext-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
+                    text-[38px] md:text-[48px]">Discover Veemost </div>
+                      <div className="ext-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
+                    text-[38px] md:text-[48px]">E-commerce store&apos;s</div>
+                     
+                    <div className="ext-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
+                    text-[38px] md:text-[48px]">
+                    story and <span className="text-[#D6A912]">
+                        mission
+                      </span>
+                    </div>
+                      
                     </h2>
+
+                    {/* Subheader */}
+                    <h2 className="text-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
+                     leading-tight w-full md:w-[450px] mt-6">
+                      Embark on a journey of unparalleled success with us, as we blend innovative technology, exceptional customer service, and a relentless commitment to excellence to deliver IT solutions that not only meet but exceed your business goals and aspirations.
+                    </h2>
+                  </div>
                 </div>
+
+
+                <div className="flex-1 hidden md:flex items-center justify-center">
+               
+                
+              </div>
+
             </div>
+
+            <Container>
+              <HomeBottomText />
+            </Container>
 
         <Container className="mb-0">
           <div className="md:px-4 lg:pl-10 xl:pl-20  w-full">

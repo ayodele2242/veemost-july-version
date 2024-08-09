@@ -1,5 +1,5 @@
 "use client"
-import React, { FunctionComponent, useEffect, useLayoutEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import Header from '../Header';
 import Container from '../Container';
 import Footer from '../Footer';
@@ -11,43 +11,38 @@ import "react-toastify/dist/ReactToastify.css";
 import Summary from './summary';
 import Breadcrumbs from '../Breadcrumb';
 import Image from 'next/image';
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 import {
-	isUserLoggedIn,
-	getUserData,
-	redirectToLoginPage,
+    isUserLoggedIn,
+    redirectToLoginPage,
 } from "@/auth/auth";
 import { ApiRequestService } from '@/services/apiRequest.service';
 import Spinner from '../Spinner';
 import useAutoLogout from '@/hooks/useAutoLogout';
-import { loadStripe } from "@stripe/stripe-js"
+import { loadStripe } from "@stripe/stripe-js";
+import { PayPalScriptProvider, PayPalButtons, ReactPayPalScriptOptions } from '@paypal/react-paypal-js';
+import Script from 'next/script';
+import Link from 'next/link';
+import Modal from '../Modal';
 import {
 	EmbeddedCheckoutProvider,
 	EmbeddedCheckout,
 } from "@stripe/react-stripe-js"
-import {
-  PayPalScriptProvider, 
-  PayPalButtons,  
-  ReactPayPalScriptOptions,
-  PayPalHostedFieldsProvider,
-  PayPalHostedField,
-  usePayPalHostedFields, } from '@paypal/react-paypal-js';
-import Script from 'next/script';
-import Link from 'next/link';
+import ModalPaypal from '../ModalPaypal';
+
 
 interface UserProfile {
     user_id: number;
     last_name: string;
     first_name: string;
     email: string;
-    
-  }
+}
 
-  interface ApiResponseData {
-    clientSecret?: string; 
-  }
+interface ApiResponseData {
+    clientSecret?: string;
+}
 
-  interface ResponseDataItem {
+interface ResponseDataItem {
     status: string;
     message: string;
     clientSecret?: string;
@@ -55,56 +50,89 @@ interface UserProfile {
 }
 
 interface LineItem {
-  ingramPartNumber: string;
-  description: string;
-  descr: string | null;
-  price: number;
-  vendorName?: string;
-  quantity: string;
-  warehouseId: string;
-  image_url: string;
+    ingramPartNumber: string;
+    description: string;
+    descr: string | null;
+    price: number;
+    vendorName?: string;
+    quantity: string;
+    warehouseId: string;
+    image_url: string;
 }
 
 interface Distribution {
-  freightRate: number;
+    freightRate: number;
 }
 
 interface CreateOrderPayload {
-  lineItems: {
-      cartItems: LineItem[];
-      distribution: Distribution[];
-      totalFees: number;
-      totalFreightAmount: number;
-      totalNetAmount: string;
-      totalTaxAmount: number;
-  };
+    lineItems: {
+        cartItems: LineItem[];
+        distribution: Distribution[];
+        totalFees: number;
+        totalFreightAmount: number;
+        totalNetAmount: string;
+        totalTaxAmount: number;
+    };
 }
 
 interface CreateOrderResponse {
-  id?: string;
-  orderID: string
+    id?: string;
+    orderID: string;
 }
 
 interface OnApproveData {
-  orderID: string;
+    orderID: string;
 }
 
 interface OnApproveResponse {
-  payer: {
-      name: {
-          given_name: string;
-      };
-  };
+    payer: {
+        name: {
+            given_name: string;
+        };
+    };
 }
 
-  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!); 
+interface Address {
+    id: number | null;
+    user_id: number;
+    email: string;
+    phone: string;
+    street: string;
+    company: string;
+    state: string;
+    country: string;
+    city: string;
+    zip: string;
+    nickname: string;
+    firstname: string | null;
+    lastname: string | null;
+    default_address_status: string;
+    apartment: string | null;
+  }
+  
+  interface SessionIDProps {
+      session_id: string;
+    }
+  
+    interface ApiResponseData {
+      clientSecret?: string; 
+      customer_email?: string;
+    }
+  
+    interface ResponseDataItem {
+      status: string;
+      message: string;
+      clientSecret?: string;
+      data: ApiResponseData;
+      customer_email?: string;
+      orderId?: string;
+  }
 
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
-
-const Payment = () => {
-
+const Payment: FunctionComponent = () => {
 
   const initialOptions: ReactPayPalScriptOptions = {
     clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
@@ -114,590 +142,485 @@ const Payment = () => {
 };
 
 
-const { cartItems } = useCartStore();
-const [isOpen, setIsOpen] = useState(false);
-const openOverlay = () => setIsOpen(true);
+    const { cartItems, clearCart } = useCartStore();
+    const [isOpen, setIsOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [totalFreightAmount, setTotalFreightAmount] = useState(0);
+    const [totalWeight, setTotalWeight] = useState(0);
+    const [transitDays, setTransitDays] = useState('');
+    const [errorIngramMessage, setErrorIngramMessage] = useState<string | null>(null);
+    const [loadingEstimate, setLoadingEstimate] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingPayment, setIsLoadingPayment] = useState(false);
+    const [clientSecret, setClientSecret] = useState('');
+    const [backendResponse, setBackendResponse] = useState(null);
+    const [payPalOrderId, setPayPalOrderId] = useState('');
+    const [isPaypalOverlayVisible, setPaypalIsOverlayVisible] = useState<boolean>(false);
+    const [isOverlayVisible, setIsOverlayVisible] = useState<boolean>(false);
+    const [scriptLoaded, setScriptLoaded] = useState(false);
+    const [issubmitting, setIssubmitting] = useState(false);
+    const [sdkReady, setSdkReady] = useState(false);
+    const [paypalLoaded, setPaypalLoaded] = useState(false);
+    const [paypalError, setPaypalError] = useState<string | null>(null);
+    const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
+    const [isPaypalModalOpen, setIsPaypalModalOpen] = useState(false);
+   
 
-const [loading, setLoading] = useState(true);
-const [totalFreightAmount, setTotalFreightAmount] = useState(0); 
-const [totalWeight, setTotalWeight] = useState(0); 
-const [transitDays, setTransitDays] = useState(''); 
-const [errorIngramMessage, setErrorIngramMessage] = useState<string | null>(null);
-const [loadingEstimate, setLoadingEstimate] = useState(false);
-const [selectedOption, setSelectedOption] = useState("")
-const [isLoading, setIsLoading] = useState(false);
-const [clientSecret, setClientSecret] = useState("");
-const [backendResponse, setBackendResponse] = useState(null)
-const [payPalOrderId, setPayPalOrderId] = useState("")
-const [isPaypalOverlayVisible, setPaypalIsOverlayVisible] = useState<boolean>(false);
-const [isOverlayVisible, setIsOverlayVisible] = useState<boolean>(false);
-const [scriptLoaded, setScriptLoaded] = useState(false);
-const [issubmitting, setIssubmitting] = useState(false);
-const [sdkReady, setSdkReady] = useState(false);
-const [paypalLoaded, setPaypalLoaded] = useState(false);
-const [paypalError, setPaypalError] = useState<string | null>(null);
+    const { push } = useRouter();
 
+    const closeOverlay = () => {
+        setIsOverlayVisible(false);
+    };
 
-const { push } = useRouter()
-
-const closeOverlay = () => {
-    setIsLoading(false);
-    setIsOverlayVisible(false);
-} 
-
-const closePaypalOverlay = () => {
-  setIsLoading(false);
-  setPaypalIsOverlayVisible(false);
-} 
+    const closePaypalOverlay = () => {
+        setIsLoading(false);
+        setPaypalIsOverlayVisible(false);
+        
+    };
 
     const [isLogin, setIsLogin] = useState(false);
     useEffect(() => {
-        // Only run on the client
         const loginStatus = isUserLoggedIn();
         setIsLogin(loginStatus);
-      }, []);
+    }, []);
 
-      const expirePeriod =
-    typeof window !== "undefined" ? localStorage.getItem("expire_period") : null;
-    const expireTime = expirePeriod ? parseInt(expirePeriod, 10) : 0; 
+    const expirePeriod = typeof window !== "undefined" ? localStorage.getItem("expire_period") : null;
+    const expireTime = expirePeriod ? parseInt(expirePeriod, 10) : 0;
     const isLoggedIn = useAutoLogout(expireTime);
-    const overallSum = cartItems.reduce(
-        (total, item) => total + item.price * item.quantity,
-        0
-      );
+    const overallSum = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
-    // Function to get user profile from localStorage
     const getUserProfile = (): UserProfile | null => {
-      const userJson = localStorage.getItem("user");
-      if (userJson) {
-        return JSON.parse(userJson) as UserProfile;
-      }
-      return null;
+        const userJson = localStorage.getItem("user");
+        if (userJson) {
+            return JSON.parse(userJson) as UserProfile;
+        }
+        return null;
     };
 
-
-if (!isLoggedIn) {
-  redirectToLoginPage();
-}
-
-useLayoutEffect(() => {
-  const loggedIn = isUserLoggedIn();
-  if (!loggedIn) {
-    redirectToLoginPage();
-  } else {
-    setLoading(false);
-  }
-}, []);
-
-useEffect(() => {
-    if (typeof window !== "undefined") {
-      const totalFreightAmountStr = localStorage.getItem("totalFreightAmount");
-      const totalWeightStr = localStorage.getItem("totalWeight");
-      const transitDaysStr = localStorage.getItem("transitDays");
-  
-      // Convert to number or use default values if not found
-      const totalFreightAmount = totalFreightAmountStr ? parseFloat(totalFreightAmountStr) : 0;
-      const totalWeight = totalWeightStr ? parseFloat(totalWeightStr) : 0;
-      const transitDays = transitDaysStr || '';
-  
-      setTotalFreightAmount(totalFreightAmount);
-      setTotalWeight(totalWeight);
-      setTransitDays(transitDays);
+    if (!isLoggedIn) {
+        redirectToLoginPage();
     }
-  }, []);
 
+    const handleSuccessRedirect = (orderId: string) => {
+        push(`/payment/success/${encodeURIComponent(orderId)}`);
+      };
 
-  const addPayPalScript = () => {
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = `https://www.paypal.com/sdk/js?clientId=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}`;
-    // script.setAttribute("data-namespace", "paypal_sdk");
+    useEffect(() => {
+        const totalFreightAmountStr = localStorage.getItem("totalFreightAmount");
+        const totalWeightStr = localStorage.getItem("totalWeight");
+        const transitDaysStr = localStorage.getItem("transitDays");
 
-    script.async = true;
-    script.onload = () => {
-      setSdkReady(true);
+        const totalFreightAmount = totalFreightAmountStr ? parseFloat(totalFreightAmountStr) : 0;
+        const totalWeight = totalWeightStr ? parseFloat(totalWeightStr) : 0;
+        const transitDays = transitDaysStr || '';
+
+        setTotalFreightAmount(totalFreightAmount);
+        setTotalWeight(totalWeight);
+        setTransitDays(transitDays);
+    }, []);
+
+    const handleRadioChange = (event: { target: { id: string; }; }) => {
+        const selectedOption = event.target.id;
+        setSelectedOption(selectedOption);
     };
-    document.body.appendChild(script);
+
+    const handlePayment = async () => {
+      const commentValue = document.getElementById("message") as HTMLInputElement | null;
+      
+      // Serialize the array into a string using JSON.stringify()
+      const serializedCartItems = JSON.stringify(cartItems);
+      // Store the serialized string in localStorage
+      localStorage.setItem('cartItems', serializedCartItems);
+      localStorage.setItem('cartSumTotal', overallSum.toString());
+      
+      const totalFreightAmount = parseFloat(localStorage.getItem('totalFreightAmount') || '0');
+  
+      // Construct line items for the payload
+      const lineItems = cartItems.map((item) => ({
+          ingramPartNumber: item.ingramPartNumber,
+          description: item.description,
+          descr: null,
+          price: item.price,
+          vendorName: item.vendorName,
+          quantity: String(item.quantity),
+          warehouseId: String(item.warehouseId),
+          image_url: item.image_url
+      }));
+  
+      // Construct the distribution object
+      const distribution = [{
+          freightRate: totalFreightAmount
+      }];
+  
+      // Construct the payload object
+      const payload = {
+          lineItems: {
+              cartItems: lineItems,
+              distribution: distribution,
+              totalFees: 0,
+              totalFreightAmount: totalFreightAmount,
+              totalNetAmount: overallSum.toString(),
+              totalTaxAmount: 0 // Include tax if applicable
+          }
+      };
+  
+     
+  
+      setIsLoadingPayment(true);
+  
+      try {
+          const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), "stripe_checkout/route");
+          const responseData = response.data;
+          
+          //console.log("Backend response ",responseData.clientSecret);
+          if (response.status === 200) {
+            const { status, message, data } = responseData;
+         
+  
+            if (responseData.clientSecret) {
+              setIsStripeModalOpen(true); 
+              setClientSecret(responseData.clientSecret);
+            }else{
+              toast.error(message);
+              setIsStripeModalOpen(false);
+            }
+           
+                        
+        } else {
+            const { status, message } = responseData;
+            toast.error(message);
+            setBackendResponse(status);
+        }
+        
+      } catch (error) {
+          toast.error("An error occurred while finalizing orders details.");
+      }
   };
 
-  useEffect(() => {
-    // Load PayPal SDK script
-    const loadPayPalScript = () => {
-      const script = document.createElement('script');
-      script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}&components=buttons`;
-      script.async = true;
-      script.onload = () => setSdkReady(true);
-      document.body.appendChild(script);
-    };
+    const handlePaypalPayment = async (): Promise<string> => {
+        setIssubmitting(true);
+        const serializedCartItems = JSON.stringify(cartItems);
+        localStorage.setItem('cartItems', serializedCartItems);
+        localStorage.setItem('cartSumTotal', overallSum.toString());
 
-    if (!window.paypal) {
-      loadPayPalScript();
-    } else {
-      setSdkReady(true);
-    }
+        const totalFreightAmount = parseFloat(localStorage.getItem('totalFreightAmount') || '0');
 
-    return () => {
-      // Cleanup script if necessary
-      const existingScript = document.querySelector(`script[src^="https://www.paypal.com/sdk/js"]`);
-      if (existingScript) {
-        document.body.removeChild(existingScript);
-      }
-    };
-  }, []);
+        const lineItems = cartItems.map(item => ({
+            ingramPartNumber: item.ingramPartNumber,
+            description: item.description,
+            descr: null,
+            price: item.price,
+            vendorName: item.vendorName,
+            quantity: String(item.quantity),
+            warehouseId: String(item.warehouseId),
+            image_url: item.image_url
+        }));
 
-  
-  const handleRadioChange = (event: { target: { id: string; }; }) => {
-    const selectedOption = event.target.id;
-    
-        setSelectedOption(selectedOption);
-    
-};
+        const distribution = [{ freightRate: totalFreightAmount }];
 
+        const payload: CreateOrderPayload = {
+            lineItems: {
+                cartItems: lineItems,
+                distribution: distribution,
+                totalFees: 0,
+                totalFreightAmount: totalFreightAmount,
+                totalNetAmount: overallSum.toString(),
+                totalTaxAmount: 0
+            }
+        };
 
+        try {
+            const response = await ApiRequestService.callAPI<CreateOrderResponse>(JSON.stringify(payload), "paypal_checkout/create_payment");
+            const responseData = response.data;
 
-
-const renderPaymentButton = () => {
-    if (selectedOption === "card") {
-        return (
-    <div className="w-full flex center justify-center">
-            <button
-                className="mt-10 flex gap-2  justify-center rounded-md border border-transparent bg-primaryBg 
-                py-2 px-4 text-sm font-medium text-white shadow-sm"
-                type="submit"
-                onClick={handlePayment} 
-      disabled={isLoading}
-            >
-      {isLoading && <Spinner size="sm" />}
-                        {isLoading ? 'Processing...' : 'Complete Payment'}
-                
-            </button>
-    </div>
-        )
-    }else if (selectedOption === "paypal") {
-        return (
-    <div className="w-full flex center justify-center">
-            <button
-                className="mt-10 flex gap-2  justify-center rounded-md border border-transparent bg-primaryBg 
-                py-2 px-4 text-sm font-medium text-white shadow-sm"
-                type="submit"
-                onClick={handlePaypalPayment} 
-      disabled={isLoading}
-            >
-      {isLoading && <Spinner size="sm" />}
-                        {isLoading ? 'Processing...' : 'Complete Payment'}
-                
-            </button>
-    </div>
-        )
-    } else {
-        return (
-    <div className="w-full flex center justify-center">
-            <div className="mt-10 flex justify-center rounded-md border border-transparent bg-[#FF0000] py-2 px-4 text-sm font-medium text-white shadow-sm">
-                Select Payment Method to Continue
-            </div>
-    </div>
-        )
-    }
-}
-
-const handlePayment = async () => {
-    const commentValue = document.getElementById("message") as HTMLInputElement | null;
-    
-    // Serialize the array into a string using JSON.stringify()
-    const serializedCartItems = JSON.stringify(cartItems);
-    // Store the serialized string in localStorage
-    localStorage.setItem('cartItems', serializedCartItems);
-    localStorage.setItem('cartSumTotal', overallSum.toString());
-    
-    const totalFreightAmount = parseFloat(localStorage.getItem('totalFreightAmount') || '0');
-
-    // Construct line items for the payload
-    const lineItems = cartItems.map((item) => ({
-        ingramPartNumber: item.ingramPartNumber,
-        description: item.description,
-        descr: null,
-        price: item.price,
-        vendorName: item.vendorName,
-        quantity: String(item.quantity),
-        warehouseId: String(item.warehouseId),
-        image_url: item.image_url
-    }));
-
-    // Construct the distribution object
-    const distribution = [{
-        freightRate: totalFreightAmount
-    }];
-
-    // Construct the payload object
-    const payload = {
-        lineItems: {
-            cartItems: lineItems,
-            distribution: distribution,
-            totalFees: 0,
-            totalFreightAmount: totalFreightAmount,
-            totalNetAmount: overallSum.toString(),
-            totalTaxAmount: 0 // Include tax if applicable
+            if (response.status === 200 && responseData.orderID) {
+                setPayPalOrderId(responseData.orderID);
+                return responseData.orderID;
+            } else {
+                throw new Error("Failed to create PayPal order");
+            }
+        } catch (error) {
+            toast.error("An error occurred while creating PayPal order.");
+            throw error;
+        } finally {
+            setIssubmitting(false);
         }
     };
 
-   
-
-    setIsLoading(true);
-
-    try {
-        const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), "stripe_checkout/route");
-        const responseData = response.data;
-        
-        //console.log("Backend response ",responseData.clientSecret);
-        if (response.status === 200) {
-          const { status, message, data } = responseData;
-       
-
-          if (responseData.clientSecret) {
-            setIsOverlayVisible(true); 
-            setClientSecret(responseData.clientSecret);
-          }else{
-            toast.error(message);
-            setIsOverlayVisible(false); 
-          }
-         
-                      
-      } else {
-          const { status, message } = responseData;
-          toast.error(message);
-          setBackendResponse(status);
-      }
-      
-    } catch (error) {
-        toast.error("An error occurred while finalizing orders details.");
-    }
-};
+    const onApprove = async (data: OnApproveData, actions: any) => {
+        try {
+            const orderDetails = await actions.order.capture();
+            //console.log("Payment response ",JSON.stringify(orderDetails))
+            //console.log("Payment response data ",JSON.stringify(data))
+            if (orderDetails.status === "COMPLETED") {
+                //localStorage.setItem('paypalID', orderDetails.id);
+                //localStorage.setItem('paypalPayerEmail', orderDetails.payer.email_address);
+                //toast.success("Payment completed successfully! "+ orderDetails.id);
+                closePaypalModal();
+                setIsOverlayVisible(true);
 
 
-const handlePaypalPayment = async (): Promise<string> => {
-  setIssubmitting(true);
-  const serializedCartItems = JSON.stringify(cartItems);
-  localStorage.setItem('cartItems', serializedCartItems);
-  localStorage.setItem('cartSumTotal', overallSum.toString());
+                //send items to the backend
 
-  const totalFreightAmount = parseFloat(localStorage.getItem('totalFreightAmount') || '0');
+                 //Send items to backend 
+                 const cartItms = cartItems.map((item) => ({
+                    ingramPartNumber: item.ingramPartNumber,
+                    description: item.description,
+                    descr: item.descr,
+                    price: item.price,
+                    vendorPartNumber: item.vendorPartNumber,
+                    vendorName: item.vendorName,
+                    quantity: String(item.quantity),
+                    warehouseId: String(item.warehouseId),
+                    image_url: item.image_url
+                }));
+                  
 
-  const lineItems = cartItems.map(item => ({
-      ingramPartNumber: item.ingramPartNumber,
-      description: item.description,
-      descr: null,
-      price: item.price,
-      vendorName: item.vendorName,
-      quantity: String(item.quantity),
-      warehouseId: String(item.warehouseId),
-      image_url: item.image_url
-  }));
+                  const totalFreightAmountStr = localStorage.getItem("totalFreightAmount");
+                  const totalWeightStr = localStorage.getItem("totalWeight");
+                  const transitDaysStr = localStorage.getItem("transitDays");
+              
+                  // Convert to number or use default values if not found
+                  const totalFreightAmount = totalFreightAmountStr ? parseFloat(totalFreightAmountStr) : 0;
+                  const totalWeight = totalWeightStr ? parseFloat(totalWeightStr) : 0;
+                  const transitDays = transitDaysStr || '';
+                  const total = overallSum;
+                  const addressString = localStorage.getItem('userAddress');
 
-  const distribution = [{ freightRate: totalFreightAmount }];
+                  // Check if the addressString is not null and parse it
+                  let address: Address | null = null;
 
-  const payload: CreateOrderPayload = {
-      lineItems: {
-          cartItems: lineItems,
-          distribution: distribution,
-          totalFees: 0,
-          totalFreightAmount: totalFreightAmount,
-          totalNetAmount: overallSum.toString(),
-          totalTaxAmount: 0
-      }
-  };
-
-  setIsLoading(true);
-
-  try {
-      const orderID = await createOrder(payload);
-      console.log(orderID)
-      if (orderID) {
-        setIssubmitting(false);
-          setPaypalIsOverlayVisible(true);
-          setPayPalOrderId(orderID);
-          return orderID;
-      } else {
-        setIssubmitting(false);
-          toast.error("Could not initiate PayPal Checkout");
-          setPaypalIsOverlayVisible(false);
-          return '';
-      }
-  } catch (error) {
-    setIssubmitting(false);
-      toast.error("An error occurred while finalizing order details.");
-      return '';
-  } finally {
-      setIsLoading(false);
-      setIssubmitting(false);
-  }
-};
-
-
-// Function to handle PayPal payment verification
-const handlePaypalPaymentVerify = async (orderID: string) => {
-  setIsLoading(true);
-
-  const payload = { orderID };
-
-  try {
-    const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), "paypal_checkout/create_payment");
-    const responseData = response.data;
-
-    if (response.status === 200 && responseData.status === 'success') {
-      // Handle success logic here
-      console.log(JSON.stringify(responseData))
-    } else {
-      toast.error(responseData.message || "Verification failed.");
-    }
-  } catch (error) {
-    toast.error("An error occurred while verifying payment details.");
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-
-async function createOrder(payload: CreateOrderPayload): Promise<string> {
-  const response = await fetch(apiUrl+"paypal_checkout/create_payment", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-  });
-
-  const order: CreateOrderResponse = await response.json();
-  console.log("orderID "+JSON.stringify(order))
-  return order.orderID;
-}
-
-async function onApprove(data: OnApproveData): Promise<void> {
-  const response = await fetch(apiUrl+"paypal_checkout/create_payment", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-          orderID: data.orderID
-      }),
-  });
-
-  const orderData: OnApproveResponse = await response.json();
-  const name = orderData.payer.name.given_name;
-  alert(`Transaction completed by ${name}`);
-}
-
-
-const handleCloseOverlay = () => {
-    setIsOverlayVisible(false); // Hide the overlay
-};
-
-
-
-
-const initialValues = {
-  cardNumber: '',
-  cardName: '',
-  expireDate: '',
-  cvv: ''
-};
-
-
-const breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Cart', href: '/cart' },
-    { label: 'Checkout', href: '/checkout' },
-    { label: 'Payment', href: '/payment' },
-     ];
-
-     const renderPaypalButtons = () => {
-      if (!sdkReady) return null;
-
-      return (
-          <div id="paypal-button-container"></div>
-      );
-  };
-
-
-
-  const handlePayPalButtonRender = () => {
-    if (window.paypal && window.paypal.Buttons) {
-        window.paypal.Buttons({
-            createOrder: async (data: any, actions: any): Promise<string> => {
-                try {
-                    // Call handlePaypalPayment to create the order and return the orderID
-                    const orderID = await handlePaypalPayment();
-                    
-                    // Ensure that orderID is always a string
-                    if (orderID) {
-                        return orderID;
-                    } else {
-                        throw new Error("Failed to create order: orderID is undefined.");
+                  if (addressString) {
+                    try {
+                      address = JSON.parse(addressString) as Address;
+                      //console.log(address.id);
+                    } catch (error) {
+                      //console.error("Failed to parse address:", error);
                     }
-                } catch (error) {
-                    console.error("Error creating PayPal order:", error);
-                    setPaypalError('Error creating PayPal order');
-                    throw error; // Ensure the function still throws an error if something goes wrong
-                }
-            },
-            onApprove: async (data: any, actions: any) => {
-                try {
-                    // Capture the order
-                    await actions.order.capture();
+                  }
 
-                    // Call handlePaypalPaymentVerify with the orderID
-                    await handlePaypalPaymentVerify(data.orderID);
-                } catch (error) {
-                    console.error("Error capturing PayPal order:", error);
-                    setPaypalError('Error capturing PayPal order');
+                  
+                  //user profile
+                  let userJson = localStorage.getItem("user");
+                  if (!userJson) return;
+                  let user = JSON.parse(userJson);
+                  const addressId = address?.id ?? null;
+
+
+                  const payload = {
+                       session_id: orderDetails.id,
+                        email: user.email,
+                        checkOutEmail: orderDetails.payer.email_address,
+                        selected_address_id: addressId,
+                        payment_type: "card",
+                        note: "",
+                        items: cartItms,
+                        totalFees: 0,
+                        totalFreightAmount: totalFreightAmount,
+                        deliveryDays: transitDays,
+                        weight: totalWeight,
+                        totalNetAmount: overallSum.toString(),
+                        totalTaxAmount: 0,
+                        totalPrice: total
+                };
+
+                //console.log(payload)
+                try {
+                  const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), "checkout/checkout");
+                  const responseData = response.data;
+                  
+                  //console.log("Backend response ",responseData.clientSecret);
+                  if (response.status === 200) {
+                    const { status, orderId, message, data } = responseData;
+                 
+                    if(status === 'success'){
+                      localStorage.setItem("totalFreightAmount", "");
+                      localStorage.setItem("totalWeight", "");
+                      localStorage.setItem("transitDays","");
+                      localStorage.setItem('cartItems','');
+                      clearCart();
+                     // console.log(orderId);
+                      setIsOverlayVisible(true);
+                      handleSuccessRedirect(orderId);
+                      
+                    }
+          
+                  
+                   
+                                
+                } else {
+                    const { status, message } = responseData;
+                    toast.error(message);
+                    
                 }
+                
+              } catch (error) {
+                  toast.error("An error occurred while finalizing orders details.");
+              }
+            
+
+
+
+
+
+
+
+
+
+
+
+
+                
+            } else {
+                throw new Error("Payment not completed.");
             }
-        }).render('#paypal-button-container');
-    } else {
-        setPaypalError(`There is an issue loading PayPal SDK. You can contact PayPal Developer Support for further assistance or visit https://developer.paypal.com/docs/support/`);
-    }
+        } catch (error: any) {
+            setPaypalError(error.message);
+            toast.error("An error occurred while processing PayPal payment.");
+        }
+    };
+
+    const onError = (error: any) => {
+        console.error("PayPal Error:", error);
+        toast.error("An error occurred during PayPal transaction.");
+    };
+
+    
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Cart', href: '/cart' },
+  { label: 'Checkout', href: '/checkout' },
+  { label: 'Payment', href: '/payment' },
+   ];
+
+   const handleStripePayment = async () => {
+    // Your Stripe payment logic here
+    setIsStripeModalOpen(true);
 };
 
+const handlePaypalPayments = async () => {
+    // Your PayPal payment logic here
+    setIsPaypalModalOpen(true);
+};
 
-useEffect(() => {
-    if (paypalLoaded) {
-        handlePayPalButtonRender();
-    }
-}, [paypalLoaded]);
+const closeStripeModal = () => {
+    setIsStripeModalOpen(false);
+};
 
+const closePaypalModal = () => {
+    setIsPaypalModalOpen(false);
+};
 
-
-
-
-
-  return (
-    <main className="w-full overflow-hidden">
-    <Header />
-    <Container>
-           <div className="flex flex-col gap-5 md:space-x-4 p-4">
-              <div className="w-full mb-8">
-                  <Breadcrumbs breadcrumbs={breadcrumbs} />
-              </div>
-              <div className="w-full flex flex-col gap-4">
-                <p className="font-extrabold text-lg lg:text-2xl mb-4">Payment</p>
-              </div>
-
-              <div className="flex flex-col lg:flex-row gap-3 mt-4">
-
-              <div className="flex-1 lg:w-[100%]   p-2">
-                <div className="flex flex-col w-full">
-                    <div className="font-bold text-[16px] mb-8">
-                        Payment Method {scriptLoaded}
+    return (
+        <>
+            <Header />
+            <Container>
+                <div>
+                    {isLoading ? (
+                        <Spinner />
+                    ) : (
+                        <>
+              <div className="flex flex-col gap-5 md:space-x-4 p-4">
+                    <div className="w-full mb-8">
+                        <Breadcrumbs breadcrumbs={breadcrumbs} />
+                    </div>
+                    <div className="w-full flex flex-col gap-4">
+                      <p className="font-extrabold text-lg lg:text-2xl mb-4">Payment</p>
                     </div>
 
+                    <div className="flex flex-col lg:flex-row gap-3 mt-4">
 
-                            <div className="w-full">
-                                <label className="radio-btn mt-4 mb-4 text-gray-600 font-bold cursor-pointer">
-                                    <input
-                                    type="radio"
-                                    name="payment"
-                                    
-                                    id="card"
-                                    className=""
-                                    onChange={handleRadioChange}
-                                    />
-                                    <span></span>
-                                    <Image src="/mastercard.png" alt="" width={36} height={24} /> Master Card
-                                </label>
+                        <div className="flex-1 lg:w-[100%]   p-2">
+
+                            <div className="font-bold text-[16px] mb-8">
+                                Payment Method
                             </div>
 
-                            <div className="w-full">
-                                <label className="radio-btn mt-4 mb-4 text-gray-600 font-bold cursor-pointer">
-                                    <input
-                                    type="radio"
-                                    name="payment"
-                                    id="paypal"
-                                    className=""
-                                    onChange={handleRadioChange}
-                                    />
-                                    <span></span>
-                                    <Image src="/paypal.png" alt="" width={36} height={32} /> Paypal
-                                </label>
+                            <div className="w-full flex flex-col gap-4">
+                                     <button
+                                        onClick={handlePayment} 
+                                        disabled={isLoadingPayment}
+                                        className="bg-blue-500 text-white px-4 py-2 rounded w-[300px]"
+                                      >
+                                        Pay with Stripe
+                                    </button>
+                                    <button
+                                        onClick={handlePaypalPayments}
+                                        className="bg-green-500 text-white flex justify-center gap-2 items-center px-4 py-2 rounded w-[300px]"
+                                    >
+                                        <Image src="/paypal.png" alt="" width={36} height={24} /> Pay with PayPal
+                                    </button>
                             </div>
 
-                            <div className="w-full mt-8">
-										{renderPaymentButton()}
-							</div>
+
+                        </div>
+
+                        <div className="flex-1 lg:w-[40%] shadow-lg rounded-lg">
+                            <Summary 
+                            loadingEstimate={loadingEstimate} 
+                            errorMessage={errorIngramMessage}
+                            totalFreightAmount={totalFreightAmount}
+                            totalWeight={totalWeight}
+                            transitDays={transitDays}/>
+                        </div>
 
 
-                </div>
 
-
-              </div>
-
-              <div className="flex-1 lg:w-[40%] shadow-lg rounded-lg">
-                <Summary 
-                loadingEstimate={loadingEstimate} 
-                errorMessage={errorIngramMessage}
-                totalFreightAmount={totalFreightAmount}
-                totalWeight={totalWeight}
-                transitDays={transitDays}/>
-                </div>
-
-
-              </div>
-
-
-          </div>
-
-
-          {isOverlayVisible && (
-          <div className="overlay">
-            <div className="modal-content">
-                <span className="close-button" onClick={closeOverlay}>Back</span>
-                <div className="w-full">
-                <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
-                    <EmbeddedCheckout />
-                </EmbeddedCheckoutProvider>
-                </div>
-            </div>
-          </div>
-          )}
-
-       
-           {/* PayPal Payment Overlay */}
-           {isPaypalOverlayVisible && (
-            <div className="overlay">
-                <div className={`fixed inset-0 flex items-center justify-center z-50 ${isPaypalOverlayVisible ? 'block' : 'hidden'}`}>
-                    <div className="bg-white p-8 rounded-md shadow-lg">
-                        <h2 className="text-xl font-semibold mb-4">Complete PayPal Payment</h2>
-                        <div id="paypal-button-container"></div>
-                        <Script
-                            src="https://www.paypal.com/sdk/js?client-id=ASTIJ2GwX1sMRZmycl1c_npOSLq5MJhFuP10tZcMyFm2khQfemdFeteDHWXeHFwEj89NXvtM6A2qzLZN&currency=USD&components=buttons,marks&debug=true"
-                            strategy="lazyOnload"
-                            onLoad={() => setPaypalLoaded(true)}
-                            onError={(e) => {
-                                setPaypalError('Failed to load PayPal SDK');
-                                console.error('Failed to load PayPal SDK', e);
-                            }}
-                        />
-                        {paypalError && <p className="text-red-500">{paypalError}</p>}
-                        <button
-                            className="mt-4 flex gap-2 justify-center rounded-md border border-transparent bg-red-500 
-                            py-2 px-4 text-sm font-medium text-white shadow-sm"
-                            type="button"
-                            onClick={closePaypalOverlay}
-                        >
-                            Cancel
-                        </button>
                     </div>
+
+                          {/* Stripe payment integration */}
+                           <Modal isOpen={isStripeModalOpen} onClose={closeStripeModal} title="Pay with Stripe">
+                                <div>
+                                    <div className="w-full">
+                                      <EmbeddedCheckoutProvider stripe={stripePromise} options={{ clientSecret }}>
+                                          <EmbeddedCheckout />
+                                      </EmbeddedCheckoutProvider>
+                                    </div>
+                                </div>
+                            </Modal>
+
+                             {/* Paypal payment integration */}
+                            <ModalPaypal isOpen={isPaypalModalOpen} onClose={closePaypalModal} title="Pay with PayPal">
+
+                            
+                                     <div>
+                                           <PayPalScriptProvider options={initialOptions}>
+                                                <PayPalButtons
+                                                    createOrder={async () => {
+                                                        return await handlePaypalPayment();
+                                                    }}
+                                                    onApprove={onApprove}
+                                                    onError={onError}
+                                                />
+                                            </PayPalScriptProvider>
+                                      </div>
+                              
+                            </ModalPaypal>
+
+                            <ModalPaypal isOpen={isOverlayVisible} onClose={closeOverlay} title="">
+
+                            
+                                     <div className="flex gap-2 justify-center items-center p-8 font-extrabold">
+                                           <Spinner size='md' /> Transaction in progress. Please wait...
+                                      </div>
+                              
+                            </ModalPaypal>
+
+
+
+                            
+
+              </div>
+                           
+                        </>
+                    )}
                 </div>
-                </div>
-            )}
+                <ToastContainer />
+            </Container>
+            <Footer />
+        </>
+    );
+};
 
-
-
-    </Container>
-    <ToastContainer />
-    <Footer />
-   
-    </main>
-  )
-}
-
-export default Payment
+export default Payment;
