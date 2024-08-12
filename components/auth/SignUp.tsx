@@ -209,7 +209,7 @@ const SignUp = () => {
                     if (responseData.status === "error") {
                         toast.error("Error occurred: " + responseData.message);
                     } else if (responseData.status === true) {
-                        openModal('Registration successful. Please check your email for activation link.', 'success');
+                        openModal('Registration successful', 'Please check your email for activation link.', 'success');
                         
                         setFormData({
                             last_name: "",
@@ -238,17 +238,17 @@ const SignUp = () => {
                     if (response.status === 400) {
                         const responseData = response.data;
                         if (responseData.status === "error") {
-                            openModal(responseData.message, 'warning');
+                            openModal('Error Occured', responseData.message, 'warning');
                             //toast.error(responseData.message);
                         } else if (responseData.status === true) {
-                            openModal('Unknown error occurred', 'error');
+                            openModal('Error Occured', 'Unknown error occurred', 'error');
                            
                         }
                     }
                 }
             } catch (error) {
                 setIsLoading(false);
-                openModal('An error occurred while Registering. Please try again later', 'error');
+                openModal('Error Occured','An error occurred while Registering. Please try again later', 'error');
             }
         }
     };
