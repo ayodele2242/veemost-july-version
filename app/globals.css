@@ -134,21 +134,22 @@ height: 60px;
   justify-content: center;
   width: 20px;
   height: 20px;
+  
   border: solid 2px #ddd;
   border-radius: 5px;
   transition: 0.3s;
 }
 
 .checkbox-btn span::before, .radio-btn span::before {
-  /*content: '';
+  content: '';
   display: inline-block;
-  width: 24px;
-  height: 12px;
+  width: 13px;
+  height: 8px;
   border-bottom: 3px solid #fff;
   border-left: 3px solid #fff;
-  transform: scale(0) rotate(-45deg);*/
+  transform: scale(0) rotate(-45deg);
   position: relative;
-  bottom: 4px;
+  bottom: 2px;
   transition: 0.6s;
 }
 

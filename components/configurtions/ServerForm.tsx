@@ -66,7 +66,14 @@ interface ServerFormProps {
   handleRemoveCustomStorageType: (serverIndex: number, customStorageType: string) => void;
 }
 
-const ServerForm: React.FC = () => {
+interface ServerProps {
+  onSuccess: () => void;
+}
+
+
+
+const ServerForm: React.FC<ServerProps> = ({ onSuccess }) => {
+
   const { openModal } = useModal();
   const [customStorageType, setCustomStorageType] = useState('');
   const [selectedStorageType, setSelectedStorageType] = useState(null);
@@ -625,8 +632,12 @@ const ServerForm: React.FC = () => {
       const responseData = response.data;
 
       if (responseData.status === true) {
-      // toast.success(responseData.message);
-       openModal(responseData.message, 'success'); 
+        onSuccess();
+      // toast.success(responseData.message); 
+       openModal(
+        'Your request has been sent successfully!!', 
+        'Our engineers will get back to you shortly, Please Check your configurations tab in your user '+
+         'profile for updates on the status of this request', 'success'); 
 
         // Reset form data on success
       setBasicDetails({

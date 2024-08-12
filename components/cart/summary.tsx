@@ -132,6 +132,32 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, total
   const isCheckoutPage = pathname === '/checkout';
   const isPaymentPage = pathname === '/payment';
 
+
+   // Function to check if URL is valid
+   const isValidUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  // Function to format image URL
+  const formatImageUrl = (url: string) => {
+    if (!url) return DEFAULT_IMAGE;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      // Absolute URL, use as-is if valid
+      return isValidUrl(url) ? url : DEFAULT_IMAGE;
+    } else if (url.startsWith('/')) {
+      // Relative URL with leading slash, use as-is
+      return url;
+    } else {
+      // Relative URL without leading slash, prepend slash
+      return `/${url}`;
+    }
+  };
+
   return (
     <div className="w-full  p-4">
             <p className="mb-3 font-bold text-[18px] text-[#121212] font-gilroy-medium">Order Summary</p>
@@ -146,22 +172,14 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, total
                   <div className="flex flex-col lg:flex-row gap-3 mb-3 justify-center items-center" key={index}>
                   
                     <div className="lg:w-[20%] sm:w-[100%] w-full justify-center items-center">
-                    {item.image_url ? (
+                    
                     <Image
-                      src={item.image_url.startsWith('/') ? item.image_url : `${item.image_url}`}
+                      src={formatImageUrl(item.image_url)}
                       alt={item.description}
                       width={50}
                       height={40}
                     />
-                  ) : (
-                    <Image
-                      src={DEFAULT_IMAGE}
-                      alt={item.description}
-                      width={50}
-                      height={40}
-                    />
-                  )}
-                      
+                  
                     </div>
 
                     <div className="lg:w-[80%] sm:w-[100%] w-full">

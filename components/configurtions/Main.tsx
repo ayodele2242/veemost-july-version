@@ -4,11 +4,12 @@ import ContactForm from '../ContactForm'
 import Footer from '../Footer'
 import Header from '../Header'
 import Container from '../Container'
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useImage } from '@/providers/ImageContext'; 
 import { Transition } from '@headlessui/react';
 import { UserAdd01Icon, MultiplicationSignIcon } from 'hugeicons-react'
 import Image from 'next/image'
+
 
 import {
     isUserLoggedIn,
@@ -18,13 +19,16 @@ import {
 import useRouting from '@/store/routing'
 import SubscribeForm from '../SubscribeForm'
 import ServerForm from './ServerForm'
+import Link from 'next/link'
 
 
 
 const Main = () => {
 
   const { setParam } = useRouting();
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
+  const pathname = usePathname();
 const goToProduct = (path: string) => {
     setParam(path, "products", "search");
   };
@@ -34,6 +38,12 @@ const goToProduct = (path: string) => {
     const loginStatus = isUserLoggedIn();
     setIsLogin(loginStatus);
   }, []);
+
+  const handleLoginRedirect = () => {
+    // Save the current URL in sessionStorage 
+    sessionStorage.setItem('redirectUrl', pathname);
+};
+
 
  
     const [open, setOpen] = useState(false);
@@ -55,6 +65,12 @@ const goToProduct = (path: string) => {
   const handleClose = () => {
     setSelectedProduct(null);
   };
+
+  const handleFormSuccess = () => {
+    // Close the modal on successful form submission
+    handleClose();
+  };
+  const serverIndex = 1;
 
   return (
     <main className="w-full overflow-hidden">
@@ -79,7 +95,7 @@ const goToProduct = (path: string) => {
                       <span className="text-[#0B0B0C] font-gilroy-extrabold font-bold text-[32px] lg:text-[36px] xl:text-[42px]
                      2xl:text-[48px] text-left leading-tight">Product</span> 
                       <span className="text-[#0B0B0C] font-gilroy-extrabold font-bold text-[32px] lg:text-[36px] xl:text-[42px]
-                     2xl:text-[48px] text-left leading-tight"> Configuration </span>
+                     2xl:text-[48px] text-left leading-tight"> Configuration  </span>
 
                  <div className="font-gilroy-extrabold font-normal text-[16px] text-[#858586] text-left">
                    Build you product configuration
@@ -92,9 +108,10 @@ const goToProduct = (path: string) => {
                                <button className="w-[139px] h-[53px] bg-[#D6A912] cursor-pointer text-[#FFFFFF] 
                                font-SemiBold font-normal text-[14px] rounded-[28px] lg:mx-0 mx-auto" onClick={handleOpen}>Configure</button>
                            ): (
-                               <button className="w-[139px] h-[53px] bg-[#D6A912] cursor-pointer text-[#FFFFFF] 
-                               font-SemiBold font-normal text-[14px] rounded-[28px] lg:mx-0 mx-auto" 
-                               >Login to continue</button>
+                               <Link href="/auth/login"  onClick={handleLoginRedirect} className="flex justify-center items-center font-bold p-3 
+                               font-bold bg-[#D6A912] cursor-pointer text-[#FFFFFF] 
+                               font-SemiBold font-normal text-[14px] rounded-[28px] w-[139px]" 
+                               >Login to continue</Link>
                            )}
             </div>
             <div className="mt-[3rem] md:mt-[1.5rem] pb-[2rem] bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[600px] xl:w-[640px] lg:w-[524px] lg:h-[425px]" />
@@ -145,7 +162,9 @@ const goToProduct = (path: string) => {
 
           {/* Your content goes here */}
           <div>
-           <ServerForm />
+
+          <ServerForm onSuccess={handleFormSuccess} />
+
           </div>
         </div>
       </Transition>
@@ -160,8 +179,8 @@ const goToProduct = (path: string) => {
                                 <button className="w-[139px] md:h-[53px] h-[37px] rounded-[8px] bg-[#FFFCDE] text-[#D6A912] 
                                 font-SemiBold font-normal text-[14px]" onClick={handleOpen}>Configure products</button>
                             ): (
-                                <button className="w-[139px] md:h-[53px] h-[37px] rounded-[8px] bg-[#FFFCDE] text-[#D6A912]
-                                 font-SemiBold font-normal text-[14px]" >Login to continue</button>
+                                <Link href="/auth/login" onClick={handleLoginRedirect} className="flex justify-center items-center p-3 font-bold rounded-[8px] bg-[#FFFCDE] text-[#D6A912]
+                                 font-SemiBold font-normal text-[14px]" >Login to continue</Link>
                             )}
                             
                         </div>

@@ -599,7 +599,19 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
       </div>
 
 
+     
+
+     
       {/* Overlay Div */}
+         {/* Backdrop */}
+         {isOpen && (
+        <div
+          className={`fixed inset-0 bg-black opacity-50 z-40 ${isOpen ? 'block' : 'hidden'}`}
+          onClick={closeOverlay}
+        />
+      )}
+
+      {/* Overlay */}
       <div
         className={`fixed top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -620,194 +632,173 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           <h2 className="text-xl font-bold mb-4">Add New Address</h2>
 
           <form
-								className="space-y-4 md:space-y-6"
-								onSubmit={_handleSubmit}
-							>
-								<div className="  flex-1 ">
-											<label
-												htmlFor=""
-												className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
-											>
-												Nickname
-												<span className=" text-[#982c2e]">
-													{" "}
-													*{" "}
-												</span>
-											</label>
-											<input
-												type="text"
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm
-                         rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full 
-                         p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-												name="nickname"
-												value={formData.nickname}
-												onChange={_handleChange}
-											/>
-										</div>
+            className="space-y-4 md:space-y-6"
+            onSubmit={_handleSubmit}
+          >
+            {/* Form fields */}
+            <div className="flex-1">
+              <label
+                htmlFor="nickname"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
+              >
+                Nickname
+                <span className="text-[#982c2e]"> *</span>
+              </label>
+              <input
+                type="text"
+                id="nickname"
+                name="nickname"
+                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+                value={formData.nickname}
+                onChange={_handleChange}
+              />
+            </div>
 
-                                        
+            <div>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                Email Address <span className="text-red-300 font-bold">*</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                value={formData.email}
+                onChange={_handleChange}
+                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
 
-								<div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										Email Address <span className="text-red-300 font-bold">*</span>
-									</label>
-									<input
-										type="email"
-										name="email"
-										id="last_name"
-                                        required
-										value={formData.email}
-										onChange={_handleChange}
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										placeholder=""
-									/>
-								</div>
+            <div>
+              <label
+                htmlFor="street"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
+              >
+                Street Address
+                <span className="text-[#982c2e]"> *</span>
+              </label>
+              <input
+                type="text"
+                id="street"
+                name="street"
+                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+                value={formData.street}
+                onChange={_handleChange}
+              />
+            </div>
 
-                                <div className=" ">
-										<label
-											htmlFor=""
-											className=" block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
-										>
-											Street Address
-											<span className=" text-[#982c2e]">
-												{" "}
-												*{" "}
-											</span>
-										</label>
-										<input
-											type="text"
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-											required
-											name="street"
-											value={formData.street}
-											onChange={_handleChange}
-                                            
-										/>
-									</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  Country <span className="text-red-300 font-bold">*</span>
+                </label>
+                <select
+                  value={selectedCountry}
+                  onChange={handleCountryChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value=""></option>
+                  {countries.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-									<div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  State/Province <span className="text-red-300 font-bold">*</span>
+                </label>
+                <select
+                  name="state"
+                  value={formData.state}
+                  onChange={_handleChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option></option>
+                  {states.map((state) => (
+                    <option key={state.id} value={state.name}>
+                      {state.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
-									<div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										Country <span className="text-red-300 font-bold">*</span>
-									</label>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  City <span className="text-red-300 font-bold">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={_handleChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
 
-									<select
-										value={selectedCountry}
-										onChange={handleCountryChange}
-                                        required
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-									>
-										<option value=""></option>
-										{countries.map((country) => (
-											<option
-												key={country.id}
-												value={country.id}
-											>
-												{country.name}
-											</option>
-										))}
-									</select>
-								</div>
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  Zip/Postal Code <span className="text-red-300 font-bold">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="zip"
+                  name="zip"
+                  value={formData.zip}
+                  onChange={_handleChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
+            </div>
 
-								<div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										State/Province <span className="text-red-300 font-bold">*</span>
-									</label>
-									<select
-										name="state"
-										value={formData.state}
-										onChange={_handleChange}
-                                        required
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-									>
-										<option></option>
-										{states.map((state) => (
-											<option
-												key={state.id}
-												value={state.name}
-											>
-												{state.name}
-											</option>
-										))}
-									</select>
-								</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  Phone Number <span className="text-red-300 font-bold">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={_handleChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm 
+                  rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
+                  dark:border-gray-600 dark:placeholder-gray-400 
+                  dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
 
-                </div>
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  Company
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={_handleChange}
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
+            </div>
 
-                <div className="grid grid-cols-2 gap-2">
-									<div>
-										<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-											City <span className="text-red-300 font-bold">*</span>
-										</label>
-										<input
-											type="text"
-											name="city"
-											id="city"
-											value={formData.city}
-											onChange={_handleChange}
-                                            required
-											placeholder=""
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										/>
-									</div>
-
-									<div>
-										<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-											Zip/Postal Code <span className="text-red-300 font-bold">*</span>
-										</label>
-										<input
-											type="text"
-											name="zip"
-											id="zip"
-											value={formData.zip}
-											onChange={_handleChange}
-                                            required
-											placeholder=""
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										/>
-									</div>
-								</div>
-
-
-                <div className="grid grid-cols-2 gap-2">
-                <div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										Phone Number <span className="text-red-300 font-bold">*</span>
-									</label>
-									<input
-										type="text"
-										name="phone"
-										id="phone"
-										value={formData.phone}
-										onChange={_handleChange}
-                                        required
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										placeholder=""
-									/>
-								</div>
-
-								<div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										Company 
-									</label>
-									<input
-										type="text"
-										name="company"
-										id="copany"
-										value={formData.company}
-										onChange={_handleChange}
-                                      
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										placeholder=""
-									/>
-								</div>
-
-                </div>
-                <div className="mt-2">
+            <div className="mt-2">
             
-                <div className="flex">
+                   <div className="flex">
                       <label className="checkbox-btn">
                           <input 
                           onChange={_handleChange}
@@ -821,10 +812,10 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                     </div>
                 </div>
 
-							
-						<button
+        <div className="w-full flex center justify-center gap-2">
+            <button
 							type="submit"
-							className="w-full flex center justify-center gap-2 text-white bg-yellow-600 hover:bg-yellow-700 
+							className="text-white bg-yellow-600 hover:bg-yellow-700 
               focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
               dark:bg-yellow-600 dark:hover-bg-yellow-700 dark:focus:ring-yellow-800 warning-btn relative"
 							disabled={isLoading}
@@ -832,11 +823,14 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
 							{isLoading && <Spinner size="sm" />}
 							{isLoading ? 'Please wait...' : 'Add Address'}
 						</button>
+            </div>
+          </form>
 
-                                {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-								
-							</form>
-         
+          {errorMessage && (
+            <div className="mt-4 text-red-500 text-sm">
+              {errorMessage}
+            </div>
+          )}
         </div>
       </div>
 

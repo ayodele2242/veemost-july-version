@@ -48,7 +48,7 @@ const TopSlider = () => {
     let formattedText = text
       .replace(/&nbsp;/g, ' ')
       .replace(/style=\\\"[^\\\"]*\\\"/g, '');
-  
+   
     // Add specific classes or adjust as needed
     return formattedText;
   };

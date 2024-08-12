@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import Header from '../Header';
 import Container from '../Container';
@@ -30,10 +30,8 @@ const Cart = () => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [states, setStates] = useState<{ id: string; name: string }[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
-
   const [selectAll, setSelectAll] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
-
   const [formData, setFormData] = useState({
     selectedCountry: "",
     state: "",
@@ -46,8 +44,7 @@ const Cart = () => {
   );
 
   useEffect(() => {
-
-    //console.log("Cart item", JSON.stringify(cartItems));
+    console.log("Cart item", JSON.stringify(cartItems));
     if (cartItems.length > 0) {
       setLoading(false);
     }
@@ -97,9 +94,6 @@ const Cart = () => {
     }
   };
 
-
-
-
   const handleDeleteItem = (item: VeeCartItem) => {
     removeItemFromCart(item.ingramPartNumber);
     console.log(JSON.stringify(item));
@@ -123,6 +117,31 @@ const Cart = () => {
     setShowSpinner(true);
   };
 
+  // Function to check if URL is valid
+  const isValidUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  // Function to format image URL
+  const formatImageUrl = (url: string) => {
+    if (!url) return DEFAULT_IMAGE;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      // Absolute URL, use as-is if valid
+      return isValidUrl(url) ? url : DEFAULT_IMAGE;
+    } else if (url.startsWith('/')) {
+      // Relative URL with leading slash, use as-is
+      return url;
+    } else {
+      // Relative URL without leading slash, prepend slash
+      return `/${url}`;
+    }
+  };
+
   return (
     <main className="w-full overflow-hidden">
       <Header />
@@ -132,114 +151,115 @@ const Cart = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-3 mt-4">
-          <div className="flex-1 lg:w-[60%]  p-4">
-
-          {loading && <div className="w-full"><SkeletonPage count={5} /></div>}
+          <div className="flex-1 lg:w-[60%] p-4">
+            {loading && <div className="w-full"><SkeletonPage count={5} /></div>}
             
             {!loading && cartItems.length === 0 && <EmptyList title={'You do not have product(s) in your cart.'} />}
-            {!loading &&  cartItems.length > 0 && (
+            {!loading && cartItems.length > 0 && (
               <div className="lg:p-2 mb-4 flex flex-col">
                 <div className="mb-4 flex lg:items-center gap-4 flex-col lg:flex-row">
                   <div className="flex">
-                  <label className="checkbox-btn">
-                  <input
-                    type="checkbox"
-                    checked={selectAll}
-                    onChange={handleSelectAll}
-                    className="mr-2"
-                  />
-                  <span></span>
-                  Select All Products
-                  </label>
-                  </div>
-                  <div className="flex text-red-600 hover:underline gap-1 lg:items-center cursor-pointer"  onClick={handleDeleteSelected}>
-                    <Delete03Icon /> Delete all selected product(s)
-                    </div>
-                 
-                </div>
-                
-                {cartItems.map((item: VeeCartItem, index: number) => (
-                  <div className="flex flex-col lg:flex-row gap-3 mb-3 justify-center items-center" key={index}>
-                   <label className="checkbox-btn">
-                    <input
+                    <label className="checkbox-btn">
+                      <input
                         type="checkbox"
-                        checked={selectedItems.includes(item)}
-                        onChange={() => handleCheckboxChange(item)}
+                        checked={selectAll}
+                        onChange={handleSelectAll}
+                        className="mr-2"
                       />
                       <span></span>
+                      Select All Products
                     </label>
-                    <div className="lg:w-[20%] sm:w-[100%] w-full justify-center items-center">
-                    {item.image_url.length > 0 ? (
-                      <LazyImage
-                        src={item.image_url.startsWith('/') ? item.image_url : `${item.image_url}`}
-                        alt={item.description}
-                        layout="responsive"
-                        objectFit="cover"
-                      />
-                    ) : (
-                      <LazyImage
-                      src={DEFAULT_IMAGE}
-                     alt={item.description}
-                     layout="responsive"
-                     objectFit="cover"
-                   />
-                    )}
-                    </div>
+                  </div>
+                  <div className="flex text-red-600 hover:underline gap-1 lg:items-center cursor-pointer" onClick={handleDeleteSelected}>
+                    <Delete03Icon /> Delete all selected product(s)
+                  </div>
+                </div>
+                
+                {cartItems.map((item: VeeCartItem, index: number) => {
+                  // Format the image URL
+                  const resolvedImageUrl = formatImageUrl(item.image_url);
 
-                    <div className="lg:w-[80%] sm:w-[100%] w-full">
-                      <div className="flex flex-col lg:flex-row gap-3">
-                        <div className="lg:w-[80%] sm:w-[100%] w-full flex-col">
-                          <Link href={`/products/${item.ingramPartNumber}`} className="text-[14px] font-bold hover:text-primaryText">
-                            {item.description}
-                          </Link>
-                          
-                          <div className="flex gap-4 mt-2">
-                            
-                            <CartQuantityActionBtns
-                              product={item}
-                              id={item.ingramPartNumber}
-                              amount={item.price}
-                              image={item.image_url}
-                            />
+                  // Log URLs for debugging
+                  console.log('Resolved Image URL:', resolvedImageUrl);
+
+                  return (
+                    <div className="flex flex-col lg:flex-row gap-3 mb-3 justify-center items-center" key={index}>
+                      <label className="checkbox-btn">
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(item)}
+                          onChange={() => handleCheckboxChange(item)}
+                        />
+                        <span></span>
+                      </label>
+                      <div className="lg:w-[20%] sm:w-[100%] w-full justify-center items-center">
+                        <LazyImage
+                          src={resolvedImageUrl}
+                          alt={item.description}
+                          layout="responsive"
+                          objectFit="cover"
+                        />
+                      </div>
+
+                      <div className="lg:w-[80%] sm:w-[100%] w-full">
+                        <div className="flex flex-col lg:flex-row gap-3">
+                          <div className="lg:w-[80%] sm:w-[100%] w-full flex-col">
+                            <Link href={`/products/${item.ingramPartNumber}`} className="text-[14px] font-bold hover:text-primaryText">
+                              {item.description}
+                            </Link>
+                            <div className="flex gap-4 mt-2">
+                              <CartQuantityActionBtns
+                                product={item}
+                                id={item.ingramPartNumber}
+                                amount={item.price}
+                                image={item.image_url}
+                              />
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="lg:w-[20%] sm:w-[20%] w-full flex justify-center items-center">
-                          <h6 className="text-1xl lg:text-xl font-bold ">
-                            {new Intl.NumberFormat('en-US', {
-                              style: 'currency',
-                              currency: 'USD'
-                            }).format(Number(item.price  * item.quantity))}
-                          </h6>
-
-                          <div className="flex items-center ml-4">
-                      
-                            <button
-                              onClick={() => handleDeleteItem(item)}
-                              className="px-4 py-2"
-                            >
-                            <MultiplicationSignIcon  className="hover:text-red-600 font-semibold"/>
-                            </button>
+                          <div className="lg:w-[20%] sm:w-[20%] w-full flex justify-center items-center">
+                            <h6 className="text-1xl lg:text-xl font-bold">
+                              {new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'USD'
+                              }).format(Number(item.price * item.quantity))}
+                            </h6>
+                            <div className="flex items-center ml-4">
+                              <button
+                                onClick={() => handleDeleteItem(item)}
+                                className="px-4 py-2"
+                              >
+                                <MultiplicationSignIcon className="hover:text-red-600 font-semibold" />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-
-                   
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
-           
           </div>
 
-          <div className="flex-1 lg:w-[40%] shadow-lg rounded-lg">
-           <Summary />
+          <div className="lg:w-[40%] w-full p-4">
+            <div className="flex flex-col gap-4">
+              <p className="font-extrabold text-lg lg:text-xl">Summary</p>
+                 <Summary/>
+            </div>
+            <div className="mt-4">
+              <button
+                onClick={handleProceedToCheckout}
+                className="bg-primary text-white py-2 px-4 rounded"
+              >
+                Proceed to Checkout
+              </button>
+            </div>
           </div>
         </div>
       </Container>
-      <ToastContainer />
       <Footer />
+      <ToastContainer />
     </main>
   );
 };

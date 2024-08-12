@@ -67,6 +67,7 @@ interface Configuration {
     network_cards: NetworkCard[];
     other_components: string;
     additional_notes: string;
+    status: string;
 }
 
 interface Owner {
@@ -238,6 +239,34 @@ const ConfigOrders = () => {
             })
             .join(', ');
     };
+
+     // Function to format the status
+     const formatStatus = (status: string | null | undefined) => {
+        // If status is null or undefined, use an empty string
+        const statusString = status ?? 'Pending';
+        return statusString.replace(/_/g, ' ');
+    };
+    
+
+    // Function to get color based on the status
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'Open':
+                return 'text-blue-500';
+            case 'Processing':
+                return 'text-orange-500';
+            case 'Quote Sent':
+                return 'text-yellow-500';
+            case 'Pending':
+                return 'text-yellow-400';
+            case 'Closed Purchased':
+                return 'text-green-500';
+            case 'Closed Forfeit':
+                return 'text-red-500';
+            default:
+                return 'text-gray-500'; // Default color
+        }
+    };
     
 
     const startItem = (currentPage - 1) * itemsPerPage + 1;
@@ -269,8 +298,8 @@ const ConfigOrders = () => {
                                     {configurations.map((config, idx) => (
                                         <div key={idx} className={`${styles.summary} ${idx === configurations.length - 1 ? '' : styles.borderBottom}`}>
                                             <div className="flex flex-col justify-center items-center">
-                                                <h3 className="text-gray-300 text-sm">Server</h3>
-                                                <p>{config.server}</p>
+                                                <h3 className="text-gray-300 text-sm">Status</h3>
+                                                <p className={`p-2 font-bold ${getStatusColor(config.status || 'Pending')}`}>{formatStatus(config.status)}</p>
                                             </div>
 
                                             <div className="flex flex-col justify-center items-center">
@@ -338,10 +367,19 @@ const ConfigOrders = () => {
                                 <div className={styles.overlay}>
                                     <div className={styles.overlayBackdrop} onClick={handleCloseOverlay}></div>
                                     <div className={styles.overlayContent}>
+
+                                    
+
+
                                         <div className="flex justify-between items-center mb-7">
                                         <h2 className="font-bold text-2xl">Server Details</h2>
                                         <button className="text-red-600 font-bold text-[30px]" onClick={handleCloseOverlay}>X</button>
                                         </div>
+
+                                        <div className="flex flex-col lg:flex-row gap-3 mb-2">
+                                        <strong>Status:</strong>  
+                                        <span className={`font-bold ${getStatusColor(selectedServer.status  || 'Pending')}`}>{formatStatus(selectedServer.status)}</span>
+                                       </div>
 
                                         <div className="flex flex-col lg:flex-row gap-3 mb-2">
                                         <strong>Quantity:</strong> {selectedServer.quantity}

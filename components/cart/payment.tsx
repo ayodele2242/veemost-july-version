@@ -537,20 +537,32 @@ const closePaypalModal = () => {
                                 Payment Method
                             </div>
 
-                            <div className="w-full flex flex-col gap-4">
+                            <div className="w-full flex flex-col gap-4 ">
+                                <div className="w-[300px] flex flex-col gap-4">
                                      <button
                                         onClick={handlePayment} 
                                         disabled={isLoadingPayment}
-                                        className="bg-blue-500 text-white px-4 py-2 rounded w-[300px]"
+                                        className="flex justify-center items-center bg-blue-500 
+                                        text-white p-4 rounded h-[45px] font-semibold text-[16px] w-full"
                                       >
                                         Pay with Stripe
                                     </button>
-                                    <button
+                                    <PayPalScriptProvider options={initialOptions}>
+                                                <PayPalButtons
+                                                    createOrder={async () => {
+                                                        return await handlePaypalPayment();
+                                                    }}
+                                                    onApprove={onApprove}
+                                                    onError={onError}
+                                                />
+                                    </PayPalScriptProvider>
+                                    </div>
+                                    {/*<button
                                         onClick={handlePaypalPayments}
                                         className="bg-green-500 text-white flex justify-center gap-2 items-center px-4 py-2 rounded w-[300px]"
                                     >
                                         <Image src="/paypal.png" alt="" width={36} height={24} /> Pay with PayPal
-                                    </button>
+                                    </button>*/}
                             </div>
 
 

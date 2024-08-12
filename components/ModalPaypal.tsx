@@ -11,7 +11,7 @@ const ModalPaypal: React.FC<ModalProps> = ({ isOpen, onClose, title, children })
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-80">
             <div className="bg-white p-4 rounded-lg w-1/2 w-full lg:max-w-lg max-h-[80vh] lg:max-h-[90vh] overflow-y-auto relative">
                 <div className="flex justify-between items-center border-b pb-2 mb-2">
                     

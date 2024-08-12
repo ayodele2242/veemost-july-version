@@ -1,106 +1,127 @@
-"use client";
+"use client"
+
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import useInView from '../hooks/useInView';
+import { fetchSliders } from '@/services/requestAll.service';
+import Link from 'next/link';
+import DOMPurify from 'dompurify';
 
+interface Banner {
+  id: number;
+  banner_image: string;
+  pageLink: string;
+  page_name: string;
+  banner_placement_position: string;
+  banner_text: string;
+  banner_text_placement: string;
+  button_text: string;
+  status: string;
+}
 
 const HomeMiddleSlider = () => {
+  const [banners, setBanners] = useState<Banner[]>([]);
 
-    const [resolution, setResolution] = useState({
-        width: typeof window !== 'undefined' ? window.innerWidth : 0,
-        height: typeof window !== 'undefined' ? window.innerHeight : 0,
-      });
-
-      const { ref, isInView } = useInView<HTMLImageElement>({ threshold: 0.1 });
-
-    
-      useEffect(() => {
-        if (typeof window !== 'undefined') {
-          const handleResize = () => {
-            setResolution({
-              width: window.innerWidth,
-              height: window.innerHeight,
-            });
-            // Log the resolution to the console whenever it changes
-           // console.log(`Width: ${window.innerWidth}, Height: ${window.innerHeight}`);
-          };
-    
-          window.addEventListener('resize', handleResize);
-    
-          // Initial log of the resolution
-          //console.log(`Width: ${window.innerWidth}, Height: ${window.innerHeight}`);
-    
-          return () => {
-            window.removeEventListener('resize', handleResize);
-          };
+  useEffect(() => {
+    fetchSliders()
+      .then((data) => {
+        if (Array.isArray(data)) {
+          // Filter, limit, and set banners
+          const filteredBanners = data
+            .filter(banner => banner.banner_placement_position === 'center' && banner.page_name === 'home')
+            .slice(0, 1); // Limit to 1 banner
+          setBanners(filteredBanners);
+        } else {
+          console.error('Data is not an array:', data);
         }
-      }, []);
-    
+      })
+      .catch((error) => {
+        console.log('Error occurred:', error);
+      });
+  }, []);
 
-      
+  const preprocessBannerText = (text: string) => {
+    let formattedText = text
+      .replace(/&nbsp;/g, ' ')
+      .replace(/style=\\\"[^\\\"]*\\\"/g, '');
+    return formattedText;
+  };
+
+  const parseBannerText = (text: string) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+    const spans = doc.querySelectorAll('span');
+    const paragraphs = doc.querySelectorAll('p');
+
     return (
-      <div className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[400px] xl:h-[400px] ">
-  
-  <div className="relative bg-gradient-to-b from-yellow-300 to-yellow-500 flex flex-col md:flex-row items-center justify-center overflow-hidden h-full p-20">
-      <div className="flex-1 h-full relative flex flex-col justify-center items-start">
-        <div className="text-black text-left z-10 p-10">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-gilroy-medium tracking-wider">
-            The smart store for
-          </h2>
-          <p className="text-3xl md:text-4xl lg:text-5xl mb-6 tracking-wider font-gilroy-extrabold">
-            digital<br className="md:hidden" /> transformation
-          </p>
-          <p>
-            <button className="bg-black hover:bg-black text-white font-bold py-2 px-4 rounded">
-              Learn More
-            </button>
-          </p>
-          <div>
-            {/* <h1>Device Resolution</h1>
-            <p>Width: {resolution.width}</p>
-            <p>Height: {resolution.height}</p>*/}
-          </div>
-        </div>
-      </div>
-
-      <div className="hidden md:flex largeTablet:hidden tablet:hidden md:flex-1 items-center justify-center h-full relative z-10">
-        {/* Add any content you want here */}
-      </div>
-
-      <Image
-        src="/indicator.png"
-        alt="Right Image 1"
-        width={410}
-        height={400}
-        className="hidden md:flex tablet:hidden largeTablet:hidden desktop:flex absolute top-0 right-[180px] h-[400px] max-w-[410px]"
-      />
-      <Image
-        src="/right-img.png"
-        alt="Right Image 2"
-        width={610}
-        height={400}
-        className="hidden md:flex tablet:hidden largeTablet:hidden desktop:flex absolute bottom-[-170px] right-[-30px] w-[700px]"
-      />
-
-      <Image
-        src="/left-img.png"
-        alt="Left Image"
-        ref={ref}
-        width={1000} 
-        height={800} 
-        className={`absolute bottom-[-70px] left-[-167px] 
-          foldPhone:bottom-[-100px] foldPhone:left-[-140px] 
-          tablet:bottom-[-250px] tablet:left-[-240px]
-          largeTablet:bottom-[-250px] largeTablet:left-[-240px]
-          smallDesktop:bottom-[-350px] smallDesktop:left-[-200px]
-          desktop:bottom-[-560px] desktop:left-[-590px] 
-          w-full h-auto object-cover z-0 transition-opacity duration-1000 ease-in-out ${
-            isInView ? 'fadeInBottom' : 'opacity-0'
-          }`}
-      />
-    </div>
-      </div>
+      <>
+        {spans[0] && <span className="text-xl 2xl:text-[60px] md:text-[50px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[0].textContent}</span>}
+        {spans[1] && <span className="text-xl 2xl:text-[60px] md:text-[50px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[1].textContent}</span>}
+        {spans[2] && <span className="text-primaryText text-xl 2xl:text-[60px] md:text-[50px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[2].textContent}</span>}
+        {paragraphs[0] && <p className="text-center text-grayText text-[12px] md:text-[14px] ">{paragraphs[0].textContent}</p>}
+      </>
     );
   };
-  
-  export default HomeMiddleSlider;
+
+  const [resolution, setResolution] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+  });
+
+  const { ref, isInView } = useInView<HTMLImageElement>({ threshold: 0.1 });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setResolution({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
+      };
+
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, []);
+
+  return (
+    <div className="mb-[30px]">
+      {banners.map((banner) => {
+        const formattedText = preprocessBannerText(banner.banner_text);
+        const sanitizedText = DOMPurify.sanitize(formattedText);
+
+        return (
+          <div
+            key={banner.id}
+            className="relative w-full h-[300px] md:h-[410px]"
+            style={{ 
+              backgroundImage: `image-set(url(${banner.banner_image}) 1x, url(${banner.banner_image}) 2x, url(${banner.banner_image}) 3x)`,
+              backgroundPosition: 'center center',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            <div className="absolute bottom-4 left-4 md:left-8 lg:left-[240px] lg:bottom-[10%]">
+            
+           {banner.button_text && (
+            <Link
+              href={banner.pageLink}
+              className="text-white px-4 py-3 hover:bg-yellow-700 mt-4 bg-primaryBg rounded-[30px]"
+            >
+              {banner.button_text}
+            </Link>
+          )}
+           </div>
+
+
+
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default HomeMiddleSlider;

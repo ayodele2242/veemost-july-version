@@ -35,11 +35,24 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { push } = useRouter();
 
-    useEffect(() => {
-        if (isLogin) {
-            push("/account/orders"); // Redirect to dashboard if already logged in
-        }
-    }, [isLogin, push]);
+
+
+   /*useEffect(() => {
+    if (isLogin) {
+        // Get the redirect URL from sessionStorage
+        const redirectUrl = sessionStorage.getItem('redirectUrl');
+        
+        // If redirectUrl exists, use it; otherwise, redirect to /account/orders
+        const destination = redirectUrl || '/account/orders';
+        
+        // Remove the redirectUrl from sessionStorage
+        sessionStorage.removeItem('redirectUrl');
+        
+        // Redirect to the destination
+        push(destination);
+    }
+}, [isLogin, push]);*/
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -107,7 +120,12 @@ const Login = () => {
                     if (responseData.xpire) {
                         localStorage.setItem('expire_period', responseData.xpire.toString());
                     }
-                    push("/account/orders");
+                   // push("/account/orders");
+                    // Redirect to the saved URL or fallback to orders page
+                    const redirectUrl = sessionStorage.getItem('redirectUrl') || '/account/orders';
+                    sessionStorage.removeItem('redirectUrl'); // Clean up
+                    
+                   push(redirectUrl);
                 }
             } else if (response.status === 400) {
                 // Handle status 400 separately

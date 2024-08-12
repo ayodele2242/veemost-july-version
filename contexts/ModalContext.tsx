@@ -1,9 +1,13 @@
-"use client"
+"use client";
 import React, { createContext, useContext, useState } from 'react';
 import GlobalModal from '@/components/modal/GlobalModal';
 
 interface ModalContextType {
-  openModal: (message: string, statusType: 'success' | 'error' | 'warning' | 'info') => void;
+  openModal: (
+    title: string,
+    message: string,
+    statusType: 'success' | 'error' | 'warning' | 'info',
+  ) => void;
   closeModal: () => void;
 }
 
@@ -11,10 +15,16 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [modalStatusType, setModalStatusType] = useState<'success' | 'error' | 'warning' | 'info'>('info');
-
-  const openModal = (message: string, statusType: 'success' | 'error' | 'warning' | 'info') => {
+ 
+  const openModal = (
+    title: string,
+    message: string,
+    statusType: 'success' | 'error' | 'warning' | 'info',
+  ) => {
+    setModalTitle(title);
     setModalMessage(message);
     setModalStatusType(statusType);
     setIsModalOpen(true);
@@ -28,6 +38,7 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       <GlobalModal
         isOpen={isModalOpen}
         onClose={closeModal}
+        title={modalTitle}
         message={modalMessage}
         statusType={modalStatusType}
       />

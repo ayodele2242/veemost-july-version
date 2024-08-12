@@ -167,12 +167,6 @@ const Checkout = () => {
   }, []);
 
   const [formData, setFormData] = useState({
-    selectedCountry: "",
-    state: "",
-    zip: "",
-  });
-
-  const [addressFormData, setAddressFormData] = useState({
     action: "insert",
     email: "",
     street: "",
@@ -185,31 +179,6 @@ const Checkout = () => {
     nickname: "",
       
   })
-
-  const overallSum = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
-
-  useEffect(() => {
-    // Assuming cartItems are being set when `useCartStore` updates
-    if (cartItems.length > 0) {
-      setLoading(false);
-    }
-  }, [cartItems]);
-
-  const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = event.target.checked;
-    setSelectAllChecked(checked);
-    
-    if (checked) {
-      setSelectedItems(cartItems);
-    } else {
-      setSelectedItems([]);
-    }
-  };
-
-
 
   useEffect(() => {
     fetchCountries()
@@ -238,6 +207,7 @@ const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         });
 };
 
+
 const _handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
         setIsLoading(true);
@@ -246,14 +216,14 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
 
   const _handleChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target
-    setAddressFormData((prevFormData) => ({ ...prevFormData, [name]: value }))
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }))
   }
 
   const init = async () => {
     const userJson = localStorage.getItem("user");
     if (!userJson) return
     const user = JSON.parse(userJson);
-    setAddressFormData({
+    setFormData({
       action: "insert",
       email: "",
       street: "",
@@ -265,7 +235,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
       phone: "",
       nickname: "",
     });
-    
+    setIsOpen(false);
     getShippingAddress(user.email).then(({ data }) => {
       if (!data || !data.length) return
       
@@ -326,156 +296,166 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
       }
   };
 
-
-  useEffect(() => {
-
-    fetchData('orders/shippingAddress', 1);
-  }, [searchQuery, searchType]);
-
-  const fetchData = async (url: string, pageNumber: number) => {
-    try {
-      
-      let payload = {};
-      let userJson = localStorage.getItem("user");
-      if (!userJson) return;
-      let user = JSON.parse(userJson);
   
-      setLoading(true); // Set loading to true by default
-  
-      payload = {
-        action: "select",
-        email: user.email,
-        pageNo: pageNumber,
-        limit: pageSize,
-        search_query: searchQuery,
-        search_type: searchType,
-      };
-  
-      const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), url);
-      const responseData = response.data;
-  
-    
-      if (response.status === 200) {
-        const { status, message, data } = responseData;
-        setProducts(responseData.data);
-        setTotalCount(parseInt(responseData.totalRecords as any));
-        setRecordsFound(parseInt(responseData.totalRecords as any));
-        const totalPages = Math.ceil(parseInt(responseData.totalRecords as any) / pageSize);
-        setTotalPages(totalPages);
-        setError(null);
-        setLoading(false);
-                    
-    } else {
-        const { status, message } = responseData;
-        setBackendResponse(status);
-        setLoading(false);
-    }
-      
-    } catch (error: any) {
-      console.error('Error fetching address:', error);
-      setLoading(false);
-      if (error.response) {
-        if (error.response.status === 401) {
-          setError("Please log in to access this content.");
-        } else if (error.response.status === 403) {
-          setError("You do not have permission to access this content.");
-        } else {
-          setError("An error occurred on the server. Please try again later.");
-        }
-      } else if (error.request) {
-        setError("No internet connection. Check your internet connection and try again.");
-      } else {
-        setError("An unexpected error occurred. Please try again later.");
-      }
-    }
-  };
 
-  const handleEdit = (index: number) => {
-    setEditIndex(index);
-    setEditedValues(products[index]);
-  };
 
-  const handleSubmit = async (index: number) => {
-    setIsLoading(true);
-    try {
-      
-      let payload = {};
-      let userJson = localStorage.getItem("user");
-      if (!userJson) return;
-      let user = JSON.parse(userJson);
-      const {  
-        id,
-        email,
-        phone,
-        street, 
-        company, 
-        state, 
-        country, 
-        city,
-        zip, 
-        nickname, 
-        default_address_status, } = editedValues;
 
+  const handlePageChange = (pageNumber: number) => {
+      setCurrentPage(pageNumber);
+      fetchData('orders/shippingAddress', pageNumber);
+    };
+
+
+    useEffect(() => {
+
+      fetchData('orders/shippingAddress', 1);
+    }, [searchQuery, searchType]);
   
-      payload = {
-        action: "update",
-        id: id,
-        email: email,
-        phone: phone,
-        street: street, 
-        company: company, 
-        state: state, 
-        country: country, 
-        city: city,
-        zip: zip, 
-        nickname: nickname, 
-        default_address_status: default_address_status,
+    const fetchData = async (url: string, pageNumber: number) => {
+      try {
         
-      };
-  
-      const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), 'orders/shippingAddress');
-      const responseData = response.data;
-  
+        let payload = {};
+        let userJson = localStorage.getItem("user");
+        if (!userJson) return;
+        let user = JSON.parse(userJson);
     
-      if (response.status === 200) {
-        const { status, message, data } = responseData;
-        toast.success(message);
-        setError(null);
-        setEditIndex(null);
-        setIsLoading(false);
-        fetchData('orders/shippingAddress', 1);      
-    } else {
-        const { status, message } = responseData;
-        setBackendResponse(status);
-        setIsLoading(false);
-        toast.error(message);
-    }
+        setLoading(true); // Set loading to true by default
+    
+        payload = {
+          action: "select",
+          email: user.email,
+          pageNo: pageNumber,
+          limit: pageSize,
+          search_query: searchQuery,
+          search_type: searchType,
+        };
+    
+        const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), url);
+        const responseData = response.data;
+    
       
-    } catch (error: any) {
-      setIsLoading(false);
-    
-      if (error.response) {
-        if (error.response.status === 401) {
-          setError("Please log in to access this content.");
-        } else if (error.response.status === 403) {
-          setError("You do not have permission to access this content.");
-        } else {
-          setError("An error occurred on the server. Please try again later.");
-        }
-      } else if (error.request) {
-        setError("No response from the server. Please try again later.");
+        if (response.status === 200) {
+          const { status, message, data } = responseData;
+          setProducts(responseData.data);
+          setTotalCount(parseInt(responseData.totalRecords as any));
+          setRecordsFound(parseInt(responseData.totalRecords as any));
+          const totalPages = Math.ceil(parseInt(responseData.totalRecords as any) / pageSize);
+          setTotalPages(totalPages);
+          setError(null);
+          setLoading(false);
+                      
       } else {
-        setError("An unexpected error occurred. Please try again later.");
+          const { status, message } = responseData;
+          setBackendResponse(status);
+          setLoading(false);
       }
-    }
+        
+      } catch (error: any) {
+        console.error('Error fetching address:', error);
+        setLoading(false);
+        if (error.response) {
+          if (error.response.status === 401) {
+            setError("Please log in to access this content.");
+          } else if (error.response.status === 403) {
+            setError("You do not have permission to access this content.");
+          } else {
+            setError("An error occurred on the server. Please try again later.");
+          }
+        } else if (error.request) {
+          setError("No internet connection. Check your internet connection and try again.");
+        } else {
+          setError("An unexpected error occurred. Please try again later.");
+        }
+      }
+    };
+
+    const handleEdit = (index: number) => {
+      setEditIndex(index);
+      setEditedValues(products[index]);
+    };
+  
+    const handleSubmit = async (index: number) => {
+      setIsLoading(true);
+      try {
+        
+        let payload = {};
+        let userJson = localStorage.getItem("user");
+        if (!userJson) return;
+        let user = JSON.parse(userJson);
+        const {  
+          id,
+          email,
+          phone,
+          street, 
+          company, 
+          state, 
+          country, 
+          city,
+          zip, 
+          nickname, 
+          default_address_status, } = editedValues;
+  
     
-  };
+        payload = {
+          action: "update",
+          id: id,
+          email: email,
+          phone: phone,
+          street: street, 
+          company: company, 
+          state: state, 
+          country: country, 
+          city: city,
+          zip: zip, 
+          nickname: nickname, 
+          default_address_status: default_address_status,
+          
+        };
+    
+        const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), 'orders/shippingAddress');
+        const responseData = response.data;
+    
+      
+        if (response.status === 200) {
+          const { status, message, data } = responseData;
+          toast.success(message);
+          setError(null);
+          setEditIndex(null);
+          setIsLoading(false);
+          fetchData('orders/shippingAddress', 1);      
+      } else {
+          const { status, message } = responseData;
+          setBackendResponse(status);
+          setIsLoading(false);
+          toast.error(message);
+      }
+        
+      } catch (error: any) {
+        setIsLoading(false);
+      
+        if (error.response) {
+          if (error.response.status === 401) {
+            setError("Please log in to access this content.");
+          } else if (error.response.status === 403) {
+            setError("You do not have permission to access this content.");
+          } else {
+            setError("An error occurred on the server. Please try again later.");
+          }
+        } else if (error.request) {
+          setError("No response from the server. Please try again later.");
+        } else {
+          setError("An unexpected error occurred. Please try again later.");
+        }
+      }
+      
+    };
 
 
-  const handleClose = () => {
-    setEditIndex(null);
-    setEditedValues({});
-  };
+    const handleClose = () => {
+      setEditIndex(null);
+      setEditedValues({});
+    };
+
 
 
   const handleSetShippingAddress = async (address: any) => {
@@ -616,15 +596,20 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
          
             
             {!loading && cartItems.length === 0 && <EmptyList title={'You do not have product(s) in your cart.'} />}
-            {!loading &&  cartItems.length > 0 && (
+            {cartItems.length > 0 && (
               <div className="lg:p-2 mb-4 flex flex-col">
                 
                 
-                {!isLogin && profileName === "Guest" && (
+                {!isLogin && (
                     <Login />
                 )}
 
-                {isLogin && (
+                {loading && <div className="w-full pt-9"> <Spinner size="lg" /> </div>}
+                {error && !loading &&
+                    <div className="text-red-500 font-bold pt-9 flex justify-center h-[100%]">{error}</div>
+                }
+
+                   {isLogin && !loading && (
                      <div className="w-full">
                      <div className="w-full flex gap-4 justify-between items-center">
                        <p className="font-extrabold text-lg lg:text-2xl fadeIn mb-4">Shipping Address</p>
@@ -632,14 +617,11 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                      </div>
                      <hr className="mt-6 mb-6 border-2"/>
          
-                     {loading && <div className="iSpinner pt-9"> <Spinner size="lg" /> </div>}
-                     {error && !loading &&
-                     <div className="text-red-500 font-bold pt-9 flex justify-center h-[100%]">{error}</div>
-                     }
+                     
          
-                   {!loading && (
+                   
          
-                     <>
+                     
                      
                      {products && products.map((product, index) => (
          
@@ -665,7 +647,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                              type="text"
                              value={editedValues.nickname || ''}
                              onChange={(e) => setEditedValues({ ...editedValues, nickname: e.target.value })}
-                             className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                             className="border border-gray-100 rounded-md px-3 py-2 w-full"
                            />
                          </div>
                          <div>
@@ -675,7 +657,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                              type="text"
                              value={editedValues.email || ''}
                              onChange={(e) => setEditedValues({ ...editedValues, email: e.target.value })}
-                             className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                             className="border border-gray-100 rounded-md px-3 py-2 w-full"
                            />
                          </div>
                          <div>
@@ -685,7 +667,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                              type="text"
                              value={editedValues.phone || ''}
                              onChange={(e) => setEditedValues({ ...editedValues, phone: e.target.value })}
-                             className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                             className="border border-gray-100 rounded-md px-3 py-2 w-full"
                            />
                          </div>
                          <div>
@@ -694,7 +676,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                          type="text"
                          value={editedValues.state || ''}
                          onChange={(e) => setEditedValues({ ...editedValues, state: e.target.value })}
-                         className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                         className="border border-gray-100 rounded-md px-3 py-2 w-full"
                        />
                        </div>
                        <div>
@@ -703,7 +685,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                          type="text"
                          value={editedValues.street || ''}
                          onChange={(e) => setEditedValues({ ...editedValues, street: e.target.value })}
-                         className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                         className="border border-gray-100 rounded-md px-3 py-2 w-full"
                        />
                        </div>
                        <div>
@@ -712,7 +694,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                          type="text"
                          value={editedValues.city || ''}
                          onChange={(e) => setEditedValues({ ...editedValues, city: e.target.value })}
-                         className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                         className="border border-gray-100 rounded-md px-3 py-2 w-full"
                        />
                        </div>
                        <div>
@@ -721,7 +703,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                          type="text"
                          value={editedValues.zip || ''}
                          onChange={(e) => setEditedValues({ ...editedValues, zip: e.target.value })}
-                         className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                         className="border border-gray-100 rounded-md px-3 py-2 w-full"
                        />
                        </div>
                          <div className="flex justify-between mt-5">
@@ -825,13 +807,18 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                      )}
          
                      
-                     </>
+                     
          
          
-                   )}
+                  
          
                  </div>
-                )}
+             )}
+
+
+
+
+               
               </div>
             )}
            
@@ -848,6 +835,15 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
         </div>
 
          {/* Overlay Div */}
+         {/* Backdrop */}
+         {isOpen && (
+        <div
+          className={`fixed inset-0 bg-black opacity-50 z-40 ${isOpen ? 'block' : 'hidden'}`}
+          onClick={closeOverlay}
+        />
+      )}
+
+      {/* Overlay */}
       <div
         className={`fixed top-0 right-0 h-full bg-white shadow-lg transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -868,194 +864,173 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           <h2 className="text-xl font-bold mb-4">Add New Address</h2>
 
           <form
-								className="space-y-4 md:space-y-6"
-								onSubmit={_handleSubmit}
-							>
-								<div className="  flex-1 ">
-											<label
-												htmlFor=""
-												className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
-											>
-												Nickname
-												<span className=" text-[#982c2e]">
-													{" "}
-													*{" "}
-												</span>
-											</label>
-											<input
-												type="text"
-												className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm
-                         rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full 
-                         p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-												required
-												name="nickname"
-												value={addressFormData.nickname}
-												onChange={_handleChange}
-											/>
-										</div>
+            className="space-y-4 md:space-y-6"
+            onSubmit={_handleSubmit}
+          >
+            {/* Form fields */}
+            <div className="flex-1">
+              <label
+                htmlFor="nickname"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
+              >
+                Nickname
+                <span className="text-[#982c2e]"> *</span>
+              </label>
+              <input
+                type="text"
+                id="nickname"
+                name="nickname"
+                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+                value={formData.nickname}
+                onChange={_handleChange}
+              />
+            </div>
 
-                                        
+            <div>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                Email Address <span className="text-red-300 font-bold">*</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                value={formData.email}
+                onChange={_handleChange}
+                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </div>
 
-								<div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										Email Address <span className="text-red-300 font-bold">*</span>
-									</label>
-									<input
-										type="email"
-										name="email"
-										id="last_name"
-                                        required
-										value={addressFormData.email}
-										onChange={_handleChange}
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										placeholder=""
-									/>
-								</div>
+            <div>
+              <label
+                htmlFor="street"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
+              >
+                Street Address
+                <span className="text-[#982c2e]"> *</span>
+              </label>
+              <input
+                type="text"
+                id="street"
+                name="street"
+                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+                value={formData.street}
+                onChange={_handleChange}
+              />
+            </div>
 
-                                <div className=" ">
-										<label
-											htmlFor=""
-											className=" block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
-										>
-											Street Address
-											<span className=" text-[#982c2e]">
-												{" "}
-												*{" "}
-											</span>
-										</label>
-										<input
-											type="text"
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-											required
-											name="street"
-											value={addressFormData.street}
-											onChange={_handleChange}
-                                            
-										/>
-									</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  Country <span className="text-red-300 font-bold">*</span>
+                </label>
+                <select
+                  value={selectedCountry}
+                  onChange={handleCountryChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option value=""></option>
+                  {countries.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-									<div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  State/Province <span className="text-red-300 font-bold">*</span>
+                </label>
+                <select
+                  name="state"
+                  value={formData.state}
+                  onChange={_handleChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                  <option></option>
+                  {states.map((state) => (
+                    <option key={state.id} value={state.name}>
+                      {state.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
-									<div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										Country <span className="text-red-300 font-bold">*</span>
-									</label>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  City <span className="text-red-300 font-bold">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={_handleChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
 
-									<select
-										value={selectedCountry}
-										onChange={handleCountryChange}
-                                        required
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-									>
-										<option value=""></option>
-										{countries.map((country) => (
-											<option
-												key={country.id}
-												value={country.id}
-											>
-												{country.name}
-											</option>
-										))}
-									</select>
-								</div>
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  Zip/Postal Code <span className="text-red-300 font-bold">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="zip"
+                  name="zip"
+                  value={formData.zip}
+                  onChange={_handleChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
+            </div>
 
-								<div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										State/Province <span className="text-red-300 font-bold">*</span>
-									</label>
-									<select
-										name="state"
-										value={addressFormData.state}
-										onChange={_handleChange}
-                                        required
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-									>
-										<option></option>
-										{states.map((state) => (
-											<option
-												key={state.id}
-												value={state.name}
-											>
-												{state.name}
-											</option>
-										))}
-									</select>
-								</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  Phone Number <span className="text-red-300 font-bold">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={_handleChange}
+                  required
+                  className="border border-gray-100 text-gray-900 sm:text-sm 
+                  rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
+                  dark:border-gray-600 dark:placeholder-gray-400 
+                  dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
 
-                </div>
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                  Company
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={_handleChange}
+                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
+            </div>
 
-                <div className="grid grid-cols-2 gap-2">
-									<div>
-										<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-											City <span className="text-red-300 font-bold">*</span>
-										</label>
-										<input
-											type="text"
-											name="city"
-											id="city"
-											value={addressFormData.city}
-											onChange={_handleChange}
-                                            required
-											placeholder=""
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										/>
-									</div>
-
-									<div>
-										<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-											Zip/Postal Code <span className="text-red-300 font-bold">*</span>
-										</label>
-										<input
-											type="text"
-											name="zip"
-											id="zip"
-											value={addressFormData.zip}
-											onChange={_handleChange}
-                                            required
-											placeholder=""
-											className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										/>
-									</div>
-								</div>
-
-
-                <div className="grid grid-cols-2 gap-2">
-                <div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										Phone Number <span className="text-red-300 font-bold">*</span>
-									</label>
-									<input
-										type="text"
-										name="phone"
-										id="phone"
-										value={addressFormData.phone}
-										onChange={_handleChange}
-                                        required
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										placeholder=""
-									/>
-								</div>
-
-								<div>
-									<label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-										Company 
-									</label>
-									<input
-										type="text"
-										name="company"
-										id="copany"
-										value={addressFormData.company}
-										onChange={_handleChange}
-                                      
-										className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-										placeholder=""
-									/>
-								</div>
-
-                </div>
-                <div className="mt-2">
+            <div className="mt-2">
             
-                <div className="flex">
+                   <div className="flex">
                       <label className="checkbox-btn">
                           <input 
                           onChange={_handleChange}
@@ -1069,10 +1044,10 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                     </div>
                 </div>
 
-							
-						<button
+        <div className="w-full flex center justify-center gap-2">
+            <button
 							type="submit"
-							className="w-full flex center justify-center gap-2 text-white bg-yellow-600 hover:bg-yellow-700 
+							className="text-white bg-yellow-600 hover:bg-yellow-700 
               focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
               dark:bg-yellow-600 dark:hover-bg-yellow-700 dark:focus:ring-yellow-800 warning-btn relative"
 							disabled={isLoading}
@@ -1080,13 +1055,20 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
 							{isLoading && <Spinner size="sm" />}
 							{isLoading ? 'Please wait...' : 'Add Address'}
 						</button>
+            </div>
+          </form>
 
-                                {errorMessage && <div className="text-red-500">{errorMessage}</div>}
-								
-							</form>
-         
+          {errorMessage && (
+            <div className="mt-4 text-red-500 text-sm">
+              {errorMessage}
+            </div>
+          )}
         </div>
       </div>
+
+
+
+
       </Container>
       <Footer />
     </main>
