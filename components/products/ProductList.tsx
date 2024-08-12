@@ -249,7 +249,7 @@ const ProductList: React.FC = () => {
                             },
                         }));
                     } catch (error) {
-                        console.error(`Error fetching details or images for ${product.ingramPartNumber}:`, error);
+                        //console.error(`Error fetching details or images for ${product.ingramPartNumber}:`, error);
                     }
                 });
                 
@@ -265,7 +265,7 @@ const ProductList: React.FC = () => {
 
             } catch (error: any) {
                 // Log the error for debugging purposes
-                console.error('Error loading products:', error);
+               // console.error('Error loading products:', error);
             
                 // Check for specific types of errors and set a more descriptive error message
                 if (error instanceof TypeError) {

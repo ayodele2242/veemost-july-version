@@ -70,7 +70,7 @@ export const fetchProducts = async (pageSize: number, pageNumber: number): Promi
     const data = await response.json();
     return { catalog: data };
   } catch (error) {
-    console.error('Error fetching products:', error);
+    //console.error('Error fetching products:', error);
     throw error;
   }
 };
@@ -89,7 +89,7 @@ export const fetchCategoryProducts = async (pageSize: number, pageNumber: number
     const data = await response.json();
     return { catalog: data };
   } catch (error) {
-    console.error('Error fetching category products:', error);
+    //console.error('Error fetching category products:', error);
     throw error;
   }
 };
@@ -108,7 +108,7 @@ export const fetchVendorProducts = async (pageSize: number, pageNumber: number, 
     const data = await response.json();
     return { catalog: data };
   } catch (error) {
-    console.error('Error fetching category products:', error);
+   // console.error('Error fetching category products:', error);
     throw error;
   }
 };
@@ -128,7 +128,7 @@ export const searchProducts = async (pageSize: number, pageNumber: number, keywo
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error searching for products:', error);
+    //console.error('Error searching for products:', error);
     throw error;
   }
 };
@@ -158,14 +158,14 @@ export const searchProductsAndCategories = async (pageSize: number, pageNumber: 
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`Error response from API: ${errorText}`); // Log error response
+      //console.error(`Error response from API: ${errorText}`); // Log error response
       throw new Error(`Network response was not ok: ${response.statusText}`);
     }
 
     const data = await response.json();
     return { catalog: data };
   } catch (error) {
-    console.error('Error searching for products:', error);
+    //console.error('Error searching for products:', error);
     throw error;
   }
 };
@@ -247,11 +247,11 @@ export const fetchProductPrice = async (ingramPartNumber: string): Promise<any[]
     if (data && Array.isArray(data)) {
       return data;
     } else {
-      console.error('Unexpected response format:', data);
+     // console.error('Unexpected response format:', data);
       throw new Error('Unexpected response format');
     }
   } catch (error) {
-    console.error('Error fetching price:', error);
+    //console.error('Error fetching price:', error);
     throw error;
   }
 };
@@ -280,7 +280,7 @@ export const fetchProductDetails = async (ingramPartNumber: string): Promise<any
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching product details:', error);
+    //console.error('Error fetching product details:', error);
     throw error;
   }
 };
@@ -303,7 +303,7 @@ export const fetchProductImage = async (vendorName: string, partNumber: string):
 
     return filteredImages.length > 0 ? filteredImages : [];
   } catch (error) {
-    console.error(`Error fetching product images for part number ${partNumber}:`, error);
+    //console.error(`Error fetching product images for part number ${partNumber}:`, error);
     return []; // Return an empty array in case of an error
   }
 };
@@ -340,7 +340,7 @@ export const getFreightEstimate = async (requestData: {
 
     return response.data;
   } catch (error) {
-    console.error('Error fetching freight estimate:', error);
+    //console.error('Error fetching freight estimate:', error);
     throw error;
   }
 };

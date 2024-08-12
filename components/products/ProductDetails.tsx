@@ -18,7 +18,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ ingramPartNumber }) => 
         setProductDetails(details);
         //console.log("Product details ", JSON.stringify(details));
       } catch (error) {
-        console.error('Failed to fetch product details:', error);
+        //console.error('Failed to fetch product details:', error);
       } finally {
         setLoading(false); // Set loading to false after fetching
       }

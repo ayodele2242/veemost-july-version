@@ -113,11 +113,11 @@ const ProductCard: React.FC = () => {
               [product.ingramPartNumber]: true, // Set loading state to true initially
             }));
           } catch (error) {
-            console.error(`Error fetching details or images for ${product.ingramPartNumber}:`, error);
+           // console.error(`Error fetching details or images for ${product.ingramPartNumber}:`, error);
           }
         });
       } catch (error: any) {
-        console.error('Error loading products:', error);
+        //console.error('Error loading products:', error);
         setError(error.message || 'An unknown error occurred');
       } finally {
         setLoading(false);

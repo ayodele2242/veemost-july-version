@@ -43,7 +43,7 @@ export const GET = async (request: NextRequest) => {
     }
   } catch (error) {
     // Handle errors from the axios request
-    console.error(`Error fetching product images for part number ${partNumber}:`, error);
-    return new Response(JSON.stringify({ error: 'Error fetching product images' }), { status: 500 });
+    //console.error(`Error fetching product images for part number ${partNumber}:`, error);
+    return new Response(JSON.stringify({ error: 'Error fetching product images' }));
   }
 };

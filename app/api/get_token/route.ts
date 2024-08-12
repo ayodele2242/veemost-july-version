@@ -32,22 +32,22 @@ export async function POST(req: NextRequest) {
     if (response.data && response.data.access_token) {
       return NextResponse.json({ token: response.data.access_token });
     } else {
-      return NextResponse.json({ error: 'Access token not found in response' }, { status: 500 });
+      return NextResponse.json({ error: 'Access token not found in response' });
     }
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
-      console.error('Axios error message:', error.message);
+      //console.error('Axios error message:', error.message);
       if (error.response) {
-        console.error('Axios error response data:', error.response.data);
-        console.error('Axios error response status:', error.response.status);
-        console.error('Axios error response headers:', error.response.headers);
+       // console.error('Axios error response data:', error.response.data);
+       // console.error('Axios error response status:', error.response.status);
+        //console.error('Axios error response headers:', error.response.headers);
         return NextResponse.json({ error: error.response.data }, { status: error.response.status });
       } else {
-        return NextResponse.json({ error: 'Error fetching token' }, { status: 500 });
+        return NextResponse.json({ error: 'Error fetching token' });
       }
     } else {
-      console.error('Unknown error:', error);
-      return NextResponse.json({ error: 'Error fetching token' }, { status: 500 });
+      //console.error('Unknown error:', error);
+      return NextResponse.json({ error: 'Error fetching token' });
     }
   }
 }
