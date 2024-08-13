@@ -9,6 +9,7 @@ import {
 } from 'hugeicons-react';
 import { getUserData, isUserLoggedIn, redirectToLoginPage } from '@/auth/auth';
 import { useImage } from '@/providers/ImageContext';
+import useAutoLogout from '@/hooks/useAutoLogout';
 
 const UserTopMenu = () => {
     const userData = getUserData();
@@ -18,19 +19,12 @@ const UserTopMenu = () => {
     const [profilePicture, setProfilePicture] = useState<string | null>(null);
     const profileName = userData?.profile_name || "Guest";
 
-    useEffect(() => {
-        const checkLoginStatus = async () => {
-            if (typeof window === 'undefined') return;
-            const loggedIn = isUserLoggedIn();
-            setIsLogin(loggedIn);
+    const expirePeriod =
+    typeof window !== "undefined" ? localStorage.getItem("expire_period") : null;
+    const expireTime = expirePeriod ? parseInt(expirePeriod, 10) : 0; 
+    const isLoggedIn = useAutoLogout(expireTime);
 
-            if (loggedIn) {
-                // Handle logic for logged-in users if needed
-            }
-        };
-
-        checkLoginStatus();
-    }, []);
+    
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -48,7 +42,8 @@ const UserTopMenu = () => {
 
     return (
         <div className="flex flex-col gap-1">
-            {!isLogin && profileName === "Guest" ? (
+           
+           {!isLoggedIn || profileName === "Guest" ? (
                 <div className='w-full flex flex-col p-3'>
                     {/* Not logged in */}
                     <Link href={"/auth/register"} className="bg-primaryBg p-1 rounded-lg text-white font-bold flex justify-center items-center text-[14px]">Sign Up</Link>
@@ -56,7 +51,7 @@ const UserTopMenu = () => {
                 </div>
             ) : (
                 <div className="py-1">
-                    {!isLogin || profileName !== "Guest" ? (
+                    {!isLoggedIn || profileName !== "Guest" ? (
                         <div className="flex items-center cursor-pointer mx-2 gap-1 py-3">
                             {profilePicture ? (
                                 <Image
@@ -87,7 +82,7 @@ const UserTopMenu = () => {
 
                     <hr />
 
-                    {isLogin && profileName !== "Guest" && (
+                    {isLoggedIn && profileName !== "Guest" && (
                         <>
                             <Link href="/account/profile" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
                                 <span className='flex items-center gap-2 justify-center'><UserSharingIcon size={18} /> Account Information</span>
@@ -116,17 +111,21 @@ const UserTopMenu = () => {
                         </>
                     )}
                     
-                    <hr />
-                    <div className="py-1">
-                        <Link href="/help-and-faq" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
-                            <span className='flex items-center gap-2 justify-center gap-2'>FAQs</span>
-                        </Link>
-                        <Link href="/contact-us" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
-                            <span className='flex items-center gap-2 justify-center gap-2'>Support</span>
-                        </Link>
-                    </div>
+                   
                 </div>
             )}
+
+
+            <hr />
+            <div className="py-1">
+                <Link href="/help-and-faq" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+                    <span className='flex items-center gap-2 justify-center gap-2'>FAQs</span>
+                </Link>
+                <Link href="/contact-us" className="flex justify-between items-center text-[14px] font-normal text-default-black px-4 py-1 hover:bg-gray-100">
+                    <span className='flex items-center gap-2 justify-center gap-2'>Support</span>
+                </Link>
+            </div>
+
         </div>
     );
 };
