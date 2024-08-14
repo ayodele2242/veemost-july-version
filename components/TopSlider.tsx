@@ -65,9 +65,9 @@ const TopSlider = () => {
     // Format the text
     const formattedText = (
       <>
-        {spans[0] && <span className="text-xl 2xl:text-[60px] md:text-[50px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[0].textContent}</span>}
-        {spans[1] && <span className="text-xl 2xl:text-[60px] md:text-[50px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[1].textContent}</span>}
-        {spans[2] && <span className="text-primaryText text-xl 2xl:text-[60px] md:text-[50px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[2].textContent}</span>}
+        {spans[0] && <span className="text-xl 2xl:text-[68px] md:text-[60px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[0].textContent}</span>}
+        {spans[1] && <span className="text-xl 2xl:text-[68px] md:text-[60px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[1].textContent}</span>}
+        {spans[2] && <span className="text-primaryText text-xl 2xl:text-[68px] md:text-[60px] text-[40px] text-center leading-none tracking-wide font-gilroy-extrabold">{spans[2].textContent}</span>}
         {paragraphs[0] && <p className="text-center text-grayText text-[12px] md:text-[14px] ">{paragraphs[0].textContent}</p>}
       </>
     );
