@@ -1566,15 +1566,17 @@ const ServerForm: React.FC<ServerProps> = ({ onSuccess }) => {
 
           </div>
         ))}
-        <div className="flex flex-row gap-3">
-        <button type="button" onClick={handleAddServer} className="px-4 py-2 mt-4 text-primaryText bg-lightBg p-2 font-bold">
+        <div className="flex justify-between items-center gap-3">
+        <button type="button" onClick={handleAddServer} className="
+        rounded-[8px]  flex justify-center items-center 
+        px-4 py-2 mt-4 text-primaryText bg-lightBg p-2 font-bold">
           Add Another Server Configurations
         </button>
         <button 
         type="submit" 
         disabled={loading}
-        className={`bg-[#D6A912] h-[3.2rem] text-white font-bold py-2 px-4 rounded-[8px] 
-          w-full focus:outline-none focus:shadow-outline ${
+        className={`bg-[#D6A912] p-2 text-white font-bold py-2 px-4 rounded-[8px]  flex justify-center items-center
+          w-[250px] focus:outline-none focus:shadow-outline ${
           loading ? 'opacity-50 cursor-not-allowed' : ''
         }`}
         >

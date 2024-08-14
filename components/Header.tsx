@@ -21,6 +21,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useImage } from '@/providers/ImageContext';
 import Autocomplete from './products/AutoComplete';
 import useRouting from '@/hooks/routing';
+import useAutoLogout from '@/hooks/useAutoLogout';
 //import useRouting from "@/hooks/routing";
 
 interface NavbarProps {
@@ -46,6 +47,10 @@ const Header: React.FC = () => {
   };
   //const isLogin = isUserLoggedIn();
   const [isLogin, setIsLogin] = useState(false);
+  const expirePeriod =
+    typeof window !== "undefined" ? localStorage.getItem("expire_period") : null;
+    const expireTime = expirePeriod ? parseInt(expirePeriod, 10) : 0; 
+    const isLoggedIn = useAutoLogout(expireTime);
  
   const profileName =
       userData && userData.profile_name ? userData.profile_name : "Guest";
