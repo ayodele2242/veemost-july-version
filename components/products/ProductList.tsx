@@ -185,17 +185,29 @@ const ProductList: React.FC = () => {
                     data = await fetchProducts(itemsPerPage, pageNumber);
                 }
     
-                // Total number of records found
-                const totalRecords = data.catalog.recordsFound;
-                setTotalRecords(totalRecords);
+                
                
                 // Filter products to only include those authorized to purchase
                 // Ensure `data.catalog` and `data.catalog.catalog` are defined
                 const catalog = data.catalog?.catalog || [];
-                const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "True");
 
+                 // Total number of records found
+                 const totalRecords = data.catalog.recordsFound;
+                 setTotalRecords(totalRecords);
+                  
+              
+        
+        
+                if (!Array.isArray(catalog)) {
+                  throw new Error('Expected catalog to be an array');
+                }
+          
+                const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "true");
+       
                 // Display initial product data
                 setProducts(authorizedProducts);
+
+                console.log(JSON.stringify(authorizedProducts));
     
                 // Fetch images and price details asynchronously
                 authorizedProducts.forEach(async (product: { vendorName: string; vendorPartNumber: string; ingramPartNumber: string; }) => {

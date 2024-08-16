@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
-import { fetchProducts, fetchProductPrice, fetchProductImage } from '../services/apiService';
+import { fetchProducts, fetchProductPrice, fetchProductImage, fetchHomeProducts } from '../services/apiService';
 import Container from './Container';
 import Link from 'next/link';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -66,13 +66,20 @@ const ProductCard: React.FC = () => {
       try {
         setLoading(true);
         setError(null); // Reset the error before fetching
-        const data = await fetchProducts(pageSize, pageNumber);
-
-        const catalog = data.catalog?.catalog || [];
+        const data = await fetchHomeProducts(pageSize, pageNumber);
+        //console.log(JSON.stringify(data))
+        const catalog = data.catalog || [];
+        
+        
+        if (!Array.isArray(catalog)) {
+          throw new Error('Expected catalog to be an array');
+        }
+  
         // Filter products to only include those authorized to purchase
-        const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "True");
+        const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "true");
+       
         setProducts(authorizedProducts);
-
+  
         // Fetch images and price details asynchronously
         authorizedProducts.forEach(async (product: { vendorName: string; vendorPartNumber: string; ingramPartNumber: string; }) => {
           try {
@@ -82,21 +89,19 @@ const ProductCard: React.FC = () => {
               ...prevImages,
               [product.ingramPartNumber]: productImageUrls,
             }));
-
+  
             // Fetch product details
             const priceAvailability = await fetchProductPrice(product.ingramPartNumber);
             
             const productAvailability = priceAvailability[0].availability.totalAvailability;
             const retailPrice = priceAvailability[0].pricing.retailPrice;
             const customerPriceWithMarkup = priceAvailability[0].pricing.customerPrice * 1.06;
-
+  
             let discount = 0;
             if (retailPrice > customerPriceWithMarkup) {
               discount = ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100;
             }
-
-           
-
+  
             setProductDetails(prevDetails => ({
               ...prevDetails,
               [product.ingramPartNumber]: {
@@ -107,7 +112,7 @@ const ProductCard: React.FC = () => {
                 discount: parseFloat(discount.toFixed(2))
               },
             }));
-
+  
             setImageLoadingStates(prevStates => ({
               ...prevStates,
               [product.ingramPartNumber]: true, // Set loading state to true initially
@@ -123,9 +128,10 @@ const ProductCard: React.FC = () => {
         setLoading(false);
       }
     };
-
+  
     loadProducts();
   }, [pageSize, pageNumber]);
+  
 
   useEffect(() => {
     if (selectedProduct && modalContentRef.current) {

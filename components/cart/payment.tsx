@@ -158,14 +158,11 @@ const Payment: FunctionComponent = () => {
     const [payPalOrderId, setPayPalOrderId] = useState('');
     const [isPaypalOverlayVisible, setPaypalIsOverlayVisible] = useState<boolean>(false);
     const [isOverlayVisible, setIsOverlayVisible] = useState<boolean>(false);
-    const [scriptLoaded, setScriptLoaded] = useState(false);
     const [issubmitting, setIssubmitting] = useState(false);
-    const [sdkReady, setSdkReady] = useState(false);
-    const [paypalLoaded, setPaypalLoaded] = useState(false);
     const [paypalError, setPaypalError] = useState<string | null>(null);
     const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
     const [isPaypalModalOpen, setIsPaypalModalOpen] = useState(false);
-   
+    const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
     const { push } = useRouter();
 
@@ -179,6 +176,11 @@ const Payment: FunctionComponent = () => {
         
     };
 
+    const handleScriptLoad = () => {
+        setIsScriptLoaded(true);
+      };
+
+   
     const [isLogin, setIsLogin] = useState(false);
     useEffect(() => {
         const loginStatus = isUserLoggedIn();
@@ -547,7 +549,10 @@ const closePaypalModal = () => {
                                       >
                                         Pay with Stripe
                                     </button>
-                                    <PayPalScriptProvider options={initialOptions}>
+                                    {isScriptLoaded && <div className="flex gap-2 justify-left items-center"><Spinner size='sm'/> Loading PayPal...</div>}
+                                    <PayPalScriptProvider 
+                                    options={initialOptions} 
+                                    >
                                                 <PayPalButtons
                                                     createOrder={async () => {
                                                         return await handlePaypalPayment();

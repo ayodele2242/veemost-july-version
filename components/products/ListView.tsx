@@ -68,7 +68,7 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
     const highlightText = (text: string, search: string | null) => {
         if (!search) return text;
         const regex = new RegExp(`(${search.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
-        return text.replace(regex, '<span class="highlight">$1</span>');
+        return text?.replace(regex, '<span class="highlight">$1</span>');
       };
 
     const handleViewDetails = (product: IngramProductType) => {

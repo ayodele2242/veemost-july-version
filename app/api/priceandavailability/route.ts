@@ -61,18 +61,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Price response error' }, { status: 500 });
     }
   } catch (error: any) {
-    console.error('Error occurred:', error.message);
+    //console.error('Error occurred:', error.message);
     if (axios.isAxiosError(error)) {
       if (error.response) {
-        console.error('Axios error response data:', error.response.data);
-        console.error('Axios error response status:', error.response.status);
-        console.error('Axios error response headers:', error.response.headers);
+        //console.error('Axios error response data:', error.response.data);
+       // console.error('Axios error response status:', error.response.status);
+       // console.error('Axios error response headers:', error.response.headers);
         return NextResponse.json({ error: error.response.data }, { status: error.response.status });
       } else {
         return NextResponse.json({ error: 'Error fetching token' }, { status: 500 });
       }
     } else {
-      console.error('Unknown error:', error);
+      //console.error('Unknown error:', error);
       return NextResponse.json({ error: 'Internal server error occurred' }, { status: 500 });
     }
   }

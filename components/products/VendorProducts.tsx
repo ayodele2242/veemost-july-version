@@ -74,7 +74,7 @@ const VendorProducts  = ({ vendorName }: ProductDetailsProps) => {
         const catalog = data.catalog?.catalog || [];
         //console.log("Similar Products ",JSON.stringify(data.catalog))
         // Filter products to only include those authorized to purchase
-        const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "True");
+        const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "true");
         setProducts(authorizedProducts);
 
         // Fetch images and price details asynchronously
