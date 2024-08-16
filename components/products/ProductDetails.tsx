@@ -15,6 +15,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ ingramPartNumber }) => 
       setLoading(true); // Set loading to true before fetching
       try {
         const details = await fetchProductDetails(ingramPartNumber); // Fetch product details using the ingramPartNumber
+
         setProductDetails(details);
         //console.log("Product details ", JSON.stringify(details));
       } catch (error) {

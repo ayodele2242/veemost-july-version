@@ -32,7 +32,7 @@ interface CartQuantityActionBtnsProps {
   } | null;
   id: string;
   amount: any,
-  image: string,
+  image: any,
   hideButton?: boolean;
   warehouseId?: string
 }

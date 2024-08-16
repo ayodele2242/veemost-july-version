@@ -252,19 +252,19 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
 
                         {product ? (
                         <div className="flex flex-row mt-8 justify-left items-center mt-4 gap-4">
-                          
+                        
                             <BuyNowBtns 
                              product={product} 
                              id={product?.ingramPartNumber} 
-                             amount={product?.customerPrice} 
-                             image={product?.ingramPartNumber} 
+                             amount={price?.customerPrice.toFixed(2)} 
+                             image={previewImage} 
                              warehouseId={warehouseId || ''}/>
 
                                 <CartQuantityActionBtns 
                                     product={product} 
                                     id={product?.ingramPartNumber} 
-                                    amount={product?.customerPrice} 
-                                    image={product?.ingramPartNumber} 
+                                    amount={price?.customerPrice.toFixed(2)} 
+                                    image={previewImage} 
                                     warehouseId={warehouseId || ''}/>
 
                                     <WishBtn ingramPartNumber={product?.ingramPartNumber} />
