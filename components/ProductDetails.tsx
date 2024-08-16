@@ -240,9 +240,9 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
 
                         {price ? (
                         <div className="flex flex-col mt-8 justify-between">
-                            <h2 className="text-[#121212] pt-[0.2rem] xl:text-[40px] text-[25px] font-normal font-GilroyBold">${price.customerPrice ? price.customerPrice.toFixed(2) : 'N/A'}</h2>
+                            <h2 className="text-[#121212] pt-[0.2rem] xl:text-[40px] text-[25px] font-normal font-GilroyBold">${price?.customerPrice.toFixed(2) || '0.00'}</h2>
                             <div>
-                                <p className="text-[#858586] text-[14px] font-normal font-GilroyRegular">MSRP ${price.retailPrice ? price.retailPrice.toFixed(2) : 'N/A'}</p>
+                                <p className="text-[#858586] text-[14px] font-normal font-GilroyRegular">MSRP ${price?.retailPrice.toFixed(2) || 0.00}</p>
                                 <p className="text-[#858586] text-[14px] font-normal font-GilroyRegular">EXCL TAX</p>
                             </div>
                         </div>
@@ -256,14 +256,14 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
                             <BuyNowBtns 
                              product={product} 
                              id={product?.ingramPartNumber} 
-                             amount={price.customerPrice ? price.customerPrice.toFixed(2) : 'N/A'}
+                             amount={price?.customerPrice.toFixed(2) || '0.00'} 
                              image={previewImage} 
                              warehouseId={warehouseId || ''}/>
 
                                 <CartQuantityActionBtns 
                                     product={product} 
                                     id={product?.ingramPartNumber} 
-                                    amount={price.customerPrice ? price.customerPrice.toFixed(2) : 'N/A'} 
+                                    amount={price?.customerPrice.toFixed(2) || '0.00'} 
                                     image={previewImage} 
                                     warehouseId={warehouseId || ''}/>
 
