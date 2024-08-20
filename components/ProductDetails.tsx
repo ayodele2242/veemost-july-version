@@ -133,7 +133,7 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
     { label: loading ? 'Loading...' : `${product?.description}`, href: loading ? '#' : `/products?search=${encodeURIComponent(product?.description || '')}` }
   ];
 
-  ///if (loading && !product) return <div>Loading product details...</div>;
+  ///if (loading && !product) return <div>Loading product details...</div>; 
 
   return (
     <main className="w-full overflow-hidden">

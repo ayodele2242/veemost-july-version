@@ -6,7 +6,7 @@ import { ApiRequestService } from '@/services/apiRequest.service';
 import { fetchCountries, fetchStatesByCountry } from "@/services/requestAll.service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { iStates, State } from '@/utils/getStateAbbreviation';
 import Image from 'next/image';
 import { useModal } from '@/contexts/ModalContext';
@@ -17,7 +17,7 @@ interface ResponseDataItem {
     message: string;
     token: string;
 }
-
+ 
 const SignUp = () => {
     const [bgHeroLeftSrc, setBgHeroLeftSrc] = useState<string | null>(null);
     const [username, setUsername] = useState('');
@@ -33,7 +33,7 @@ const SignUp = () => {
     const [step, setStep] = useState(1); // New state for form step
     const [checked, setChecked] = useState(false); // Checkbox state
     const [selectedState, setSelectedState] = useState<State | null>(null);
-
+    const pathname = usePathname();
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const stateName = e.target.value;
         //console.log(stateName);
@@ -209,7 +209,7 @@ const SignUp = () => {
                     if (responseData.status === "error") {
                         toast.error("Error occurred: " + responseData.message);
                     } else if (responseData.status === true) {
-                        openModal('Registration successful', 'Please check your email for activation link.', 'success');
+                        openModal('Registration successful', 'Please check your email for activation link.', 'success', pathname);
                         
                         setFormData({
                             last_name: "",
@@ -238,17 +238,18 @@ const SignUp = () => {
                     if (response.status === 400) {
                         const responseData = response.data;
                         if (responseData.status === "error") {
-                            openModal('Error Occured', responseData.message, 'warning');
+                            openModal('Error Occured', responseData.message, 'warning', pathname);
                             //toast.error(responseData.message);
                         } else if (responseData.status === true) {
-                            openModal('Error Occured', 'Unknown error occurred', 'error');
+                            openModal('Error Occured', 'Unknown error occurred', 'error', pathname);
                            
                         }
                     }
                 }
-            } catch (error) {
+            } catch (error: any) {
+                //console.log(JSON.stringify(error.data.message))
                 setIsLoading(false);
-                openModal('Error Occured','An error occurred while Registering. Please try again later', 'error');
+                openModal('Error Occured',error.data.message, 'error', pathname);
             }
         }
     };

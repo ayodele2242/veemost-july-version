@@ -7,6 +7,7 @@ interface ModalContextType {
     title: string,
     message: string,
     statusType: 'success' | 'error' | 'warning' | 'info',
+    pathname?: any
   ) => void;
   closeModal: () => void;
 }
@@ -18,16 +19,19 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [modalStatusType, setModalStatusType] = useState<'success' | 'error' | 'warning' | 'info'>('info');
+  const [modalPath, setModalPath] = useState('');
  
   const openModal = (
     title: string,
     message: string,
     statusType: 'success' | 'error' | 'warning' | 'info',
+    pathname?: any
   ) => {
     setModalTitle(title);
     setModalMessage(message);
     setModalStatusType(statusType);
     setIsModalOpen(true);
+    setModalPath(pathname);
   };
 
   const closeModal = () => setIsModalOpen(false);
@@ -41,6 +45,7 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         title={modalTitle}
         message={modalMessage}
         statusType={modalStatusType}
+        pathname={modalPath}
       />
     </ModalContext.Provider>
   );
