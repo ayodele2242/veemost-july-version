@@ -637,7 +637,7 @@ const ServerForm: React.FC<ServerProps> = ({ onSuccess }) => {
        openModal(
         'Your request has been sent successfully!!', 
         'Our engineers will get back to you shortly, Please Check your configurations tab in your user '+
-         'profile for updates on the status of this request', 'success'); 
+         'profile for updates on the status of this request', 'success', '/configurations'); 
 
         // Reset form data on success
       setBasicDetails({

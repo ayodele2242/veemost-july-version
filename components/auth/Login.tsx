@@ -10,6 +10,7 @@ import Image from 'next/image';
 import {
     isUserLoggedIn,
 } from "@/auth/auth";
+import useCartStore from '@/store/cart';
 
 interface ResponseDataItem {
     status: string;
@@ -34,6 +35,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { push } = useRouter();
+    const { cartItems } = useCartStore();
 
 
 
@@ -122,10 +124,17 @@ const Login = () => {
                     }
                    // push("/account/orders");
                     // Redirect to the saved URL or fallback to orders page
-                    const redirectUrl = sessionStorage.getItem('redirectUrl') || '/account/orders';
-                    sessionStorage.removeItem('redirectUrl'); // Clean up
+                   
+                   const redirectUrl = cartItems && cartItems.length > 0 
+                        ? '/cart' 
+                        : (sessionStorage.getItem('redirectUrl') || '/');
+
+                    sessionStorage.removeItem('redirectUrl'); 
+
+                   
+                        push(redirectUrl);
                     
-                   push(redirectUrl);
+
                 }
             } else if (response.status === 400) {
                 // Handle status 400 separately

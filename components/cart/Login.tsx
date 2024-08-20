@@ -141,6 +141,11 @@ const Login = () => {
         setShowPassword(!showPassword);
     };
 
+    const handleLoginRedirect = () => {
+        // Save the current URL in sessionStorage  
+        sessionStorage.setItem('redirectUrl', '/checkout');
+    };
+
     return (
         <main className="w-full h-screen overflow-hidden flex lg:flex-row 2lg:flex-row flex-col">
             <div className="left flex w-full relative">
@@ -211,9 +216,11 @@ const Login = () => {
                                 {isLoading ? <Spinner /> : "Login"}
                             </button>
 
-                            <Link href="/auth/register">
+                            <Link 
+                            href="/auth/register" 
+                            onClick={handleLoginRedirect}>
                                 <h2 className="text-[#121212] font-gilroy-medium cursor-pointer font-bold hover:text-primaryText">Sign Up</h2>
-                            </Link>
+                            </Link> 
                         </div>
                         </div>
                     </form>

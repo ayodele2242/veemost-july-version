@@ -604,7 +604,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                     <Login />
                 )}
 
-                {loading && <div className="w-full pt-9"> <Spinner size="lg" /> </div>}
+                {/*loading && <div className="w-full pt-9"> <Spinner size="lg" /> </div>*/}
                 {error && !loading &&
                     <div className="text-red-500 font-bold pt-9 flex justify-center h-[100%]">{error}</div>
                 }
@@ -873,7 +873,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                 htmlFor="nickname"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
               >
-                Nickname
+                Full Name
                 <span className="text-[#982c2e]"> *</span>
               </label>
               <input

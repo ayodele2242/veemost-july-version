@@ -229,8 +229,13 @@ const SignUp = () => {
                             agreement: false, // Reset agreement checkbox
                         });
                         setErrors({});
+
+                        const redirectUrl = sessionStorage.getItem('redirectUrl') || '/auth/login';
+                        sessionStorage.removeItem('redirectUrl'); // Clean up
+                    
+                  
                         setTimeout(() => {
-                            push("/auth/login");
+                            push(redirectUrl);
                         }, 6000);
                     }
                 } else {

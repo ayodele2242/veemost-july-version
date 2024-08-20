@@ -67,7 +67,7 @@ const goToProduct = (path: string) => {
   };
 
   const handleFormSuccess = () => {
-    // Close the modal on successful form submission
+    // Close the modal on successful form submission 
     handleClose();
   };
   const serverIndex = 1;

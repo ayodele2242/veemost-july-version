@@ -39,7 +39,7 @@ const GlobalModal: React.FC<ModalProps> = ({ isOpen, onClose, title, message, st
             >
               Close
             </button>
-          ) : pathname === '/configuration' ? (
+          ) : pathname === '/configurations' ? (
             <Link
               href="/account/configuration-orders"
               className="bg-lightBg text-primaryText px-4 py-2 rounded-lg"

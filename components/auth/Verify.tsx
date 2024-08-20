@@ -1,5 +1,5 @@
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import SecondHeader from '@/components/SecondHeader';
 import Container from '../Container';
 import { useState, useEffect } from 'react';
@@ -24,6 +24,7 @@ const VerifyToken = ({ token }: TokenProps) => {
     const searchParams = useSearchParams();
     const tokenPa = searchParams.get('token');
     const [backendResponse, setBackendResponse] = useState<string | null>(null);
+    const { push } = useRouter();
     
 
     useEffect(() => {
@@ -39,7 +40,13 @@ const VerifyToken = ({ token }: TokenProps) => {
 
                 if (response.status === 200) {
                     const { status, message, data, totalRecords } = responseData;
-                   
+                    const redirectUrl = sessionStorage.getItem('redirectUrl') || '/auth/login';
+                    sessionStorage.removeItem('redirectUrl'); // Clean up
+                
+              
+                    setTimeout(() => {
+                        push(redirectUrl);
+                    }, 6000);
                     setError(null);
                 } else {
                     setBackendResponse(responseData.message);
