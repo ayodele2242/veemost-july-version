@@ -19,6 +19,10 @@ export function isUserLoggedIn(): boolean {
   
   export function redirectToLoginPage(): void {
     window.location.href = "/auth/login";
-    localStorage.clear();
+    //localStorage.clear(); 
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('uploadedImage');
+    localStorage.removeItem('expire_period');
   }
   
