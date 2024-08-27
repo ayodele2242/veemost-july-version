@@ -209,7 +209,7 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                     </div>
                 ) : (
                     <div className="flex flex-col w-full justify-center items-center mt-2">
-                        <div className="w-[126px] h-[126px] bg-[#23A26D] rounded-full p-8 font-semibold 
+                        <div className="w-[106px] h-[106px] bg-[#23A26D] rounded-full p-8 font-semibold 
                             flex justify-center items-center fadeIn text-white mb-3">
                             <CheckIcon />
                         </div>
