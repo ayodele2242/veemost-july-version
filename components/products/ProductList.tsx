@@ -225,7 +225,7 @@ const ProductList: React.FC = () => {
                         const productAvailability = details.availability.totalAvailability;
                         const retailPrice = details.pricing.retailPrice;
                         const warehouseIdDetails = details.availability.availabilityByWarehouse;
-                       // console.log("Warehouse Details ",JSON.stringify(details));
+                       console.log("Warehouse Details ",JSON.stringify(details));
                 
                         let highestAvailabilityWarehouse = null;
                 

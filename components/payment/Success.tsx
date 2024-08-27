@@ -208,8 +208,8 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                         <p className="text-red-500">Error: {error}</p>
                     </div>
                 ) : (
-                    <div className="flex flex-col w-full justify-center items-center mt-5">
-                        <div className="w-[136px] h-[136px] bg-[#23A26D] rounded-full p-8 font-semibold 
+                    <div className="flex flex-col w-full justify-center items-center mt-2">
+                        <div className="w-[126px] h-[126px] bg-[#23A26D] rounded-full p-8 font-semibold 
                             flex justify-center items-center fadeIn text-white mb-3">
                             <CheckIcon />
                         </div>
@@ -298,10 +298,10 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                         )}
 
                         {orders.length > 0 && (
-                            <div className="w-full mt-8  pt-4">
+                            <div className="w-full mt-3  pt-0">
                                 <div className="flex justify-between mb-2 text-[24px] text-red-400">
                                     <b>Total:</b>
-                                    <div>{finalAmount.toFixed(2)}</div>
+                                    <div>${finalAmount.toFixed(2)}</div>
                                 </div>
 
 
@@ -318,7 +318,7 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                                     )}
                                 </div>
 
-                                <div className="mt-8">
+                                <div className="mt-3">
                                     <h3 className="text-xl font-bold mb-2">Personal Information:</h3>
                                     {profile && (
                                         <div className="flex flex-col">
@@ -329,7 +329,7 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                                     )}
                                 </div>
                                 </div>
-                                <div className="w-full flex flex-col justify-center items-center mt-8 ">
+                                <div className="w-full flex flex-col justify-center items-center mt-3">
                                     <Link href="/account/orders" 
                                     className="bg-primaryBg text-white p-2 w-[200px] flex justify-center items-center rounded-[30px]">
                                         Check Order

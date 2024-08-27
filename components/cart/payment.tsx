@@ -415,7 +415,7 @@ const Payment: FunctionComponent = () => {
                         email: user.email,
                         checkOutEmail: orderDetails.payer.email_address,
                         selected_address_id: addressId,
-                        payment_type: "card",
+                        payment_type: "paypal",
                         note: "",
                         items: cartItms,
                         totalFees: 0,
