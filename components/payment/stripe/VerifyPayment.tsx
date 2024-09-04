@@ -182,10 +182,7 @@ const VerifyPayment = () => {
                      // console.log(orderId);
                       handleSuccessRedirect(orderId)
                     }
-          
-                  
-                   
-                                
+           
                 } else {
                     const { status, message } = responseData;
                     toast.error(message);

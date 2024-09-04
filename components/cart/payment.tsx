@@ -488,9 +488,7 @@ const Payment: FunctionComponent = () => {
                       localStorage.setItem('shipVia', ''); 
                       localStorage.setItem('carrierCode', '');
                       localStorage.setItem('daysInTransit', '');
-                     
-
-
+                      
                       clearCart();
                      // console.log(orderId);
                       setIsOverlayVisible(true);

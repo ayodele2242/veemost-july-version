@@ -195,7 +195,7 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, viaTr
     localStorage.setItem('shipVia', carrier.shipVia); 
     localStorage.setItem('carrierCode', carrier.carrierCode);
     localStorage.setItem('daysInTransit', carrier.daysInTransit.toString());
-    localStorage.setItem("totalFreightAmount", carrier.estimatedFreightCharge);
+    localStorage.setItem("totalFreightAmount", carrier.estimatedFreightCharge); 
 
     // Retrieve and store the estimated freight charge as a number
     const estimatedFreightCharge = parseFloat(carrier.estimatedFreightCharge);

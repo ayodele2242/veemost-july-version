@@ -431,7 +431,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           nickname: nickname, 
           default_address_status: default_address_status,
           
-        };
+        }; 
     
         const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), 'orders/shippingAddress');
         const responseData = response.data;

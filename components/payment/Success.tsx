@@ -243,7 +243,6 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                                                 <b>Delivery date:</b> {getDeliveryDateRange(order.deliveryDays)}
                                             </div>
                                         )}
-
                                         
                                         <div className="flex flex-col lg:flex-row gap-3 mb-2 justify-center items-center">
                                             {/* Left Div */}
