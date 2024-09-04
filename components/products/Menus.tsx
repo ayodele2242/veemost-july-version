@@ -100,8 +100,8 @@ const Menus: React.FC<MenusProps> = ({ onSelectedCategoriesChange, selectedCateg
               <label className={styles.checkboxContainer}>
                 <input
                   type="checkbox"
-                  checked={selectedCategories.includes(category.root_menu)}
-                  onChange={() => handleCheckboxChange(category.root_menu)}
+                  checked={selectedCategories.includes(category.root_menu === 'Networking' ? 'Network Devices' : category.root_menu)}
+                  onChange={() => handleCheckboxChange(category.root_menu === 'Networking' ? 'Network Devices' : category.root_menu)}
                   className={styles.checkboxInput}
                 />
                 <span className={styles.checkboxLabel}>

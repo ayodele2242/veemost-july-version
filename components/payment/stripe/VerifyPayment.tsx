@@ -108,6 +108,10 @@ const VerifyPayment = () => {
                   const totalFreightAmountStr = localStorage.getItem("totalFreightAmount");
                   const totalWeightStr = localStorage.getItem("totalWeight");
                   const transitDaysStr = localStorage.getItem("transitDays");
+                  const shipFromBranchNumber = localStorage.getItem("shipFromBranchNumber");
+                  const po_number = localStorage.getItem("po_number");
+                  const shipViaStr = localStorage.getItem("shipVia");
+                  const carrierCode = localStorage.getItem('carrierCode');
               
                   // Convert to number or use default values if not found
                   const totalFreightAmount = totalFreightAmountStr ? parseFloat(totalFreightAmountStr) : 0;
@@ -147,6 +151,10 @@ const VerifyPayment = () => {
                         totalFees: 0,
                         totalFreightAmount: totalFreightAmount,
                         deliveryDays: transitDays,
+                        shipVia: shipViaStr,
+                        carrierCode: carrierCode,
+                        shipFromBranchNumber: shipFromBranchNumber,
+                        po_number: po_number,
                         weight: totalWeight,
                         totalNetAmount: overallSum.toString(),
                         totalTaxAmount: 0,
@@ -167,6 +175,9 @@ const VerifyPayment = () => {
                       localStorage.setItem("totalWeight", "");
                       localStorage.setItem("transitDays","");
                       localStorage.setItem('cartItems','');
+                      localStorage.setItem('shipVia', ''); 
+                      localStorage.setItem('carrierCode', '');
+                      localStorage.setItem('daysInTransit', '');
                       clearCart();
                      // console.log(orderId);
                       handleSuccessRedirect(orderId)

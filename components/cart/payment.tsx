@@ -60,6 +60,25 @@ interface LineItem {
     image_url: string;
 }
 
+interface CarrierItem {
+    carrierCode: string;
+    shipVia: string;
+    carrierMode: string;
+    estimatedFreightCharge: string;
+    daysInTransit: number;
+  
+  }
+
+  interface DistributionItem {
+    shipFromBranchNumber: string;
+    carrierCode: string;
+    shipVia: string;
+    freightRate: number;
+    totalWeight: number;
+    transitDays: number;
+    carrierList: CarrierItem[];
+  }
+
 interface Distribution {
     freightRate: number;
 }
@@ -147,7 +166,7 @@ const Payment: FunctionComponent = () => {
     const [loading, setLoading] = useState(true);
     const [totalFreightAmount, setTotalFreightAmount] = useState(0);
     const [totalWeight, setTotalWeight] = useState(0);
-    const [transitDays, setTransitDays] = useState('');
+    const [transitDays, setTransitDays] = useState(0);
     const [errorIngramMessage, setErrorIngramMessage] = useState<string | null>(null);
     const [loadingEstimate, setLoadingEstimate] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
@@ -163,6 +182,7 @@ const Payment: FunctionComponent = () => {
     const [isStripeModalOpen, setIsStripeModalOpen] = useState(false);
     const [isPaypalModalOpen, setIsPaypalModalOpen] = useState(false);
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
+    const [viaTransits, setViaTransits] = useState(""); 
 
     const { push } = useRouter();
 
@@ -208,19 +228,24 @@ const Payment: FunctionComponent = () => {
         push(`/payment/success/${encodeURIComponent(orderId)}`);
       };
 
-    useEffect(() => {
-        const totalFreightAmountStr = localStorage.getItem("totalFreightAmount");
+      useEffect(() => {
+        const shippingInfo = localStorage.getItem("selectedCarrier");
+    
+        const totalFreightAmountStr = localStorage.getItem("estimatedFreightCharge");
+        const shipViaStr = localStorage.getItem("shipVia");
         const totalWeightStr = localStorage.getItem("totalWeight");
-        const transitDaysStr = localStorage.getItem("transitDays");
-
+        const transitDaysStr = localStorage.getItem("daysInTransit");
+    
         const totalFreightAmount = totalFreightAmountStr ? parseFloat(totalFreightAmountStr) : 0;
         const totalWeight = totalWeightStr ? parseFloat(totalWeightStr) : 0;
-        const transitDays = transitDaysStr || '';
-
+        const transitDays = transitDaysStr ? parseFloat(transitDaysStr) : 0;
+    
         setTotalFreightAmount(totalFreightAmount);
         setTotalWeight(totalWeight);
         setTransitDays(transitDays);
+        setViaTransits(shipViaStr || '');
     }, []);
+    
 
     const handleRadioChange = (event: { target: { id: string; }; }) => {
         const selectedOption = event.target.id;
@@ -237,6 +262,9 @@ const Payment: FunctionComponent = () => {
       localStorage.setItem('cartSumTotal', overallSum.toString());
       
       const totalFreightAmount = parseFloat(localStorage.getItem('totalFreightAmount') || '0');
+      const shipViaStr = localStorage.getItem("shipVia");
+      const transitDaysStr = localStorage.getItem("daysInTransit");
+     
   
       // Construct line items for the payload
       const lineItems = cartItems.map((item) => ({
@@ -262,6 +290,8 @@ const Payment: FunctionComponent = () => {
               distribution: distribution,
               totalFees: 0,
               totalFreightAmount: totalFreightAmount,
+              shipVia: shipViaStr,
+              deliveryDays: transitDaysStr,
               totalNetAmount: overallSum.toString(),
               totalTaxAmount: 0 // Include tax if applicable
           }
@@ -380,13 +410,23 @@ const Payment: FunctionComponent = () => {
                   
 
                   const totalFreightAmountStr = localStorage.getItem("totalFreightAmount");
+                 
+                  const shipViaStr = localStorage.getItem("shipVia");
                   const totalWeightStr = localStorage.getItem("totalWeight");
-                  const transitDaysStr = localStorage.getItem("transitDays");
+                  const transitDaysStr = localStorage.getItem("daysInTransit");
+                  const shipFromBranchNumber = localStorage.getItem("shipFromBranchNumber");
+                  const po_number = localStorage.getItem("po_number");
+                  const carrierCode = localStorage.getItem('carrierCode');
+              
+                  
               
                   // Convert to number or use default values if not found
                   const totalFreightAmount = totalFreightAmountStr ? parseFloat(totalFreightAmountStr) : 0;
                   const totalWeight = totalWeightStr ? parseFloat(totalWeightStr) : 0;
                   const transitDays = transitDaysStr || '';
+
+
+
                   const total = overallSum;
                   const addressString = localStorage.getItem('userAddress');
 
@@ -421,13 +461,17 @@ const Payment: FunctionComponent = () => {
                         totalFees: 0,
                         totalFreightAmount: totalFreightAmount,
                         deliveryDays: transitDays,
+                        shipVia: shipViaStr,
+                        carrierCode: carrierCode,
+                        shipFromBranchNumber: shipFromBranchNumber,
+                        po_number: po_number,
                         weight: totalWeight,
                         totalNetAmount: overallSum.toString(),
                         totalTaxAmount: 0,
                         totalPrice: total
                 };
 
-                //console.log(payload)
+                //console.log("Payload:  ",payload)
                 try {
                   const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), "checkout/checkout");
                   const responseData = response.data;
@@ -441,6 +485,12 @@ const Payment: FunctionComponent = () => {
                       localStorage.setItem("totalWeight", "");
                       localStorage.setItem("transitDays","");
                       localStorage.setItem('cartItems','');
+                      localStorage.setItem('shipVia', ''); 
+                      localStorage.setItem('carrierCode', '');
+                      localStorage.setItem('daysInTransit', '');
+                     
+
+
                       clearCart();
                      // console.log(orderId);
                       setIsOverlayVisible(true);
@@ -457,21 +507,9 @@ const Payment: FunctionComponent = () => {
                     
                 }
                 
-              } catch (error) {
-                  toast.error("An error occurred while finalizing orders details.");
-              }
-            
-
-
-
-
-
-
-
-
-
-
-
+                } catch (error) {
+                    toast.error("An error occurred while finalizing orders details.");
+                }     
 
                 
             } else {
@@ -574,12 +612,14 @@ const closePaypalModal = () => {
                         </div>
 
                         <div className="flex-1 lg:w-[40%] shadow-lg rounded-lg">
-                            <Summary 
+                        <Summary 
                             loadingEstimate={loadingEstimate} 
                             errorMessage={errorIngramMessage}
                             totalFreightAmount={totalFreightAmount}
                             totalWeight={totalWeight}
-                            transitDays={transitDays}/>
+                            transitDays={transitDays} 
+                            viaTransits={viaTransits}
+                           />
                         </div>
 
 

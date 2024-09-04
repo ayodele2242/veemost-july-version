@@ -29,18 +29,18 @@ const About = () => {
             > 
                 <div className="sm:flex-1 md:flex-1 lg:w-[80%] flex flex-col items-center justify-center">
                   {/* Container for both headers */}
-                  <div className="flex flex-col items-center justify-left w-full">
+                  <div className="flex flex-col items-center justify-left w-full leading-none tracking-wide">
                     {/* Main Heading */}
-                    <h2 className="text-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
-                    text-[38px] md:text-[48px] leading-tight flex flex-col">
-                      <div className=" ext-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
-                    text-[38px] md:text-[48px]">Discover Veemost </div>
-                      <div className="ext-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
-                    text-[38px] md:text-[48px]">E-commerce store&apos;s</div>
+                    <h2 className="text-left text-[#0B0B0C] leading-none tracking-wide font-gilroy-extrabold
+                    text-[38px] md:text-[43px] leading-tight flex flex-col">
+                      <div className=" ext-left text-[#0B0B0C] leading-none tracking-wide font-gilroy-extrabold 
+                    text-[38px] md:text-[43px]">Discover Veemost </div>
+                      <div className="ext-left text-[#0B0B0C] leading-none tracking-wide font-gilroy-extrabold 
+                    text-[38px] md:text-[43px]">E-commerce store&apos;s</div>
                      
-                    <div className="ext-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
-                    text-[38px] md:text-[48px]">
-                    story and <span className="text-[#D6A912]">
+                    <div className="ext-left text-[#0B0B0C] leading-none tracking-wide font-gilroy-extrabold 
+                    text-[38px] md:text-[43px]">
+                    story and <span className="text-[#D6A912] leading-none tracking-wide font-gilroy-extrabold ">
                         mission
                       </span>
                     </div>

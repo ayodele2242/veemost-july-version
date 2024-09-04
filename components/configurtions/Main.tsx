@@ -92,9 +92,9 @@ const goToProduct = (path: string) => {
             <div className="flex flex-col">
                 <div className="mb-5">
                     <h2 className="mb-2 flex flex-col">
-                      <span className="text-[#0B0B0C] font-gilroy-extrabold font-bold text-[32px] lg:text-[36px] xl:text-[42px]
+                      <span className="text-[#0B0B0C] font-gilroy-extrabold font-bold text-[32px] lg:text-[36px] xl:text-[45px]
                      2xl:text-[48px] text-left leading-tight">Product</span> 
-                      <span className="text-[#0B0B0C] font-gilroy-extrabold font-bold text-[32px] lg:text-[36px] xl:text-[42px]
+                      <span className="text-[#0B0B0C] font-gilroy-extrabold font-bold text-[32px] lg:text-[36px] xl:text-[45px]
                      2xl:text-[48px] text-left leading-tight"> Configuration  </span>
 
                  <div className="font-gilroy-extrabold font-normal text-[16px] text-[#858586] text-left">

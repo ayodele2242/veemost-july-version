@@ -23,6 +23,7 @@ import CartQuantityActionBtns from '../cart-quantity-btn';
 import Link from 'next/link';
 import SkeletonPage from '@/loaders/SkeletonPage';
 import BuyNowBtns from '../cart-buy-now-btn';
+import PriceSkeleton from '@/loaders/PriceSkeleton';
 
 interface ListViewProps {
     products: IngramProductType[];
@@ -304,31 +305,33 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
                       <div className="lg:w-[20%] sm:w-[100%] w-full flex flex-col">
 
                       <div className="">
-                      <h6 className="text-1xl lg:text-2xl font-bold mb-3">
-                                                {new Intl.NumberFormat('en-US', {
+                      <h6 className="text-1xl lg:text-2xl font-bold">
+                                                {/*new Intl.NumberFormat('en-US', {
                                                     style: 'currency',
                                                     currency: 'USD',
-                                                }).format(0.0)}
+                                                }).format(0.0)*/}
+                                                <PriceSkeleton />
                                             </h6>
-                                            <p className="text-[14px] font-normal">MSRP {new Intl.NumberFormat('en-US', {
+                                            
+                                            {/*<p className="text-[14px] font-normal">MSRP {new Intl.NumberFormat('en-US', {
                                                 style: 'currency',
                                                 currency: 'USD',
                                             }).format(0.0)} </p>
-                                            <p className="text-[14px] font-normal">EXCL TAX</p>
+                                            <p className="text-[14px] font-normal">EXCL TAX</p>*/}
                                         </div>
-                                        <div className="itemListMe mt-2 flex gap-2 flex-wrap lg:flex-row justify-beteem items-center">
-                                            {/*<BuyNowBtns  product={product} 
+                                         {/*<div className="itemListMe mt-2 flex gap-2 flex-wrap lg:flex-row justify-beteem items-center">
+                                           <BuyNowBtns  product={product} 
                                                 id={product?.ingramPartNumber} 
-                                                amount={customerPrice} 
+                                                amount={customerPrice}  
                                                 image={images[0] || DEFAULT_IMAGE} />
 
                                             <CartQuantityActionBtns 
                                                 product={product} 
                                                 id={product?.ingramPartNumber} 
                                                 amount={customerPrice} 
-                                                image={images[0] || DEFAULT_IMAGE} />*/}
+                                                image={images[0] || DEFAULT_IMAGE} />
 
-                                        </div>
+                                        </div>*/}
 
 
                       </div>

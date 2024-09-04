@@ -28,25 +28,26 @@ const SkeletonPage: React.FC<SkeletonPageProps> = ({ count }) => {
                             <div className="">
                                 <div className="skeleton skeleton-text mb-2"></div>
                                 <div className="skeleton skeleton-text text-sm font-normal mt-3"></div>
+                                 {/* Price Placeholder */}
+                                <div className="w-full md:w-1/2 lg:w-1/5 px-2 mb-4 md:mb-0 lg:ml-8">
+                                    <div className="">
+                                        <div className="h-24">
+                                            <div className="skeleton skeleton-text mb-3"></div>
+                                            <div className="skeleton skeleton-text text-[14px] font-normal mb-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="w-full mt-3">
                                     <div className="flex justify-left gap-3 text-xs">
                                         <span className="skeleton skeleton-text"></span>
                                         <span className="skeleton skeleton-text"></span>
-                                        <span className="skeleton skeleton-text"></span>
+                                        <span className="skeleton skeleton-text"></span> 
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Price Placeholder */}
-                        <div className="w-full md:w-1/2 lg:w-1/5 px-2 mb-4 md:mb-0 lg:ml-8">
-                            <div className="">
-                                <div className="h-24">
-                                    <div className="skeleton skeleton-text mb-3"></div>
-                                    <div className="skeleton skeleton-text text-[14px] font-normal mb-2"></div>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
             ))}

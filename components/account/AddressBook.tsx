@@ -12,9 +12,10 @@ import EmptyList from './orders/EmptyList';
 import LazyImage from '@/components/LazyImage';
 import BuyNowBtns from '@/components/cart-buy-now-btn';
 import CartQuantityActionBtns from '@/components/cart-quantity-btn';
-import { ClosedCaptionAltIcon, MultiplicationSignIcon, Delete04Icon, Delete03Icon } from 'hugeicons-react';
+import { Delete02Icon, Delete03Icon, MultiplicationSignIcon } from 'hugeicons-react';
 import styles from '../../products/CheckboxStyles.module.css'
 import { ToastContainer, Bounce, toast } from 'react-toastify';
+import axios from 'axios';
 import "react-toastify/dist/ReactToastify.css";
 import { useModal } from '@/contexts/ModalContext';
 import {
@@ -72,7 +73,12 @@ const AddressBook = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const openOverlay = () => setIsOpen(true);
+    const [errorIngramMessage, setErrorIngramMessage] = useState<string | null>(null);
     const closeOverlay = () => setIsOpen(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedId, setSelectedId] = useState<number | null>(null);
+    const { openModal } = useModal();
+  
 
     const expirePeriod =
     typeof window !== "undefined" ? localStorage.getItem("expire_period") : null;
@@ -97,6 +103,7 @@ const AddressBook = () => {
     action: "insert",
     email: "",
     street: "",
+    address_2: "",
     state: "",
     city: "",
     zip: "",
@@ -154,6 +161,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
       action: "insert",
       email: "",
       street: "",
+      address_2: "",
       state: "",
       city: "",
       zip: "",
@@ -314,6 +322,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           email,
           phone,
           street, 
+          address_2,
           company, 
           state, 
           country, 
@@ -329,6 +338,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           email: email,
           phone: phone,
           street: street, 
+          address_2: address_2,
           company: company, 
           state: state, 
           country: country, 
@@ -342,16 +352,20 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
         const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), 'orders/shippingAddress');
         const responseData = response.data;
     
-      
+        const { status, message, data } = responseData;
         if (response.status === 200) {
-          const { status, message, data } = responseData;
+         
+          if(status === true){
+
           toast.success(message);
           setError(null);
           setEditIndex(null);
           setIsLoading(false);
           fetchData('orders/shippingAddress', 1);      
+        }
+
       } else {
-          const { status, message } = responseData;
+        
           setBackendResponse(status);
           setIsLoading(false);
           toast.error(message);
@@ -382,6 +396,76 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
       setEditIndex(null);
       setEditedValues({});
     };
+
+
+    const deleteAddress = async (id: number) => {
+
+      const payload = {id : id, action : 'delete'}
+      try {
+        const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), 'orders/shippingAddress');
+        const responseData = response.data;
+    
+      
+        if (response.status === 200) {
+          const { status, message, data } = responseData;
+
+          console.log("status", status, " message ", message)
+          toast.success(message);
+          setError(null);
+          if(status === true){
+
+            openModal('Deleted Successfully', message, 'success', '/checkout');
+            setTimeout(() => {
+              fetchData('orders/shippingAddress', 1);
+            }, 2000);
+
+          }else{
+            openModal('Error Occured', message, 'warning', '/checkout');
+          }
+         
+          
+      } else {
+          const { status, message } = responseData;
+          
+          toast.error(message);
+      }
+
+      
+      } catch (error: unknown) {
+        // Type assertion for AxiosError
+        if (axios.isAxiosError(error)) {
+          const errorResponse = error.response?.data;
+          if (errorResponse?.errors) {
+            const errorDetail = errorResponse.errors[0]?.fields?.[0]?.message || "An unknown error occurred.";
+            setErrorIngramMessage(errorDetail);
+          } else {
+            setErrorIngramMessage("An unexpected error occurred.");
+          }
+        } else {
+          setErrorIngramMessage("An unexpected error occurred.");
+        }
+        console.error('Error getting freight estimate:', error);
+      } finally {
+       // setLoadingEstimate(false);
+      }
+    };
+  
+    const handleDeleteClick = (id: number) => {
+      setSelectedId(id);
+      setIsModalOpen(true);
+    };
+  
+    const confirmDelete = () => {
+      if (selectedId !== null) {
+        deleteAddress(selectedId);
+        setIsModalOpen(false);
+      }
+    };
+  
+    const cancelDelete = () => {
+      setIsModalOpen(false);
+    };
+
 
 
     const selectedSearchedItems = (selectedItem: any) => {
@@ -430,84 +514,97 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                 <div className="font-bold text-lg">Address Update</div>
                 <button className="font-bold text-lg" onClick={handleClose} >X</button>
                 </div>
-                
-                <form className="space-y-4">
-                <div>
-                  <label htmlFor="nickname" className="block">Nickname</label>
-                  <input
-                    id="nickname"
-                    type="text"
-                    value={editedValues.nickname || ''}
-                    onChange={(e) => setEditedValues({ ...editedValues, nickname: e.target.value })}
-                    className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                  />
+                <div className="scrollbar p-4">
+                  <form className="space-y-4">
+                  <div>
+                    <label htmlFor="nickname" className="block">Full Name</label>
+                    <input
+                      id="nickname"
+                      type="text"
+                      value={editedValues.nickname || ''}
+                      onChange={(e) => setEditedValues({ ...editedValues, nickname: e.target.value })}
+                      className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block">Email</label>
+                    <input
+                      id="email"
+                      type="text"
+                      value={editedValues.email || ''}
+                      onChange={(e) => setEditedValues({ ...editedValues, email: e.target.value })}
+                      className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="phone" className="block">Phone</label>
+                    <input
+                      id="phone"
+                      type="text"
+                      value={editedValues.phone || ''}
+                      onChange={(e) => setEditedValues({ ...editedValues, phone: e.target.value })}
+                      className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="phone" className="block">State</label>
+                <input
+                  type="text"
+                  value={editedValues.state || ''}
+                  onChange={(e) => setEditedValues({ ...editedValues, state: e.target.value })}
+                  className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block">Email</label>
-                  <input
-                    id="email"
-                    type="text"
-                    value={editedValues.email || ''}
-                    onChange={(e) => setEditedValues({ ...editedValues, email: e.target.value })}
-                    className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                  />
+                    <label htmlFor="phone" className="block">Street</label>
+                <input
+                  type="text"
+                  value={editedValues.street || ''}
+                  onChange={(e) => setEditedValues({ ...editedValues, street: e.target.value })}
+                  className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                />
+                </div>
+
+                <div>
+                    <label htmlFor="address" className="block">Address 2</label>
+                <input
+                  type="text"
+                  value={editedValues.address_2 || ''}
+                  onChange={(e) => setEditedValues({ ...editedValues, address_2: e.target.value })}
+                  className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                />
+                </div>
+
+
+                <div>
+                    <label htmlFor="phone" className="block">City</label>
+                <input
+                  type="text"
+                  value={editedValues.city || ''}
+                  onChange={(e) => setEditedValues({ ...editedValues, city: e.target.value })}
+                  className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block">Phone</label>
-                  <input
-                    id="phone"
-                    type="text"
-                    value={editedValues.phone || ''}
-                    onChange={(e) => setEditedValues({ ...editedValues, phone: e.target.value })}
-                    className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                  />
+                    <label htmlFor="phone" className="block">Zip</label>
+                <input
+                  type="text"
+                  value={editedValues.zip || ''}
+                  onChange={(e) => setEditedValues({ ...editedValues, zip: e.target.value })}
+                  className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                />
                 </div>
-                <div>
-                  <label htmlFor="phone" className="block">State</label>
-              <input
-                type="text"
-                value={editedValues.state || ''}
-                onChange={(e) => setEditedValues({ ...editedValues, state: e.target.value })}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-              />
-              </div>
-              <div>
-                  <label htmlFor="phone" className="block">Street</label>
-              <input
-                type="text"
-                value={editedValues.street || ''}
-                onChange={(e) => setEditedValues({ ...editedValues, street: e.target.value })}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-              />
-              </div>
-              <div>
-                  <label htmlFor="phone" className="block">City</label>
-              <input
-                type="text"
-                value={editedValues.city || ''}
-                onChange={(e) => setEditedValues({ ...editedValues, city: e.target.value })}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-              />
-              </div>
-              <div>
-                  <label htmlFor="phone" className="block">Zip</label>
-              <input
-                type="text"
-                value={editedValues.zip || ''}
-                onChange={(e) => setEditedValues({ ...editedValues, zip: e.target.value })}
-                className="border border-gray-300 rounded-md px-3 py-2 w-full"
-              />
-              </div>
-                <div className="flex justify-between mt-5">
-                  <button type="button" onClick={() => handleSubmit(index)} 
-                  className="bg-primaryBg hover:bg-yellow-600 text-white px-4 py-2 rounded-full flex justify-content items-center gap-2"
-                  disabled={isLoading}>
-                    {isLoading && <Spinner size="sm" />}
-						      	{isLoading ? 'Please wait...' : 'Update'}
-                  </button>
-                  <button type="button" onClick={handleClose} className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-md">Close</button>
+                  <div className="flex justify-between mt-5">
+                    <button type="button" onClick={() => handleSubmit(index)} 
+                    className="bg-primaryBg hover:bg-yellow-600 text-white px-4 py-2 rounded-full flex justify-content items-center gap-2"
+                    disabled={isLoading}>
+                      {isLoading && <Spinner size="sm" />}
+                      {isLoading ? 'Please wait...' : 'Update'}
+                    </button>
+                    <button type="button" onClick={handleClose} className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-md">Close</button>
+                  </div>
+                  </form>
                 </div>
-                </form>
 
             </div>
 
@@ -518,13 +615,21 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
             <>
             <div className="flex flex-col w-full bg-gray-50 p-3">
 
-            <div className="w-full flex gap-3 flex-col  lg:justify-between items-center">
+            <div className="w-full flex gap-3 justify-between items-center">
               <div className="w-full flex gap-3 w-full">
                   <span className="font-bold text-xl">{product.nickname}</span>
                   {product.default_address_status === "1" && (
                     <span className="bg-primaryBg text-white rounded-lg lg:rounded-full text-sm p-1 flex justify-center items-center ">Default</span>
                   )}
               </div>
+
+              <div className="text-red-500 flex cursor-pointer justify-center items-center 
+                       gap-1 font-bold bg-red-200 p-1 rounded-lg text-[12px]" 
+                       onClick={() => handleDeleteClick(product.id)} >
+                        <Delete02Icon size={14}/>
+                        Delete
+
+                       </div>
             
             </div>
 
@@ -540,9 +645,8 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
               <div className="font-normal w-full txt-small">{product.phone}</div>
               
                <div className="flex flex-col">
-                <div className="w-full">{product.state}</div>
-                <div className="w-full">{product.street}</div>
-                <div className="w-full">{product.city} - {product.zip}</div>
+                <div className="w-full">{product.street}, {product.state}, {product.city} - {product.zip}</div>
+                <div className="w-full">{product.address_2}</div>
                 
               </div>
               <div className="flex justify-between lg:flex-row w-full items-left">
@@ -630,201 +734,221 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
             &times;
           </button>
           <h2 className="text-xl font-bold mb-4">Add New Address</h2>
-
-          <form
-            className="space-y-4 md:space-y-6"
-            onSubmit={_handleSubmit}
-          >
-            {/* Form fields */}
-            <div className="flex-1">
-              <label
-                htmlFor="nickname"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
+            <div className="scrollbar p-4">
+              <form
+                className="space-y-4 md:space-y-6"
+                onSubmit={_handleSubmit}
               >
-                Nickname
-                <span className="text-[#982c2e]"> *</span>
-              </label>
-              <input
-                type="text"
-                id="nickname"
-                name="nickname"
-                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-                value={formData.nickname}
-                onChange={_handleChange}
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-                Email Address <span className="text-red-300 font-bold">*</span>
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                required
-                value={formData.email}
-                onChange={_handleChange}
-                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="street"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
-              >
-                Street Address
-                <span className="text-[#982c2e]"> *</span>
-              </label>
-              <input
-                type="text"
-                id="street"
-                name="street"
-                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required
-                value={formData.street}
-                onChange={_handleChange}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-                  Country <span className="text-red-300 font-bold">*</span>
-                </label>
-                <select
-                  value={selectedCountry}
-                  onChange={handleCountryChange}
-                  required
-                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  <option value=""></option>
-                  {countries.map((country) => (
-                    <option key={country.id} value={country.id}>
-                      {country.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-                  State/Province <span className="text-red-300 font-bold">*</span>
-                </label>
-                <select
-                  name="state"
-                  value={formData.state}
-                  onChange={_handleChange}
-                  required
-                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-                  <option></option>
-                  {states.map((state) => (
-                    <option key={state.id} value={state.name}>
-                      {state.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-                  City <span className="text-red-300 font-bold">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  value={formData.city}
-                  onChange={_handleChange}
-                  required
-                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-                  Zip/Postal Code <span className="text-red-300 font-bold">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="zip"
-                  name="zip"
-                  value={formData.zip}
-                  onChange={_handleChange}
-                  required
-                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-                  Phone Number <span className="text-red-300 font-bold">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={_handleChange}
-                  required
-                  className="border border-gray-100 text-gray-900 sm:text-sm 
-                  rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
-                  dark:border-gray-600 dark:placeholder-gray-400 
-                  dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
-                  Company
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={_handleChange}
-                  className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                />
-              </div>
-            </div>
-
-            <div className="mt-2">
-            
-                   <div className="flex">
-                      <label className="checkbox-btn">
-                          <input 
-                          onChange={_handleChange}
-                          name="default_address"
-                          type="checkbox" 
-                          className="nw rx adp afv ayg bnp" 
-                          />
-                              <span></span>
-                              Set as default address
-                     </label>
-                    </div>
+                {/* Form fields */}
+                <div className="flex-1">
+                  <label
+                    htmlFor="nickname"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
+                  >
+                    Full Name
+                    <span className="text-[#982c2e]"> *</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="nickname"
+                    name="nickname"
+                    className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
+                    value={formData.nickname}
+                    onChange={_handleChange}
+                  />
                 </div>
 
-        <div className="w-full flex center justify-center gap-2">
-            <button
-							type="submit"
-							className="text-white bg-yellow-600 hover:bg-yellow-700 
-              focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
-              dark:bg-yellow-600 dark:hover-bg-yellow-700 dark:focus:ring-yellow-800 warning-btn relative"
-							disabled={isLoading}
-						>
-							{isLoading && <Spinner size="sm" />}
-							{isLoading ? 'Please wait...' : 'Add Address'}
-						</button>
-            </div>
-          </form>
+                <div>
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                    Email Address <span className="text-red-300 font-bold">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    required
+                    value={formData.email}
+                    onChange={_handleChange}
+                    className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="street"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
+                  >
+                    Street Address
+                    <span className="text-[#982c2e]"> *</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="street"
+                    name="street"
+                    className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
+                    value={formData.street}
+                    onChange={_handleChange}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="street"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
+                  >
+                    Address 2
+                    <span className="text-[#982c2e]"> *</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="address_2"
+                    name="address_2"
+                    className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
+                    value={formData.address_2}
+                    onChange={_handleChange}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                      Country <span className="text-red-300 font-bold">*</span>
+                    </label>
+                    <select
+                      value={selectedCountry}
+                      onChange={handleCountryChange}
+                      required
+                      className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option value=""></option>
+                      {countries.map((country) => (
+                        <option key={country.id} value={country.id}>
+                          {country.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                      State/Province <span className="text-red-300 font-bold">*</span>
+                    </label>
+                    <select
+                      name="state"
+                      value={formData.state}
+                      onChange={_handleChange}
+                      required
+                      className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                      <option></option>
+                      {states.map((state) => (
+                        <option key={state.id} value={state.name}>
+                          {state.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                      City <span className="text-red-300 font-bold">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={_handleChange}
+                      required
+                      className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                      Zip/Postal Code <span className="text-red-300 font-bold">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="zip"
+                      name="zip"
+                      value={formData.zip}
+                      onChange={_handleChange}
+                      required
+                      className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                      Phone Number <span className="text-red-300 font-bold">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={_handleChange}
+                      required
+                      className="border border-gray-100 text-gray-900 sm:text-sm 
+                      rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
+                      dark:border-gray-600 dark:placeholder-gray-400 
+                      dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">
+                      Company
+                    </label>
+                    <input
+                      type="text"
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={_handleChange}
+                      className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-2">
+                
+                      <div className="flex">
+                          <label className="checkbox-btn">
+                              <input 
+                              onChange={_handleChange}
+                              name="default_address"
+                              type="checkbox" 
+                              className="nw rx adp afv ayg bnp" 
+                              />
+                                  <span></span>
+                                  Set as default address
+                        </label>
+                        </div>
+                    </div>
+
+            <div className="w-full flex center justify-center gap-2">
+                <button
+                  type="submit"
+                  className="text-white bg-yellow-600 hover:bg-yellow-700 
+                  focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
+                  dark:bg-yellow-600 dark:hover-bg-yellow-700 dark:focus:ring-yellow-800 warning-btn relative"
+                  disabled={isLoading}
+                >
+                  {isLoading && <Spinner size="sm" />}
+                  {isLoading ? 'Please wait...' : 'Add Address'}
+                </button>
+                </div>
+              </form>
+           </div>
 
           {errorMessage && (
             <div className="mt-4 text-red-500 text-sm">
@@ -834,9 +958,37 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
         </div>
       </div>
 
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          {/* Backdrop */}
+          <div className="fixed inset-0 bg-black opacity-50"></div>
+
+          {/* Modal Content */}
+          <div className="relative bg-white p-6 rounded-lg shadow-lg z-10 max-w-sm w-full">
+            <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
+            <p className="mb-6">Are you sure you want to delete this address?</p>
+            <div className="flex justify-end space-x-4">
+              <button 
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={confirmDelete}
+              >
+                Yes, Delete
+              </button>
+              <button 
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                onClick={cancelDelete}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       </Container>
         
-        
+      <ToastContainer />
         </main>
   )
 }

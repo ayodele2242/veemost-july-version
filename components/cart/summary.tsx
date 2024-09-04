@@ -21,19 +21,37 @@ import { usePathname } from 'next/navigation';
 import { useShippingAddress } from '@/contexts/ShippingAddressContext';
 import Spinner from '../Spinner';
 
+
+interface CarrierItem {
+  carrierCode: string;
+  shipVia: string;
+  carrierMode: string;
+  estimatedFreightCharge: string;
+  daysInTransit: number;
+  
+}
+
 interface SummaryProps {
   loadingEstimate?: boolean;
   errorMessage?: string | null;
   totalFreightAmount?: number;
   totalWeight?: number;
-  transitDays?: string;
+  transitDays?: number;
+  carrierList?: CarrierItem[];
+  isOverlayOpen?: boolean,
+  setIsOverlayOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  viaTransits?: string;
 }
 
 const DEFAULT_IMAGE = "/no-image.png";
 
-const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, totalFreightAmount = 0, totalWeight, transitDays }) => {
+const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, viaTransits,
+   totalFreightAmount = 0, totalWeight, transitDays, carrierList = [], isOverlayOpen, setIsOverlayOpen  }) => {
 
-    const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [isItemSelected, setIsItemSelected] = useState(false);
+
+
   const [selectedItems, setSelectedItems] = useState<VeeCartItem[]>([]);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const { cartItems, removeItemFromCart, removeMultipleItemsFromCart } = useCartStore();
@@ -42,10 +60,16 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, total
   const [states, setStates] = useState<{ id: string; name: string }[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [selectedCarrier, setSelectedCarrier] = useState<CarrierItem | null>(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const { isAddressSelected } = useShippingAddress();
-  const pathname = usePathname();
+  const [totFreightAmount, setTotFreightAmount] = useState(0); 
+  const [viaTransit, setViaTransit] = useState(""); 
+  const [transitDay, setTransitDay] = useState(0); 
+  const [poNumber, setPoNumber] = useState('');
 
+  const pathname = usePathname();
+  
   const [formData, setFormData] = useState({
     selectedCountry: "",
     state: "",
@@ -158,6 +182,38 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, total
     }
   };
 
+  const handleCarrierSelection = (carrier: CarrierItem) => {
+    setSelectedCarrier(carrier);
+    setIsItemSelected(true);
+    if (setIsOverlayOpen) {
+      setSelectedCarrier(carrier);
+      setIsOverlayOpen(false); // Safely call setIsOverlayOpen
+    }
+
+    localStorage.setItem('selectedCarrier', JSON.stringify(carrier)); 
+    localStorage.setItem('estimatedFreightCharge', carrier.estimatedFreightCharge); 
+    localStorage.setItem('shipVia', carrier.shipVia); 
+    localStorage.setItem('carrierCode', carrier.carrierCode);
+    localStorage.setItem('daysInTransit', carrier.daysInTransit.toString());
+    localStorage.setItem("totalFreightAmount", carrier.estimatedFreightCharge);
+
+    // Retrieve and store the estimated freight charge as a number
+    const estimatedFreightCharge = parseFloat(carrier.estimatedFreightCharge);
+
+
+    setTotFreightAmount(estimatedFreightCharge);
+    setViaTransit(carrier.shipVia)
+    setTransitDay(carrier.daysInTransit)
+  
+    //console.log(JSON.stringify(carrier));
+  };
+  
+  const handleNextClick = () => {
+    const poNumberValue = poNumber;
+    localStorage.setItem('po_number', poNumberValue);
+  };
+  
+
   return (
     <div className="w-full  p-4">
             <p className="mb-3 font-bold text-[18px] text-[#121212] font-gilroy-medium">Order Summary</p>
@@ -216,7 +272,250 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, total
                    
                   </div>
                 ))}
+
+               
+
+                {pathname === '/checkout'  && (
+
+                <>
+                <div className="w-full">
+                <div className="w-full mb-3 mt-3">
+                        <div className="relative bg-blue-100 border-blue-500 text-blue-700 p-3">
+                          <p><strong>PO Number (optional)</strong></p>
+                            <input
+                                type="text"
+                                name="po_number"
+                                id="po_number"
+                                value={poNumber}
+                                onChange={(e) => setPoNumber(e.target.value)}
+                                className="border border-gray-500 text-gray-900 sm:text-sm rounded-lg 
+                                focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
+                                dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 
+                                dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                 placeholder="PO Number"
+                            />
+                           
+                        </div>
+
+                </div>
+                 
+          {loadingEstimate ? (
+          <div className="mt-4 mb-4 flex justify-center items-center gap-2"><Spinner size='sm' /> Loading shipping methods. Please wait...</div>
+            ) : (
+              
+              <>
+
+            {/*!isOverlayOpen && !isItemSelected && ( 
+              <div className="bg-lightBg p-3 w-full text-center">
+                <p className="font-extrabold text-[16px] mb-3 mt-2">No shipping method selected</p>
+                <p>Select shipping address to continue.</p>
+                {isItemSelected && (
+                <button
+                  className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => setIsOverlayOpen && setIsOverlayOpen(true)}
+                >
+                  Select a Shipping Method
+                </button>
+                )}
+              </div>
+            )*/}
+
+          {isItemSelected && (
+                <>
+                <div className="bg-lightBg p-3 w-full">
+                <div className="flex justify-between items-center">
+                  <div className="font-extrabold text-[16px] mb-3 mt-2 ">Selected Shipping Method</div>
+                  <div className="font-bold text-blue-400 cursor-pointer" onClick={() => setIsOverlayOpen && setIsOverlayOpen(true)}>Use another method</div>
+
+                </div>
+                
+                <div className="flex justify-between items-center mt-3">
+                <div className="font-bold ">Ship Via</div>
+                <div className="">
+                {viaTransit}
+                </div>
+                </div>
+
+                <div className="flex justify-between items-center mt-3">
+                <div className="font-bold ">Days in Transit</div>
+                <div className="">
+                {transitDay} {transitDay > 1 ? 'Days' : 'Day'}
+                </div>
+                </div>
+
+                <div className="flex justify-between items-center mt-3">
+                <div className="font-bold">Estimated Freight Charge</div>
+                <div className="">
+                {new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                }).format(totFreightAmount)}
+                </div>
+                </div>
+
+                </div>
+
+                
+                </>
+                
+                )}
+
+                {carrierList && carrierList.length > 0 && isOverlayOpen && (
+                    <div>
+                      {/* Backdrop */}
+                      <div
+                        className={`fixed inset-0 bg-black bg-opacity-50 z-40 ${
+                          isOverlayOpen ? 'block' : 'hidden'
+                        }`}
+                        onClick={() => setIsOverlayOpen && setIsOverlayOpen(false)}
+                      />
+
+                      {/* Sliding Modal */}
+                      <div
+                        className={`fixed top-0 left-0 bg-white h-full shadow-lg transition-transform duration-300 ease-in-out z-50 ${
+                          isOverlayOpen ? 'translate-x-0' : 'translate-x-full'
+                        } ${
+                          isOverlayOpen
+                            ? 'w-[100%] lg:w-[50%] md:w-[80%] sm:w-full'
+                            : 'w-0'
+                        }`}
+                        style={{ transform: `translateX(${isOverlayOpen ? '0%' : '100%'})` }}
+                      >
+                        <div className="relative h-full p-4 w-full">
+                          {/* Close Button */}
+                          <button
+                            onClick={() => setIsOverlayOpen && setIsOverlayOpen(false)}
+                            className="absolute top-2 right-2 text-gray-600 text-[40px] text-red-500"
+                          >
+                            &times;
+                          </button>
+
+                          {/* Modal Content */}
+                          <div className="flex flex-col mt-3 w-full">
+                            <div className="flex justify-between items-center mb-8">
+                              <div className="font-bold text-[18px] text-primaryText">
+                                Carrier Options
+                              </div>
+                            </div>
+
+                            <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4">
+                              <p className="font-bold">Information</p>
+                              <p>Select the carrier you wish to use for your delivery.</p>
+                            </div>
+
+                            <div className="w-full scrollbar">
+                              {carrierList.map((carrier, index) => (
+                                <div
+                                  className={`w-full flex flex-col mb-4 p-3 gap-2 cursor-pointer ${
+                                    selectedCarrier?.carrierCode === carrier.carrierCode
+                                      ? 'bg-blue-100 border border-blue-500'
+                                      : 'bg-lightBg'
+                                  }`}
+                                  key={index}
+                                  onClick={() => handleCarrierSelection(carrier)}
+                                >
+                                  <div className="flex justify-between mb-2">
+                                    <b>{carrier.shipVia}</b>
+                                    <span></span>
+                                  </div>
+                                  <div className="flex justify-between ">
+                                    <b>Estimated Freight Charge:</b>
+                                    <span>
+                                      {new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                      }).format(parseFloat(carrier.estimatedFreightCharge))}
+                                    </span>
+                                  </div>
+                                  <div className="flex justify-between ">
+                                    <b>Days in Transit</b>
+                                    <span>
+                                      {carrier.daysInTransit} {carrier.daysInTransit > 1 ? 'Days' : 'Day'}
+                                    </span>
+                                  </div>
+                                  <div className="flex justify-between ">
+                                    <b>Carrier Mode</b>
+                                    <span>{carrier.carrierMode}</span>
+                                  </div>
+
+                                  <input
+                                    type="radio"
+                                    name="carrier"
+                                    value={carrier.carrierCode}
+                                    checked={selectedCarrier?.carrierCode === carrier.carrierCode}
+                                    onChange={() => handleCarrierSelection(carrier)}
+                                    className="hidden"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+    </>
+  )}
+
+</div>
+
+
+
+
+
+                    </>
+
+                    )}
+
+                    {pathname === '/payment'  && (
+
+                    <>
+                    
+                <>
+                <div className="bg-lightBg p-3 w-full">
+                <div className="flex justify-between items-center">
+                  <div className="font-extrabold text-[16px] mb-3 mt-2 ">Selected Shipping Method</div>
+                 
+                </div>
+                
+                <div className="flex justify-between items-center mt-3">
+                <div className="font-bold ">Ship Via</div>
+                <div className="">
+                {viaTransits}
+                </div>
+                </div>
+
+                <div className="flex justify-between items-center mt-3">
+                <div className="font-bold ">Days in Transit</div>
+                <div className="">
+                {transitDays !== undefined && `${transitDays} ${transitDays > 1 ? 'Days' : 'Day'}`}
+
+                </div>
+                </div>
+
+                <div className="flex justify-between items-center mt-3">
+                <div className="font-bold">Estimated Freight Charge</div>
+                <div className="">
+                {new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                }).format(totalFreightAmount)}
+                </div>
+                </div>
+
+                </div>
+
+                
+                </>
+                
+                
+
+                    </>
+
+                    )}
                 <hr className='p-3 mt-5 mb-5 b-2 border-t-2 border-gray-200' />
+
+
                 <div className="flex justify-between items-center">
                     <div className="">Sub Total</div>
                     <div className="">
@@ -226,107 +525,7 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, total
                         }).format(overallSum)}
                     </div>
                 </div>
-                {pathname === '/checkout'  && (
-
-                    <>
-                    <div className="flex justify-between items-center mt-3">
-                    <div className="">Shipping (Estimate Shipping)</div>
-                    <div className="">
-
-                    {loadingEstimate ? (
-                    <div className=""><Spinner size='sm' /></div>
-                  ) : (
-                    <>
-                    {new Intl.NumberFormat('en-US', {
-                          style: 'currency',
-                          currency: 'USD'
-                        }).format(totalFreightAmount)}
-
-                    </>
-                  )}
-                    </div>
-                </div>
-
-              <div className="flex justify-between items-center mt-3">
-              <div className="">Total Weight</div>
-              <div className="">
-                {loadingEstimate ? (
-                <div className=""><Spinner size='sm' /></div>
-                ) : (
-                <>
-                {totalWeight || 0}
-                </>
-                )}
-              </div>
-              </div>
-
-              <div className="flex justify-between items-center mt-3">
-              <div className="">Delivery Days</div>
-              <div className="">
-                {loadingEstimate ? (
-                <div className=""><Spinner size='sm' /></div>
-                ) : (
-                <>
-                {transitDays +' Business Days' || ''}
-                </>
-                )}
-              </div>
-              </div>
-
-              </>
-
-                )}
-
-                {pathname === '/payment'  && (
-
-                <>
-                <div className="flex justify-between items-center mt-3">
-                <div className="">Shipping (Estimate Shipping)</div>
-                <div className="">
-
-                {loadingEstimate ? (
-                <div className=""><Spinner size='sm' /></div>
-                ) : (
-                <>
-                {new Intl.NumberFormat('en-US', {
-                      style: 'currency',
-                      currency: 'USD'
-                    }).format(totalFreightAmount)}
-
-                </>
-                )}
-                </div>
-                </div>
-
-                <div className="flex justify-between items-center mt-3">
-                <div className="">Total Weight</div>
-                <div className="">
-                {loadingEstimate ? (
-                <div className=""><Spinner size='sm' /></div>
-                ) : (
-                <>
-                {totalWeight || 0}
-                </>
-                )}
-                </div>
-                </div>
-
-                <div className="flex justify-between items-center mt-3">
-                <div className="">Delivery Days</div>
-                <div className="">
-                {loadingEstimate ? (
-                <div className=""><Spinner size='sm' /></div>
-                ) : (
-                <>
-                {transitDays +' Business Days' || ''}
-                </>
-                )}
-                </div>
-                </div>
-
-                </>
-
-                )}
+              
 
 
                  
@@ -345,16 +544,19 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, total
                     <div className="">Total</div>
                     <div className="">
                     {new Intl.NumberFormat('en-US', {
-                          style: 'currency',
-                          currency: 'USD'
-                        }).format(overallSum + totalFreightAmount)}
+                      style: 'currency',
+                      currency: 'USD'
+                    }).format(overallSum + (totFreightAmount || totalFreightAmount))}
+
                     </div>
                 </div>
                 <div className="mt-4 w-full p-5 flex flex-col">
                 {isCheckoutPage && !isPaymentPage ? (
                   <>
-                  {isAddressSelected && !loadingEstimate ? (
-                     <Link href="/payment" className="flex justify-center items-center p-3 bg-primaryBg text-white font-semibold">Next</Link>
+                  {selectedCarrier ? (
+                     <Link href="/payment" className="flex justify-center items-center p-3 
+                     bg-primaryBg text-white font-semibold" 
+                     onClick={handleNextClick}>Next</Link>
                 
                   ) : (
 
@@ -372,10 +574,11 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, total
                   </>
                 )}
                 
-                     <div className="w-full text-center text-[12px] flex justify-center items-center gap-1"><Image src="/securedIcon.png" alt="" width={12} height={12} />Payment secured</div>
-                   
+                    
                      {isCheckoutPage && !isPaymentPage && (
                       <>
+                     <div className="w-full text-center text-[12px] flex justify-center items-center gap-1 mt-3"><Image src="/securedIcon.png" alt="" width={12} height={12} />Payment secured</div>
+                   
                     <p className='font-gilroy-regular font-normal text-[14px] text-[#858586] mt-4'>By checking out this order, you have accepted our <span className='font-GilroySemiBold  text-[#121212]'><u>Terms & Conditions, Policies.</u></span></p>
                     <div className="w-full text-center text-[12px] flex justify-left items-center gap-1 mt-3">
                         <Image src="/visa.png" alt="" width={36} height={24} />

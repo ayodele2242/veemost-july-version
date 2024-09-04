@@ -18,7 +18,7 @@ const getToken = async (clientId: string, secretKey: string): Promise<string> =>
     if (data && data.token) {
       return data.token;
     } else {
-      throw new Error('Access token not found in response');
+      throw new Error('Please check your internet connection and try again.');
     }
   } catch (error) {
     console.error('Error fetching token:', error);

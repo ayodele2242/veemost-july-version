@@ -100,8 +100,10 @@ const HeaderCategories = () => {
       return (
         <div>
           <div className="p-2 bg-primaryBg font-bold text-white text-center w-[100%] mb-3">
-            <Link href={`/products?category=${encodeURIComponent(category.root_menu)}`} 
-              className="w-full cursor-pointer">{category.root_menu}</Link>
+          <Link href={`/products?category=${encodeURIComponent(category.root_menu === 'Networking' ? 'Network Devices' : category.root_menu)}`} 
+          className="w-full cursor-pointer">
+          {category.root_menu === 'Networking' ? 'Network Devices' : category.root_menu}
+        </Link>
           </div>
           <ul>
             {category.sub_categories.map((subCategory: any) => (

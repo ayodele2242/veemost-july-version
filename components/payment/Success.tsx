@@ -165,17 +165,21 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         }
     };
 
+    
     const totalAmount = orders.reduce((sum, order) => {
         const itemPrice = Number(order.product_price);
         const quantity = Number(order.quantity);
-        const freightCharge = Number(order.totalFreightAmount); // Use totalFreightAmount instead of freight_charge
         
-        // Calculate item total and ensure it's a number
+        // Calculate item total
         const itemTotal = isNaN(itemPrice) || isNaN(quantity) ? 0 : itemPrice * quantity;
-        return sum + itemTotal + (isNaN(freightCharge) ? 0 : freightCharge);
+        
+        return sum + itemTotal;
     }, 0);
-
-    const finalAmount = totalAmount;
+    
+    // Use the totalFreightAmount from the first order
+    const freightCharge = orders.length > 0 ? Number(orders[0].totalFreightAmount) : 0;
+    
+    const finalAmount = totalAmount + (isNaN(freightCharge) ? 0 : freightCharge);
 
     const getDeliveryDateRange = (deliveryDays: string) => {
         const days = parseInt(deliveryDays, 10);
@@ -301,7 +305,7 @@ const Success: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                             <div className="w-full mt-3  pt-0">
                                 <div className="flex justify-between mb-2 text-[24px] text-red-400">
                                     <b>Total:</b>
-                                    <div>${finalAmount.toFixed(2)}</div>
+                                    <div> ${!isNaN(finalAmount) ? finalAmount.toFixed(2) : '0.00'} {/*totalFreightAmount*/}</div>
                                 </div>
 
 

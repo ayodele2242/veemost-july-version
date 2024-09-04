@@ -5,9 +5,10 @@ import Container from '../Container';
 import Footer from '../Footer';
 import { VeeCartItem } from '@/types/types';
 import useCartStore from '@/store/cart';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import EmptyCart from './EmptyCart';
-import { Delete03Icon, MultiplicationSignIcon } from 'hugeicons-react';
+import { Delete02Icon, Delete03Icon, MultiplicationSignIcon } from 'hugeicons-react';
 import SkeletonPage from '@/loaders/SkeletonPage';
 import EmptyList from '../account/orders/EmptyList';
 import LazyImage from '../LazyImage';
@@ -31,6 +32,9 @@ import { ApiRequestService } from '@/services/apiRequest.service';
 import Spinner from '../Spinner';
 import { getFreightEstimate } from '@/services/apiService';
 import axios from 'axios';
+import useAutoLogout from '@/hooks/useAutoLogout';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import { useModal } from '@/contexts/ModalContext';
 
 interface ErrorField {
   field: string;
@@ -45,6 +49,16 @@ interface ErrorDetail {
   fields?: ErrorField[];
 }
 
+
+interface CarrierItem {
+  carrierCode: string;
+  shipVia: string;
+  carrierMode: string;
+  estimatedFreightCharge: string;
+  daysInTransit: number;
+
+}
+
 interface DistributionItem {
   shipFromBranchNumber: string;
   carrierCode: string;
@@ -52,7 +66,7 @@ interface DistributionItem {
   freightRate: number;
   totalWeight: number;
   transitDays: number;
-  carrierList: any[];
+  carrierList: CarrierItem[];
 }
 
 interface LineItem {
@@ -98,6 +112,7 @@ interface ResponseDataItem {
     email: string;
     phone: string;
     street: string;
+    address_2: string;
     company: string | null;
     state: string;
     country: string | null;
@@ -144,13 +159,15 @@ const Checkout = () => {
   const closeOverlay = () => setIsOpen(false);
   const [errorIngramMessage, setErrorIngramMessage] = useState<string | null>(null);
   const { setAddressSelected } = useShippingAddress();
-
+  const [carrierList, setCarrierList] = useState<CarrierItem[]>([]);
   const [totalFreightAmount, setTotalFreightAmount] = useState(0); 
   const [totalWeight, setTotalWeight] = useState(0); 
   const [transitDays, setTransitDays] = useState(''); 
-
-  const profileName =
-      userData && userData.profile_name ? userData.profile_name : "Guest"
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [selectedCarrier, setSelectedCarrier] = useState<CarrierItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const { openModal } = useModal();
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -170,6 +187,7 @@ const Checkout = () => {
     action: "insert",
     email: "",
     street: "",
+    address_2: "",
     state: "",
     city: "",
     zip: "",
@@ -227,6 +245,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
       action: "insert",
       email: "",
       street: "",
+      address_2: "",
       state: "",
       city: "",
       zip: "",
@@ -387,6 +406,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           email,
           phone,
           street, 
+          address_2,
           company, 
           state, 
           country, 
@@ -402,6 +422,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           email: email,
           phone: phone,
           street: street, 
+          address_2: address_2,
           company: company, 
           state: state, 
           country: country, 
@@ -457,6 +478,76 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
     };
 
 
+    
+
+    const deleteAddress = async (id: number) => {
+
+      const payload = {id : id, action : 'delete'}
+      try {
+        const response = await ApiRequestService.callAPI<ResponseDataItem>(JSON.stringify(payload), 'orders/shippingAddress');
+        const responseData = response.data;
+    
+      
+        if (response.status === 200) {
+          const { status, message, data } = responseData;
+
+          console.log("status", status, " message ", message)
+          toast.success(message);
+          setError(null);
+          if(status === true){
+
+            openModal('Deleted Successfully', message, 'success', '/checkout');
+            setTimeout(() => {
+              fetchData('orders/shippingAddress', 1);
+            }, 2000);
+
+          }else{
+            openModal('Error Occured', message, 'warning', '/checkout');
+          }
+         
+          
+      } else {
+          const { status, message } = responseData;
+          
+          toast.error(message);
+      }
+
+      
+      } catch (error: unknown) {
+        // Type assertion for AxiosError
+        if (axios.isAxiosError(error)) {
+          const errorResponse = error.response?.data;
+          if (errorResponse?.errors) {
+            const errorDetail = errorResponse.errors[0]?.fields?.[0]?.message || "An unknown error occurred.";
+            setErrorIngramMessage(errorDetail);
+          } else {
+            setErrorIngramMessage("An unexpected error occurred.");
+          }
+        } else {
+          setErrorIngramMessage("An unexpected error occurred.");
+        }
+        console.error('Error getting freight estimate:', error);
+      } finally {
+        setLoadingEstimate(false);
+      }
+    };
+  
+    const handleDeleteClick = (id: number) => {
+      setSelectedId(id);
+      setIsModalOpen(true);
+    };
+  
+    const confirmDelete = () => {
+      if (selectedId !== null) {
+        deleteAddress(selectedId);
+        setIsModalOpen(false);
+      }
+    };
+  
+    const cancelDelete = () => {
+      setIsModalOpen(false);
+    };
+
 
   const handleSetShippingAddress = async (address: any) => {
     setAddressSelected(true);
@@ -506,18 +597,25 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
         // Handle error message
       }
 
+      //console.log("Shipping list ",JSON.stringify(responseData))
+
       if (responseData.freightEstimateResponse) {
         const freightEstimate = responseData.freightEstimateResponse;
-  
+        const distribution = freightEstimate.distribution[0];
+        setIsOverlayOpen(true);
+       // console.log("Shipping list 2 ",JSON.stringify(distribution.shipFromBranchNumber))
+
+        setCarrierList(distribution.carrierList);
         const totalFreightAmount = freightEstimate.totalFreightAmount ?? 0;
         const totalWeight = freightEstimate.distribution[0]?.totalWeight ?? 0;
-        const transitDays = freightEstimate.distribution[0]?.transitDays?.toString() || '';
-        localStorage.setItem('totalFreightAmount', totalFreightAmount);
+        const transitDays = 0;
+        localStorage.setItem('shipFromBranchNumber', distribution.shipFromBranchNumber);
+        /*
         localStorage.setItem('totalWeight', totalWeight);
-        localStorage.setItem('transitDays', transitDays); 
+        localStorage.setItem('transitDays', transitDays); */ 
         setTotalFreightAmount(totalFreightAmount);
         setTotalWeight(totalWeight);
-        setTransitDays(transitDays);
+        //setTransitDays(transitDays);
       }
 
       
@@ -587,7 +685,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                 </div>
             </div>
         <div className="w-full flex flex-col gap-4">
-          <p className="font-extrabold text-lg lg:text-2xl mb-4">Checkout</p>
+          <p className="font-extrabold text-lg lg:text-2xl mb-4">Checkout {isLogin}</p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-3 mt-4">
@@ -641,7 +739,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                          
                          <form className="space-y-4">
                          <div>
-                           <label htmlFor="nickname" className="block">Nickname</label>
+                           <label htmlFor="nickname" className="block">Full Name</label>
                            <input
                              id="nickname"
                              type="text"
@@ -679,8 +777,9 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                          className="border border-gray-100 rounded-md px-3 py-2 w-full"
                        />
                        </div>
+
                        <div>
-                           <label htmlFor="phone" className="block">Street</label>
+                           <label htmlFor="address" className="block">Address 1</label>
                        <input
                          type="text"
                          value={editedValues.street || ''}
@@ -688,6 +787,17 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                          className="border border-gray-100 rounded-md px-3 py-2 w-full"
                        />
                        </div>
+
+                       <div>
+                           <label htmlFor="address_2" className="block">Address 2</label>
+                       <input
+                         type="text"
+                         value={editedValues.address_2 || ''}
+                         onChange={(e) => setEditedValues({ ...editedValues, address_2: e.target.value })}
+                         className="border border-gray-100 rounded-md px-3 py-2 w-full"
+                       />
+                       </div>
+
                        <div>
                            <label htmlFor="phone" className="block">City</label>
                        <input
@@ -726,12 +836,20 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                      <>
                      <div className="flex flex-col w-full border-b-2 p-2">
          
-                     <div className="w-full flex gap-3 flex-col  lg:justify-between items-center">
+                     <div className="w-full flex gap-3 justify-between items-center">
                        <div className="w-full flex gap-3 w-full">
                            <span className="font-bold text-xl">{product.nickname}</span>
                            {product.default_address_status === "1" && (
                              <span className="bg-primaryBg text-white rounded-lg lg:rounded-full text-sm p-1 flex justify-center items-center ">Default</span>
                            )}
+                       </div>
+
+                       <div className="text-red-500 flex cursor-pointer justify-center items-center 
+                       gap-1 font-bold bg-red-200 p-1 rounded-lg text-[12px]" 
+                       onClick={() => handleDeleteClick(product.id)} >
+                        <Delete02Icon size={14}/>
+                        Delete
+
                        </div>
                      
                      </div>
@@ -749,7 +867,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                        
                         <div className="flex flex-col">
                          <div className="w-full text-small text-sm">{product.street}, {product.state}, {product.city}, {product.zip}</div>
-                         
+                         <div className="w-full text-small text-sm">{product.address_2}</div>
                          <div className="w-full">
 
                             <label className="radio-btn mt-4 mb-4 text-purple-400">
@@ -830,7 +948,9 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
            errorMessage={errorIngramMessage}
            totalFreightAmount={totalFreightAmount}
            totalWeight={totalWeight}
-           transitDays={transitDays}/>
+           carrierList={carrierList}
+           isOverlayOpen={isOverlayOpen}
+           setIsOverlayOpen={setIsOverlayOpen}/>
           </div>
         </div>
 
@@ -849,7 +969,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           isOpen ? 'translate-x-0' : 'translate-x-full'
         } ${
           isOpen
-            ? 'w-[100%] lg:w-[40%] md:w-[70%] sm:w-full'
+            ? 'w-[100%] lg:w-[50%] md:w-[70%] sm:w-full'
             : 'w-0'
         } z-50`}
         style={{ transform: `translateX(${isOpen ? '0%' : '100%'})` }}
@@ -862,7 +982,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
             &times;
           </button>
           <h2 className="text-xl font-bold mb-4">Add New Address</h2>
-
+          <div className="scrollbar p-4">
           <form
             className="space-y-4 md:space-y-6"
             onSubmit={_handleSubmit}
@@ -917,6 +1037,25 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
                 className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
                 value={formData.street}
+                onChange={_handleChange}
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="street"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500"
+              >
+                Address 2
+                <span className="text-[#982c2e]"> *</span>
+              </label>
+              <input
+                type="text"
+                id="address_2"
+                name="address_2"
+                className="border border-gray-100 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+                value={formData.address_2}
                 onChange={_handleChange}
               />
             </div>
@@ -1057,7 +1196,7 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
 						</button>
             </div>
           </form>
-
+          </div>
           {errorMessage && (
             <div className="mt-4 text-red-500 text-sm">
               {errorMessage}
@@ -1065,9 +1204,36 @@ const _handleSubmit = async (e: { preventDefault: () => void; }) => {
           )}
         </div>
       </div>
+ 
 
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          {/* Backdrop */}
+          <div className="fixed inset-0 bg-black opacity-50"></div>
 
+          {/* Modal Content */}
+          <div className="relative bg-white p-6 rounded-lg shadow-lg z-10 max-w-sm w-full">
+            <h2 className="text-xl font-semibold mb-4">Confirm Deletion</h2>
+            <p className="mb-6">Are you sure you want to delete this address?</p>
+            <div className="flex justify-end space-x-4">
+              <button 
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={confirmDelete}
+              >
+                Yes, Delete
+              </button>
+              <button 
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                onClick={cancelDelete}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
+<ToastContainer />
 
       </Container>
       <Footer />

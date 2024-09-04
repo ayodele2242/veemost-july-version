@@ -125,6 +125,7 @@ const ProductList: React.FC = () => {
         setPageNumber(1); // Reset page number when items per page changes
     };
 
+
     useEffect(() => {
         const loadProducts = async () => {
             setLoading(true);
@@ -133,159 +134,138 @@ const ProductList: React.FC = () => {
             try {
                 let data;
                 let vendorName = '';
-
+    
                 // Check if the search term matches specific vendor names
                 const vendorNames = ['Dell', 'Cisco', 'Meraki', 'Apple', 'Samsung'];
                 const matchedVendor = vendorNames.find(vendor => search && search.toLowerCase().includes(vendor.toLowerCase()));
-
+    
                 if (matchedVendor) {
                     vendorName = matchedVendor;
                     data = await fetchVendorProducts(itemsPerPage, pageNumber, vendorName);
                 } else if (selectedCategories.length === 1) {
                     const category = selectedCategories[0];
                     data = await fetchCategoryProducts(itemsPerPage, pageNumber, category);
-                }else if (category && !selectedCategories) {
-                    data = await fetchCategoryProducts(itemsPerPage, pageNumber, category);
                 } else if (selectedCategories.length > 1 || search) {
                     let category = '';
                     const keywords: string[] = [];
-                
-                    // Check if search is not null and contains specific words
+    
                     const specificKeywords = ["switch", "routers", "firewalls", "wireless"];
                     const searchLower = search ? search.toLowerCase() : '';
                     const containsSpecificKeyword = specificKeywords.some(keyword => searchLower.includes(keyword));
-                
+    
                     if (containsSpecificKeyword) {
-                        // Use specific keywords from the search term
                         keywords.push(...specificKeywords.filter(keyword => searchLower.includes(keyword)));
-                        category = 'Accessories'; // Default category when specific keywords are present
-                    }else {
-                       // If no specific keywords are found, and if search is present
+                        category = 'Accessories';
+                    } else {
                         if (search !== null) {
-                            keywords.push(search); // Add the search term as a keyword if it's not null
+                            keywords.push(search);
                         }
-                        
-                        // Choose a random category from selectedCategories
+    
                         if (selectedCategories.length > 0) {
                             const randomIndex = Math.floor(Math.random() * selectedCategories.length);
                             category = selectedCategories[randomIndex];
-
-                            // Use the rest of the selected categories as keywords
                             const otherCategories = selectedCategories.filter((_, index) => index !== randomIndex);
                             keywords.push(...otherCategories);
                         } else {
-                            // If no selected categories, fallback to default category or empty string
-                            category = ''; // Or a default category if applicable
+                            category = '';
                         }
                     }
-                
+    
                     data = await searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category);
-                }
-                 else {
+                } else {
                     data = await fetchProducts(itemsPerPage, pageNumber);
                 }
     
-                
-               
-                // Filter products to only include those authorized to purchase
-                // Ensure `data.catalog` and `data.catalog.catalog` are defined
                 const catalog = data.catalog?.catalog || [];
-
-                 // Total number of records found
-                 const totalRecords = data.catalog.recordsFound;
-                 setTotalRecords(totalRecords);
-                  
-              
-        
-        
-                if (!Array.isArray(catalog)) {
-                  throw new Error('Expected catalog to be an array');
-                }
-          
-                const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "true");
-       
-                // Display initial product data
-                setProducts(authorizedProducts);
-
-                console.log(JSON.stringify(authorizedProducts));
+                const totalRecords = data.catalog.recordsFound;
+                setTotalRecords(totalRecords);
     
-                // Fetch images and price details asynchronously
-                authorizedProducts.forEach(async (product: { vendorName: string; vendorPartNumber: string; ingramPartNumber: string; }) => {
-                    try {
-                        // Fetch product images
-                        const productImageUrls = await fetchProductImage(product.vendorName, product.vendorPartNumber);
-                        setProductImages(prevImages => ({
-                            ...prevImages,
-                            [product.ingramPartNumber]: productImageUrls,
-                        }));
-                
-                        // Fetch product details 
-                        const priceAvailability = await fetchProductPrice(product.ingramPartNumber);
-                        const details = priceAvailability[0];
-                        const productAvailability = details.availability.totalAvailability;
-                        const retailPrice = details.pricing.retailPrice;
-                        const warehouseIdDetails = details.availability.availabilityByWarehouse;
-                       console.log("Warehouse Details ",JSON.stringify(details));
-                
-                        let highestAvailabilityWarehouse = null;
-                
-                        // Check if availabilityByWarehouse is not null
-                        if (warehouseIdDetails !== null) {
-                            // Filter out warehouses with a null warehouseId
-                            const validWarehouses = warehouseIdDetails.filter(
-                                (warehouse: Warehouse) => warehouse.warehouseId !== null
-                            );
-                
-                            // Find the warehouse with the highest quantity available
-                            highestAvailabilityWarehouse = validWarehouses.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) =>
-                                prev.quantityAvailable > curr.quantityAvailable ? prev : curr
-                            );
-                        }
-                
-                        setWareHouseId(highestAvailabilityWarehouse);
-                
-                        const customerPriceWithMarkup = details.pricing.customerPrice * 1.06;
-                        const discount = (retailPrice > customerPriceWithMarkup)
-                            ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
-                            : 0;
-                
-                        setProductDetails(prevDetails => ({
-                            ...prevDetails,
-                            [product.ingramPartNumber]: {
+                if (!Array.isArray(catalog)) {
+                    throw new Error('Expected catalog to be an array');
+                }
+    
+                const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "true");
+                setProducts(authorizedProducts);
+    
+                const batchSize = 25;
+                for (let i = 0; i < authorizedProducts.length; i += batchSize) {
+                    const batch = authorizedProducts.slice(i, i + batchSize);
+    
+                    const imagePromises = batch.map(product => 
+                        fetchProductImage(product.vendorName, product.vendorPartNumber)
+                    );
+                    const imageResults = await Promise.all(imagePromises);
+                    
+                    const newImages = Object.fromEntries(
+                        batch.map((product, index) => [product.ingramPartNumber, imageResults[index]])
+                    );
+                    setProductImages(prevImages => ({...prevImages, ...newImages}));
+    
+                    const pricePromises = batch.map(product => 
+                        fetchProductPrice(product.ingramPartNumber).catch(error => {
+                            console.error(`Error fetching price for ${product.ingramPartNumber}:`, error);
+                            return null; // Return null to signify an error
+                        })
+                    );
+                    const priceResults = await Promise.all(pricePromises);
+    
+                    const newDetails = Object.fromEntries(
+                        priceResults.map((result, index) => {
+                            const product = batch[index];
+                            if (!result) {
+                                return [product.ingramPartNumber, null]; // Skip this product if there was an error
+                            }
+    
+                            const details = result[0];
+                            const productAvailability = details.availability.totalAvailability;
+                            const retailPrice = details.pricing.retailPrice;
+                            const warehouseIdDetails = details.availability.availabilityByWarehouse;
+    
+                            let highestAvailabilityWarehouse = null;
+                            if (warehouseIdDetails !== null) {
+                                const validWarehouses = warehouseIdDetails.filter(
+                                    (warehouse: Warehouse) => warehouse.warehouseId !== null
+                                );
+                                if (validWarehouses.length > 0) {
+                                    highestAvailabilityWarehouse = validWarehouses.reduce((prev: Warehouse, curr: Warehouse) =>
+                                        prev.quantityAvailable > curr.quantityAvailable ? prev : curr
+                                    , validWarehouses[0]);
+                                }
+                            }
+    
+                            const customerPriceWithMarkup = details.pricing.customerPrice * 1.06;
+                            const discount = (retailPrice > customerPriceWithMarkup)
+                                ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
+                                : 0;
+    
+                            return [product.ingramPartNumber, {
                                 ingramPartNumber: product.ingramPartNumber,
                                 availability: productAvailability,
                                 retailPrice,
                                 customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
                                 discount: parseFloat(discount.toFixed(2)),
                                 warehouseId: highestAvailabilityWarehouse ? highestAvailabilityWarehouse.warehouseId : null,
-                            },
-                        }));
-                    } catch (error) {
-                        //console.error(`Error fetching details or images for ${product.ingramPartNumber}:`, error);
-                    }
-                });
-                
+                            }];
+                        }).filter(([_, details]) => details !== null) // Filter out products with null details
+                    );
+                    setProductDetails(prevDetails => ({...prevDetails, ...newDetails}));
     
-                 // Calculate start and end records
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+    
                 const totalRecordsDisplayed = pageNumber * itemsPerPage;
                 const startRecord = (pageNumber - 1) * itemsPerPage + 1;
                 const endRecord = Math.min(totalRecordsDisplayed, totalRecords);
-
+    
                 setStartRecord(startRecord);
                 setEndRecord(endRecord);
-
-
+    
             } catch (error: any) {
-                // Log the error for debugging purposes
-               // console.error('Error loading products:', error);
-            
-                // Check for specific types of errors and set a more descriptive error message
                 if (error instanceof TypeError) {
                     setError('No search could be made for this query. Please try again.');
                 } else if (error instanceof SyntaxError) {
                     setError('There was a syntax error in the response data. Please contact support.');
                 } else if (error.response && error.response.status) {
-                    // Handle HTTP errors based on response status
                     switch (error.response.status) {
                         case 400:
                             setError('Bad request. Please check your request and try again.');
@@ -307,20 +287,19 @@ const ProductList: React.FC = () => {
                             break;
                     }
                 } else if (error.message) {
-                    // Handle general errors with a message
                     setError(error.message);
                 } else {
-                    // Fallback for any other types of errors
                     setError('An unknown error occurred. Please try again later.');
                 }
-            }
-             finally {
+            } finally {
                 setLoading(false);
             }
         };
     
         loadProducts();
     }, [pageNumber, itemsPerPage, selectedCategories, search]);
+    
+    
 
     const shouldShowBanner = !selectedCategories.length && !search && !category && !subCategory;
     const shouldShowClear = selectedCategories.length || search || category || subCategory;
