@@ -115,7 +115,7 @@ const Partners = () => {
       </div>
     </div>
     <div className="bg-[#FFFFFF] flex flex-col  items-center drop-shadow-xl rounded-[16px] border border-[#EEEEEE] 2xl:p-[3rem] 2xl:w-[358px] lg:h-[450px] lg:w-[262px] w-[312px] h-[450px]">
-      <Image src="/checkPoint.png" alt="Check Point" width={120} height={50} className="2xl:pt-0 2xl:pl-0 pt-[2rem] pl-[1rem] w-[130px] " />
+      <Image src="/checkpoint.png" alt="Check Point" width={120} height={50} className="2xl:pt-0 2xl:pl-0 pt-[2rem] pl-[1rem] w-[130px] " />
       <div className="lg:w-[260px] w-full mt-[1.5rem]">
         <p className="p-[1rem] 2xl:p-0 pt-0 font-GilroyRegular font-normal text-[16px] text-[#858586]">
           Check Point is an American-Israeli multinational provider of software and combined hardware and software products for IT security, including network security, endpoint security, cloud security, mobile security, data security and security management. As of 2019, the company has approximately 5,000 employees worldwide.
