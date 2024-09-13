@@ -217,7 +217,7 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, viaTr
   
  
   //console.log(JSON.stringify(userData));
-  const { user_type } = userData;
+  
 
   return (
     <div className="w-full  p-4">
