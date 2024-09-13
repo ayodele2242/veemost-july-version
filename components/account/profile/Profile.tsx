@@ -41,7 +41,7 @@ const Profile = () => {
     const [states, setStates] = useState<{ id: string; name: string }[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const userData = getUserData();
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false); 
     
 
 

@@ -20,6 +20,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useShippingAddress } from '@/contexts/ShippingAddressContext';
 import Spinner from '../Spinner';
+import { getUserData } from '@/auth/auth';
 
 
 interface CarrierItem {
@@ -67,6 +68,7 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, viaTr
   const [viaTransit, setViaTransit] = useState(""); 
   const [transitDay, setTransitDay] = useState(0); 
   const [poNumber, setPoNumber] = useState('');
+  const userData = getUserData();
 
   const pathname = usePathname();
   
@@ -213,6 +215,9 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, viaTr
     localStorage.setItem('po_number', poNumberValue);
   };
   
+ 
+  //console.log(JSON.stringify(userData));
+  const { user_type } = userData;
 
   return (
     <div className="w-full  p-4">
@@ -279,25 +284,27 @@ const Summary: React.FC<SummaryProps> = ({ loadingEstimate,  errorMessage, viaTr
 
                 <>
                 <div className="w-full">
-                <div className="w-full mb-3 mt-3">
-                        <div className="relative bg-blue-100 border-blue-500 text-blue-700 p-3">
-                          <p><strong>PO Number (optional)</strong></p>
-                            <input
-                                type="text"
-                                name="po_number"
-                                id="po_number"
-                                value={poNumber}
-                                onChange={(e) => setPoNumber(e.target.value)}
-                                className="border border-gray-500 text-gray-900 sm:text-sm rounded-lg 
-                                focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
-                                dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 
-                                dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                 placeholder="PO Number"
-                            />
-                           
-                        </div>
-
-                </div>
+                {userData && userData.user_type === "Company" && (
+                  <div className="w-full mb-3 mt-3">
+                    <div className="relative bg-blue-100 border-blue-500 text-blue-700 p-3">
+                      <p>
+                        <strong>PO Number (optional)</strong>
+                      </p>
+                      <input
+                        type="text"
+                        name="po_number"
+                        id="po_number"
+                        value={poNumber}
+                        onChange={(e) => setPoNumber(e.target.value)}
+                        className="border border-gray-500 text-gray-900 sm:text-sm rounded-lg 
+                          focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
+                          dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-500 
+                          dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="PO Number"
+                      />
+                    </div>
+                  </div>
+                 )}
                  
           {loadingEstimate ? (
           <div className="mt-4 mb-4 flex justify-center items-center gap-2"><Spinner size='sm' /> Loading shipping methods. Please wait...</div>

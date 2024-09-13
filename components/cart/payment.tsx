@@ -544,6 +544,7 @@ const handlePaypalPayments = async () => {
 
 const closeStripeModal = () => {
     setIsStripeModalOpen(false);
+    setIsLoadingPayment(false);
 };
 
 const closePaypalModal = () => {
@@ -581,10 +582,11 @@ const closePaypalModal = () => {
                                         onClick={handlePayment} 
                                         disabled={isLoadingPayment}
                                         className="flex justify-center items-center bg-blue-500 
-                                        text-white p-4 rounded h-[45px] font-semibold text-[16px] w-full"
+                                        text-white p-4 rounded h-[46px] font-semibold text-[16px] w-full"
                                       >
-                                        Pay with Stripe
+                                        Debit or Credit Card
                                     </button>
+                                    <div className="flex justify-center items-center mb-2 mt-1"><span className="text-gray-500 text-[12px]">Powered by</span> <b className="font-extraBold ml-1 text-blue-700">Stripe</b></div>
                                     {isScriptLoaded && <div className="flex gap-2 justify-left items-center"><Spinner size='sm'/> Loading PayPal...</div>}
                                     <PayPalScriptProvider 
                                     options={initialOptions} 

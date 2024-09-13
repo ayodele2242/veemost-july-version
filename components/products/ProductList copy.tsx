@@ -19,13 +19,12 @@ import { GridIcon, ListViewIcon } from 'hugeicons-react';
 import GridView from './GridView';
 import ListView from './ListView';
 import { IngramProductDetailType, IngramProductType } from '@/types/types';
-//import debounce from 'lodash.debounce';
+import debounce from 'lodash.debounce';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Breadcrumbs from '../Breadcrumb';
 import HomeBottomText from '../HomeBottomText';
 import Container from '../Container';
-import { debounce } from 'lodash';
 
 interface Warehouse {
     quantityAvailable: number;
@@ -37,63 +36,6 @@ interface Warehouse {
     backOrderInfo: string | null;
     leadTimeEta: string | null;
   }
-
-
-const RATE_LIMIT_DELAY = 200; // ms
-const MAX_RETRIES = 3;
-const BATCH_SIZE = 25;
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-// Enhanced rate limiter with priority queue
-class RateLimiter {
-    private queue: PriorityQueue<() => Promise<void>>;
-    private processing: boolean = false;
-  
-    constructor() {
-      this.queue = new PriorityQueue<() => Promise<void>>();
-    }
-  
-    enqueue(task: () => Promise<void>, priority: number = 0) {
-      this.queue.enqueue(task, priority);
-      this.processQueue();
-    }
-  
-    private async processQueue() {
-      if (this.processing) return;
-      this.processing = true;
-  
-      while (!this.queue.isEmpty()) {
-        const task = this.queue.dequeue();
-        if (task) {
-          await task();
-          await sleep(RATE_LIMIT_DELAY);
-        }
-      }
-  
-      this.processing = false;
-    }
-  }
-  
-  class PriorityQueue<T> {
-    private items: { element: T; priority: number }[] = [];
-  
-    enqueue(element: T, priority: number) {
-      this.items.push({ element, priority });
-      this.items.sort((a, b) => b.priority - a.priority);
-    }
-  
-    dequeue(): T | undefined {
-      return this.items.shift()?.element;
-    }
-  
-    isEmpty(): boolean {
-      return this.items.length === 0;
-    }
-  }
-
-  const rateLimiter = new RateLimiter();
-
-  
   
 
 const ProductList: React.FC = () => {
@@ -199,10 +141,10 @@ const ProductList: React.FC = () => {
     
                 if (matchedVendor) {
                     vendorName = matchedVendor;
-                    data = await fetchWithRetry(() => fetchVendorProducts(itemsPerPage, pageNumber, vendorName));
+                    data = await fetchVendorProducts(itemsPerPage, pageNumber, vendorName);
                 } else if (selectedCategories.length === 1) {
                     const category = selectedCategories[0];
-                    data = await fetchWithRetry(() => fetchCategoryProducts(itemsPerPage, pageNumber, category));
+                    data = await fetchCategoryProducts(itemsPerPage, pageNumber, category);
                 } else if (selectedCategories.length > 1 || search) {
                     let category = '';
                     const keywords: string[] = [];
@@ -229,9 +171,9 @@ const ProductList: React.FC = () => {
                         }
                     }
     
-                    data = await fetchWithRetry(() => searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category));
+                    data = await searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category);
                 } else {
-                    data = await fetchWithRetry(() => fetchProducts(itemsPerPage, pageNumber));
+                    data = await fetchProducts(itemsPerPage, pageNumber);
                 }
     
                 const catalog = data.catalog?.catalog || [];
@@ -249,18 +191,18 @@ const ProductList: React.FC = () => {
                 for (let i = 0; i < authorizedProducts.length; i += batchSize) {
                     const batch = authorizedProducts.slice(i, i + batchSize);
     
-                    const imagePromises = batch.map(product =>
+                    const imagePromises = batch.map(product => 
                         fetchProductImage(product.vendorName, product.vendorPartNumber)
                     );
                     const imageResults = await Promise.all(imagePromises);
-    
+                    
                     const newImages = Object.fromEntries(
                         batch.map((product, index) => [product.ingramPartNumber, imageResults[index]])
                     );
-                    setProductImages(prevImages => ({ ...prevImages, ...newImages }));
+                    setProductImages(prevImages => ({...prevImages, ...newImages}));
     
-                    const pricePromises = batch.map(product =>
-                        fetchWithRetry(() => fetchProductPrice(product.ingramPartNumber)).catch(error => {
+                    const pricePromises = batch.map(product => 
+                        fetchProductPrice(product.ingramPartNumber).catch(error => {
                             console.error(`Error fetching price for ${product.ingramPartNumber}:`, error);
                             return null; // Return null to signify an error
                         })
@@ -306,10 +248,9 @@ const ProductList: React.FC = () => {
                             }];
                         }).filter(([_, details]) => details !== null) // Filter out products with null details
                     );
-                    setProductDetails(prevDetails => ({ ...prevDetails, ...newDetails }));
+                    setProductDetails(prevDetails => ({...prevDetails, ...newDetails}));
     
-                    // Delay between batches to avoid rate limits
-                    await new Promise(resolve => setTimeout(resolve, 500));
+                    await new Promise(resolve => setTimeout(resolve, 100));
                 }
     
                 const totalRecordsDisplayed = pageNumber * itemsPerPage;
@@ -320,7 +261,36 @@ const ProductList: React.FC = () => {
                 setEndRecord(endRecord);
     
             } catch (error: any) {
-                handleErrors(error);
+                if (error instanceof TypeError) {
+                    setError('No search could be made for this query. Please try again.');
+                } else if (error instanceof SyntaxError) {
+                    setError('There was a syntax error in the response data. Please contact support.');
+                } else if (error.response && error.response.status) {
+                    switch (error.response.status) {
+                        case 400:
+                            setError('Bad request. Please check your request and try again.');
+                            break;
+                        case 401:
+                            setError('Unauthorized. Please check your authentication and try again.');
+                            break;
+                        case 403:
+                            setError('Forbidden. You do not have permission to access this resource.');
+                            break;
+                        case 404:
+                            setError('Not found. The requested resource could not be found.');
+                            break;
+                        case 500:
+                            setError('Internal server error. Please try again later.');
+                            break;
+                        default:
+                            setError('An unexpected error occurred. Please try again.');
+                            break;
+                    }
+                } else if (error.message) {
+                    setError(error.message);
+                } else {
+                    setError('An unknown error occurred. Please try again later.');
+                }
             } finally {
                 setLoading(false);
             }
@@ -328,54 +298,6 @@ const ProductList: React.FC = () => {
     
         loadProducts();
     }, [pageNumber, itemsPerPage, selectedCategories, search]);
-    
-    // Retry mechanism with exponential backoff
-    const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay = 1000) => {
-        try {
-            return await fetchFunc();
-        } catch (error: any) {
-            if (error.response && error.response.status === 429 && retries > 0) {
-                console.warn(`Rate limit exceeded. Retrying in ${delay / 1000} seconds...`);
-                await new Promise(resolve => setTimeout(resolve, delay));
-                return fetchWithRetry(fetchFunc, retries - 1, delay * 2); // Exponential backoff
-            }
-            throw error;
-        }
-    };
-    
-    // General error handler
-    const handleErrors = (error: any) => {
-        if (error.response && error.response.status) {
-            switch (error.response.status) {
-                case 400:
-                    setError('Bad request. Please check your request and try again.');
-                    break;
-                case 401:
-                    setError('Unauthorized. Please check your authentication and try again.');
-                    break;
-                case 403:
-                    setError('Forbidden. You do not have permission to access this resource.');
-                    break;
-                case 404:
-                    setError('Not found. The requested resource could not be found.');
-                    break;
-                case 429:
-                    setError('Rate limit exceeded. Please wait and try again.');
-                    break;
-                case 500:
-                    setError('Internal server error. Please try again later.');
-                    break;
-                default:
-                    setError('An unexpected error occurred. Please try again.');
-                    break;
-            }
-        } else if (error.message) {
-            setError(error.message);
-        } else {
-            setError('An unknown error occurred. Please try again later.');
-        }
-    };
-    
     
     
 

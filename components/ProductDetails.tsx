@@ -47,81 +47,83 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
 
   useEffect(() => {
     const fetchProductData = async () => {
-      try {
-        // Fetch product details
-        const productDetails = await fetchProductDetails(ingramPartNumber);
-        setProduct(productDetails);
+        setLoading(true);
+        setError(null); // Reset any previous errors
+        try {
+            // Fetch product details, price, and images concurrently
+            const [productDetails, priceData] = await Promise.all([
+                fetchWithRetry(() => fetchProductDetails(ingramPartNumber)),
+                fetchWithRetry(() => fetchProductPrice(ingramPartNumber)),
+            ]);
 
-        // Fetch product price
-        const priceData = await fetchProductPrice(ingramPartNumber);
-        const productPrice = priceData[0].pricing.customerPrice;
-        const retailPrice = priceData[0].pricing.retailPrice;
+            setProduct(productDetails);
 
-        // Find the warehouse with the highest quantity available
-        const availabilityData = priceData[0].availability.availabilityByWarehouse;
-        let highestAvailabilityWarehouse = null;
+            // Handle price details
+            const productPrice = priceData[0].pricing.customerPrice;
+            const retailPrice = priceData[0].pricing.retailPrice;
+            const customerPrice = productPrice * 1.06; // Add 6% markup
 
-        if (availabilityData !== null) {
-          const validWarehouses = availabilityData.filter(
-            (warehouse: AvailabilityByWarehouse) => warehouse.warehouseId !== null
-          );
-        
-          const highestAvailabilityWarehouse = validWarehouses.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) =>
-            prev.quantityAvailable > curr.quantityAvailable ? prev : curr
-          );
-        
-          setWareHouseId(highestAvailabilityWarehouse.warehouseId); // Set the warehouseId
-        } else {
-          setWareHouseId(null);
-        }
-        
-
-      
-        // Check if availabilityByWarehouse is not null
-        /*if (availabilityData !== null) {
             // Find the warehouse with the highest quantity available
-            const highestAvailabilityWarehouse = availabilityData.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) => 
-              prev.quantityAvailable > curr.quantityAvailable ? prev : curr
-            );
-        
-            setWareHouseId(highestAvailabilityWarehouse)
-            
-        } else { 
-          setWareHouseId(null);
-        }*/
+            const availabilityData = priceData[0].availability.availabilityByWarehouse || [];
+            let highestAvailabilityWarehouse = null;
+            if (availabilityData.length > 0) {
+                const validWarehouses = availabilityData.filter(
+                    (warehouse: AvailabilityByWarehouse) => warehouse.warehouseId !== null
+                );
+                highestAvailabilityWarehouse = validWarehouses.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) =>
+                    prev.quantityAvailable > curr.quantityAvailable ? prev : curr
+                );
+            }
 
-        // Calculate the price with an additional 6%
-        const customerPrice = productPrice * 1.06;
+            setWareHouseId(highestAvailabilityWarehouse ? highestAvailabilityWarehouse.warehouseId : null);
 
-        setPrice({
-          retailPrice,
-          mainCustomerPrice: productPrice,
-          customerPrice
-        });
+            // Set price state
+            setPrice({
+                retailPrice,
+                mainCustomerPrice: productPrice,
+                customerPrice: parseFloat(customerPrice.toFixed(2)),
+            });
 
-        // Fetch product images
-        if (productDetails && productDetails.vendorName) {
-          const productImages = await fetchProductImage(productDetails.vendorName, productDetails.vendorPartNumber);
-          setImages(productImages);
-          if (productImages.length > 0) {
-            setPreviewImage(productImages[0]); // Set the first image as the preview
+            // Fetch product images
+            if (productDetails && productDetails.vendorName) {
+                const productImages = await fetchWithRetry(() =>
+                    fetchProductImage(productDetails.vendorName, productDetails.vendorPartNumber)
+                );
+
+                if (productImages.length > 0) {
+                    setImages(productImages);
+                    setPreviewImage(productImages[0]); // Set the first image as the preview
+                } else {
+                    setPreviewImage(DEFAULT_IMAGE); // Use a default image if none are available
+                }
+            }
+
             setImgLoading(false);
-          }else{
-            setPreviewImage(DEFAULT_IMAGE);
-            setImgLoading(false);
-          }
+        } catch (error) {
+            console.error('Error fetching product data:', error);
+            setError('Failed to load product data.');
+        } finally {
+            setLoading(false); // Ensure loading state is reset after completion
         }
-
-        setLoading(false); // Data fetching is complete
-      } catch (error) {
-        setError('Failed to load product data.');
-        //console.error('Error fetching product data:', error);
-        setLoading(false); // Stop loading in case of error
-      }
     };
 
     fetchProductData();
-  }, [ingramPartNumber]);
+}, [ingramPartNumber]);
+
+// Retry mechanism with exponential backoff
+const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay = 1000) => {
+    try {
+        return await fetchFunc();
+    } catch (error: any) {
+        if (error.response && error.response.status === 429 && retries > 0) {
+            console.warn(`Rate limit exceeded. Retrying in ${delay / 1000} seconds...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return fetchWithRetry(fetchFunc, retries - 1, delay * 2); // Exponential backoff
+        }
+        throw error;
+    }
+};
+
 
   const handleThumbnailClick = (image: string) => {
     setPreviewImage(image);
