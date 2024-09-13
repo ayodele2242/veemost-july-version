@@ -285,6 +285,36 @@ export const fetchProductPrice = async (ingramPartNumber: string): Promise<any[]
 };
 
 
+
+export const fetchProductPricesAndAvailability = async (products: Array<any>): Promise<any> => {
+  try {
+      const token = await getToken('fiAbziKYpA7LhobAKPZvFXGjvkiICRGZ', 'W5TSXZay5f1yFG82');
+      const response = await fetch('/api/prices', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ products, token }), // Send array of products
+      });
+
+      if (!response.ok) {
+          throw new Error(JSON.stringify(response));
+      }
+
+      const { data } = await response.json();
+      if (data && Array.isArray(data)) {
+          return data;
+      } else {
+          throw new Error('Unexpected response format');
+      }
+  } catch (error) {
+      throw error;
+  }
+};
+
+
+
+
 export const fetchProductDetails = async (ingramPartNumber: string): Promise<any> => {
   try {
     // Fetch the token

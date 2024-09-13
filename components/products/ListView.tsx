@@ -55,7 +55,7 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
     const [processingItemId, setProcessingItemId] = useState<string | null>(null);
     const [ingramId, setIngramId] = useState<string | null>(null);
 
-    //console.log(JSON.stringify(productDetails));
+    console.log("Products Details", JSON.stringify(productDetails));
 
     const sliderSettings: Settings = {
         dots: true,

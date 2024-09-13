@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { fetchProducts, fetchProductPrice, fetchProductImage, fetchCategoryProducts, fetchVendorProducts } from '../../services/apiService';
+import { fetchProducts, fetchProductPrice, fetchProductImage, fetchCategoryProducts, fetchVendorProducts, fetchProductPricesAndAvailability } from '../../services/apiService';
 import Container from '../Container';
 import Link from 'next/link';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -66,87 +66,79 @@ const VendorProducts  = ({ vendorName }: ProductDetailsProps) => {
 
   useEffect(() => {
     const loadProducts = async () => {
-        setLoading(true);
-        setError(null); // Reset error before fetching
-        try {
-            // Fetch vendor products
-            const data = await fetchWithRetry(() => fetchVendorProducts(pageSize, pageNumber, vendorName));
-            const catalog = data.catalog?.catalog || [];
+      setLoading(true);
+      setError(null);
 
-            // Filter only authorized products
-            const authorizedProducts = catalog.filter(
-                (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
-            );
-            setProducts(authorizedProducts);
+      try {
+        
+        const data = await fetchWithRetry(() => fetchVendorProducts(pageSize, pageNumber, vendorName));
 
-            // Process products in batches to avoid rate limits
-            const batchSize = 10;
-            for (let i = 0; i < authorizedProducts.length; i += batchSize) {
-                const batch = authorizedProducts.slice(i, i + batchSize);
-
-                // Fetch images and price details in parallel
-                const imagePromises = batch.map(async (product: { vendorName: string; vendorPartNumber: string; ingramPartNumber: string; }) => {
-                    try {
-                        const productImageUrls = await fetchProductImage(product.vendorName, product.vendorPartNumber);
-                        setProductImages(prevImages => ({
-                            ...prevImages,
-                            [product.ingramPartNumber]: productImageUrls,
-                        }));
-
-                        setImageLoadingStates(prevStates => ({
-                            ...prevStates,
-                            [product.ingramPartNumber]: true, // Set loading state to true
-                        }));
-                    } catch (error) {
-                        console.error(`Error fetching image for ${product.ingramPartNumber}:`, error);
-                    }
-                });
-
-                const pricePromises = batch.map(async (product: { ingramPartNumber: string }) => {
-                    try {
-                        const priceAvailability = await fetchWithRetry(() => fetchProductPrice(product.ingramPartNumber));
-                        const productAvailability = priceAvailability[0].availability.totalAvailability;
-                        const retailPrice = priceAvailability[0].pricing.retailPrice;
-                        const customerPriceWithMarkup = priceAvailability[0].pricing.customerPrice * 1.06;
-
-                        let discount = 0;
-                        if (retailPrice > customerPriceWithMarkup) {
-                            discount = ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100;
-                        }
-
-                        setProductDetails(prevDetails => ({
-                            ...prevDetails,
-                            [product.ingramPartNumber]: {
-                                ingramPartNumber: product.ingramPartNumber,
-                                availability: productAvailability,
-                                retailPrice,
-                                customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
-                                discount: parseFloat(discount.toFixed(2)),
-                            },
-                        }));
-                    } catch (error) {
-                        console.error(`Error fetching price for ${product.ingramPartNumber}:`, error);
-                    }
-                });
-
-                // Wait for all images and prices in the batch to resolve
-                await Promise.all([...imagePromises, ...pricePromises]);
-
-                // Throttle to avoid rate limits
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
-        } catch (error: any) {
-            console.error('Error loading products:', error);
-            setError(error.message || 'An unknown error occurred');
-        } finally {
-            setLoading(false);
+        const catalog = data.catalog?.catalog || [];
+        const totalRecords = data.catalog.recordsFound;
+       
+        if (!Array.isArray(catalog)) {
+          throw new Error("Expected catalog to be an array");
         }
+
+        const authorizedProducts = catalog.filter(
+          (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
+        );
+        setProducts(authorizedProducts);
+
+        const productArray = authorizedProducts.map((product) => ({
+          ingramPartNumber: product.ingramPartNumber
+        }));
+
+        const priceAvailabilityResponse = await fetchWithRetry(() =>
+          fetchProductPricesAndAvailability(productArray)
+        ).catch((error) => {
+          console.error("Error fetching price/availability:", error);
+          return null;
+        });
+
+        if (priceAvailabilityResponse) {
+          const priceDetails = priceAvailabilityResponse;
+
+          //console.log("Prices", JSON.stringify(priceAvailabilityResponse));
+
+          const newDetails = Object.fromEntries(
+            authorizedProducts.map((product, index) => {
+              const details = priceDetails[index];
+              const productAvailability = details.availability.totalAvailability;
+              const retailPrice = details.pricing.retailPrice;
+              const customerPriceWithMarkup = details.pricing.customerPrice * 1.06;
+              const discount =
+                retailPrice > customerPriceWithMarkup
+                  ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
+                  : 0;
+
+              return [
+                product.ingramPartNumber,
+                {
+                  ingramPartNumber: product.ingramPartNumber,
+                  availability: productAvailability,
+                  retailPrice,
+                  customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
+                  discount: discount.toFixed(2),
+                },
+              ];
+            })
+          );
+          setProductDetails((prevDetails) => ({ ...prevDetails, ...newDetails }));
+        }
+      } catch (error: any) {
+        console.error(JSON.stringify(error));
+        setError(error.message || "Error loading products");
+      } finally {
+        setLoading(false);
+      }
     };
 
     if (vendorName) {
-        loadProducts();
-    }
-}, [pageSize, pageNumber, vendorName]);
+      loadProducts();
+  }
+  
+  }, [pageSize, pageNumber, vendorName]);
 
 // Retry mechanism with exponential backoff
 const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay = 1000) => {
@@ -379,12 +371,12 @@ const sendProductToBackend = async (productId: string) => {
                             />
                          </div>
                 {/*<ProductCardSideNav onViewDetails={() => handleViewDetails(product)} />*/}
-                {productDetails[product.ingramPartNumber]?.discount > 0 && (
+                {productDetails[product.ingramPartNumber]?.discount != null && (
                   <span
                     className="bg-black text-white absolute left-0 top-[2px] w-18 text-xs text-center
                      py-1 rounded-md font-semibold inline-block z-10 p-1"
                   >
-                    save {productDetails[product.ingramPartNumber]?.discount.toFixed(0)}%
+                    save {Number(productDetails[product.ingramPartNumber]?.discount || 0).toFixed(0)}%
                   </span>
                 )}
               </div>

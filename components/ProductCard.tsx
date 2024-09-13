@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
-import { fetchProducts, fetchProductPrice, fetchProductImage, fetchHomeProducts } from '../services/apiService';
+import { fetchProducts, fetchProductPrice, fetchProductImage, fetchHomeProducts, fetchProductPricesAndAvailability } from '../services/apiService';
 import Container from './Container';
 import Link from 'next/link';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -63,75 +63,97 @@ const ProductCard: React.FC = () => {
 
   useEffect(() => {
     const loadProducts = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        setLoading(true);
-        setError(null); // Reset the error before fetching
+        
         const data = await fetchHomeProducts(pageSize, pageNumber);
-        //console.log(JSON.stringify(data))
+
         const catalog = data.catalog || [];
-        
-        
+       //// setTotalRecords(totalRecords);
+
+       // const totalRecordsDisplayed = pageNumber * itemsPerPage;
+       // const startRecord = (pageNumber - 1) * itemsPerPage + 1;
+       // const endRecord = Math.min(totalRecordsDisplayed, totalRecords);
+
+       // setStartRecord(startRecord);
+        //setEndRecord(endRecord);
+
         if (!Array.isArray(catalog)) {
-          throw new Error('Expected catalog to be an array');
+          throw new Error("Expected catalog to be an array");
         }
-  
-        // Filter products to only include those authorized to purchase
-        const authorizedProducts = catalog.filter((product: { authorizedToPurchase: string; }) => product.authorizedToPurchase === "true");
-       
+
+        const authorizedProducts = catalog.filter(
+          (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
+        );
         setProducts(authorizedProducts);
-  
-        // Fetch images and price details asynchronously
-        authorizedProducts.forEach(async (product: { vendorName: string; vendorPartNumber: string; ingramPartNumber: string; }) => {
-          try {
-            // Fetch product images
-            const productImageUrls = await fetchProductImage(product.vendorName, product.vendorPartNumber);
-            setProductImages(prevImages => ({
-              ...prevImages,
-              [product.ingramPartNumber]: productImageUrls,
-            }));
-  
-            // Fetch product details
-            const priceAvailability = await fetchProductPrice(product.ingramPartNumber);
-            
-            const productAvailability = priceAvailability[0].availability.totalAvailability;
-            const retailPrice = priceAvailability[0].pricing.retailPrice;
-            const customerPriceWithMarkup = priceAvailability[0].pricing.customerPrice * 1.06;
-  
-            let discount = 0;
-            if (retailPrice > customerPriceWithMarkup) {
-              discount = ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100;
-            }
-  
-            setProductDetails(prevDetails => ({
-              ...prevDetails,
-              [product.ingramPartNumber]: {
-                ingramPartNumber: product.ingramPartNumber,
-                availability: productAvailability,
-                retailPrice,
-                customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
-                discount: parseFloat(discount.toFixed(2))
-              },
-            }));
-  
-            setImageLoadingStates(prevStates => ({
-              ...prevStates,
-              [product.ingramPartNumber]: true, // Set loading state to true initially
-            }));
-          } catch (error) {
-           // console.error(`Error fetching details or images for ${product.ingramPartNumber}:`, error);
-          }
+
+        const productArray = authorizedProducts.map((product) => ({
+          ingramPartNumber: product.ingramPartNumber
+        }));
+
+        const priceAvailabilityResponse = await fetchWithRetry(() =>
+          fetchProductPricesAndAvailability(productArray)
+        ).catch((error) => {
+          console.error("Error fetching price/availability:", error);
+          return null;
         });
+
+        if (priceAvailabilityResponse) {
+          const priceDetails = priceAvailabilityResponse;
+
+          //console.log("Prices", JSON.stringify(priceAvailabilityResponse));
+
+          const newDetails = Object.fromEntries(
+            authorizedProducts.map((product, index) => {
+              const details = priceDetails[index];
+              const productAvailability = details.availability.totalAvailability;
+              const retailPrice = details.pricing.retailPrice;
+              const customerPriceWithMarkup = details.pricing.customerPrice * 1.06;
+              const discount =
+                retailPrice > customerPriceWithMarkup
+                  ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
+                  : 0;
+
+              return [
+                product.ingramPartNumber,
+                {
+                  ingramPartNumber: product.ingramPartNumber,
+                  availability: productAvailability,
+                  retailPrice,
+                  customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
+                  discount: discount.toFixed(2),
+                },
+              ];
+            })
+          );
+          setProductDetails((prevDetails) => ({ ...prevDetails, ...newDetails }));
+        }
       } catch (error: any) {
-        //console.error('Error loading products:', error);
-        setError(error.message || 'An unknown error occurred');
+        console.error(JSON.stringify(error));
+        setError(error.message || "Error loading products");
       } finally {
         setLoading(false);
       }
     };
-  
+
     loadProducts();
   }, [pageSize, pageNumber]);
-  
+// Retry mechanism with exponential backoff
+const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay = 1000) => {
+    try {
+        return await fetchFunc();
+    } catch (error: any) {
+        if (error.response && error.response.status === 429 && retries > 0) {
+            console.warn(`Rate limit exceeded. Retrying in ${delay / 1000} seconds...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return fetchWithRetry(fetchFunc, retries - 1, delay * 2); // Exponential backoff
+        }
+        throw error;
+    }
+};
+
 
   useEffect(() => {
     if (selectedProduct && modalContentRef.current) {
@@ -354,12 +376,12 @@ const sendProductToBackend = async (productId: string) => {
                             />
                          </div>
                   {/*<ProductCardSideNav onViewDetails={() => handleViewDetails(product)} />*/}
-                  {productDetails[product.ingramPartNumber]?.discount > 0 && (
+                  {productDetails[product.ingramPartNumber]?.discount != null && (
                     <span
                       className="bg-black text-white absolute left-0 top-[2px] w-18 text-xs text-center
                        py-1 rounded-md font-semibold inline-block z-10 p-1"
                     >
-                      save {productDetails[product.ingramPartNumber]?.discount.toFixed(0)}%
+                      save {Number(productDetails[product.ingramPartNumber]?.discount || 0).toFixed(0)}%
                     </span>
                   )}
                 </div>
