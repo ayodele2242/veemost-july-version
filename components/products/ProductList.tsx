@@ -187,137 +187,151 @@ const ProductList: React.FC = () => {
 
  
     useEffect(() => {
-        const loadProducts = async () => {
-          setLoading(true);
-          setError(null);
+      const loadProducts = async () => {
+        setLoading(true);
+        setError(null);
     
-          try {
-            let data;
-            let vendorName = "";
-            const vendorNames = ["Dell", "Cisco", "Meraki", "Apple", "Samsung"];
-            const matchedVendor = vendorNames.find(
-              (vendor) => search && search.toLowerCase().includes(vendor.toLowerCase())
+        try {
+          let data;
+          let vendorName = "";
+          const vendorNames = ["Dell", "Cisco", "Meraki", "Apple", "Samsung"];
+          const matchedVendor = vendorNames.find(
+            (vendor) => search && search.toLowerCase().includes(vendor.toLowerCase())
+          );
+    
+          if (matchedVendor) {
+            vendorName = matchedVendor;
+            data = await fetchWithRetry(() =>
+              fetchVendorProducts(itemsPerPage, pageNumber, vendorName)
+            );
+          } else if (selectedCategories.length === 1) {
+            const category = selectedCategories[0];
+            data = await fetchWithRetry(() =>
+              fetchCategoryProducts(itemsPerPage, pageNumber, category)
+            );
+          } else if (selectedCategories.length > 1 || search) {
+            let category = "";
+            const keywords: string[] = [];
+            const specificKeywords = ["switch", "routers", "firewalls", "wireless"];
+            const searchLower = search ? search.toLowerCase() : "";
+            const containsSpecificKeyword = specificKeywords.some((keyword) =>
+              searchLower.includes(keyword)
             );
     
-            if (matchedVendor) {
-              vendorName = matchedVendor;
-              data = await fetchWithRetry(() =>
-                fetchVendorProducts(itemsPerPage, pageNumber, vendorName)
+            if (containsSpecificKeyword) {
+              keywords.push(
+                ...specificKeywords.filter((keyword) => searchLower.includes(keyword))
               );
-            } else if (selectedCategories.length === 1) {
-              const category = selectedCategories[0];
-              data = await fetchWithRetry(() =>
-                fetchCategoryProducts(itemsPerPage, pageNumber, category)
-              );
-            } else if (selectedCategories.length > 1 || search) {
-              let category = "";
-              const keywords: string[] = [];
-              const specificKeywords = ["switch", "routers", "firewalls", "wireless"];
-              const searchLower = search ? search.toLowerCase() : "";
-              const containsSpecificKeyword = specificKeywords.some((keyword) =>
-                searchLower.includes(keyword)
-              );
-    
-              if (containsSpecificKeyword) {
-                keywords.push(
-                  ...specificKeywords.filter((keyword) => searchLower.includes(keyword))
-                );
-                category = "Accessories";
-              } else {
-                if (search !== null) {
-                  keywords.push(search);
-                }
-    
-                if (selectedCategories.length > 0) {
-                  const randomIndex = Math.floor(Math.random() * selectedCategories.length);
-                  category = selectedCategories[randomIndex];
-                  const otherCategories = selectedCategories.filter(
-                    (_, index) => index !== randomIndex
-                  );
-                  keywords.push(...otherCategories);
-                } else {
-                  category = "";
-                }
+              category = "Accessories";
+            } else {
+              if (search !== null) {
+                keywords.push(search);
               }
     
-              data = await fetchWithRetry(() =>
-                searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category)
-              );
-            } else {
-              data = await fetchWithRetry(() => fetchProducts(itemsPerPage, pageNumber));
+              if (selectedCategories.length > 0) {
+                const randomIndex = Math.floor(Math.random() * selectedCategories.length);
+                category = selectedCategories[randomIndex];
+                const otherCategories = selectedCategories.filter(
+                  (_, index) => index !== randomIndex
+                );
+                keywords.push(...otherCategories);
+              } else {
+                category = "";
+              }
             }
     
-            const catalog = data.catalog?.catalog || [];
-            const totalRecords = data.catalog.recordsFound;
-            setTotalRecords(totalRecords);
-
-            const totalRecordsDisplayed = pageNumber * itemsPerPage;
-            const startRecord = (pageNumber - 1) * itemsPerPage + 1;
-            const endRecord = Math.min(totalRecordsDisplayed, totalRecords);
-
-            setStartRecord(startRecord);
-            setEndRecord(endRecord);
-    
-            if (!Array.isArray(catalog)) {
-              throw new Error("Expected catalog to be an array");
-            }
-    
-            const authorizedProducts = catalog.filter(
-              (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
+            data = await fetchWithRetry(() =>
+              searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category)
             );
-            setProducts(authorizedProducts);
-    
-            const productArray = authorizedProducts.map((product) => ({
-              ingramPartNumber: product.ingramPartNumber
-            }));
-    
-            const priceAvailabilityResponse = await fetchWithRetry(() =>
-              fetchProductPricesAndAvailability(productArray)
-            ).catch((error) => {
-              console.error("Error fetching price/availability:", error);
-              return null;
-            });
-    
-            if (priceAvailabilityResponse) {
-              const priceDetails = priceAvailabilityResponse;
-
-              //console.log("Prices", JSON.stringify(priceAvailabilityResponse));
-
-              const newDetails = Object.fromEntries(
-                authorizedProducts.map((product, index) => {
-                  const details = priceDetails[index];
-                  const productAvailability = details.availability.totalAvailability;
-                  const retailPrice = details.pricing.retailPrice;
-                  const customerPriceWithMarkup = details.pricing.customerPrice * 1.06;
-                  const discount =
-                    retailPrice > customerPriceWithMarkup
-                      ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
-                      : 0;
-    
-                  return [
-                    product.ingramPartNumber,
-                    {
-                      ingramPartNumber: product.ingramPartNumber,
-                      availability: productAvailability,
-                      retailPrice,
-                      customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
-                      discount: discount.toFixed(2),
-                    },
-                  ];
-                })
-              );
-              setProductDetails((prevDetails) => ({ ...prevDetails, ...newDetails }));
-            }
-          } catch (error: any) {
-            console.error(JSON.stringify(error));
-            setError(error.message || "Error loading products");
-          } finally {
-            setLoading(false);
+          } else {
+            data = await fetchWithRetry(() => fetchProducts(itemsPerPage, pageNumber));
           }
-        };
     
-        loadProducts();
-      }, [selectedCategories, search, itemsPerPage, pageNumber]);
+          const catalog = data.catalog?.catalog || [];
+          const totalRecords = data.catalog.recordsFound;
+          setTotalRecords(totalRecords);
+    
+          const totalRecordsDisplayed = pageNumber * itemsPerPage;
+          const startRecord = (pageNumber - 1) * itemsPerPage + 1;
+          const endRecord = Math.min(totalRecordsDisplayed, totalRecords);
+    
+          setStartRecord(startRecord);
+          setEndRecord(endRecord);
+    
+          if (!Array.isArray(catalog)) {
+            throw new Error("Expected catalog to be an array");
+          }
+    
+          const authorizedProducts = catalog.filter(
+            (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
+          );
+          setProducts(authorizedProducts);
+    
+          const productArray = authorizedProducts.map((product) => ({
+            ingramPartNumber: product.ingramPartNumber,
+          }));
+    
+          const priceAvailabilityResponse = await fetchWithRetry(() =>
+            fetchProductPricesAndAvailability(productArray)
+          ).catch((error) => {
+            console.error("Error fetching price/availability:", error);
+            return null;
+          });
+    
+          if (priceAvailabilityResponse) {
+            const priceDetails = priceAvailabilityResponse;
+    
+            const newDetails = Object.fromEntries(
+              authorizedProducts.map((product, index) => {
+                const details = priceDetails[index];
+                const productAvailability = details.availability.totalAvailability;
+                const retailPrice = details.pricing.retailPrice;
+                const customerPriceWithMarkup = details.pricing.customerPrice * 1.06;
+                const discount =
+                  retailPrice > customerPriceWithMarkup
+                    ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
+                    : 0;
+    
+                return [
+                  product.ingramPartNumber,
+                  {
+                    ingramPartNumber: product.ingramPartNumber,
+                    availability: productAvailability,
+                    retailPrice,
+                    customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
+                    discount: discount.toFixed(2),
+                  },
+                ];
+              })
+            );
+            setProductDetails((prevDetails) => ({ ...prevDetails, ...newDetails }));
+          }
+    
+          // Fetch images for all authorized products
+          const imagePromises = authorizedProducts.map((product) =>
+            fetchProductImage(product.vendorName, product.vendorPartNumber)
+          );
+          const imageResults = await Promise.all(imagePromises);
+    
+          const newImages = Object.fromEntries(
+            authorizedProducts.map((product, index) => [
+              product.ingramPartNumber,
+              imageResults[index],
+            ])
+          );
+          setProductImages((prevImages) => ({ ...prevImages, ...newImages }));
+    
+        } catch (error: any) {
+          console.error(JSON.stringify(error));
+          setError(error.message || "Error loading products");
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      loadProducts();
+    }, [selectedCategories, search, itemsPerPage, pageNumber]);
+    
     
     
     // Retry mechanism with exponential backoff

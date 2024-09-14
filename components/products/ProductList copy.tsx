@@ -207,6 +207,7 @@ const ProductList: React.FC = () => {
                             return null; // Return null to signify an error
                         })
                     );
+                    
                     const priceResults = await Promise.all(pricePromises);
     
                     const newDetails = Object.fromEntries(

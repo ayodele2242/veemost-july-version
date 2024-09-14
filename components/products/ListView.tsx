@@ -393,7 +393,7 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
 
                                     <div className="mb-2 text-lg font-bold">
                                         <Link href={`/products/${encodeURIComponent(product.ingramPartNumber)}`} 
-                                        className="text-lg">
+                                        className="text-lg hover:text-yellow-500">
                                             {product.description}
                                         </Link>
                                     </div>

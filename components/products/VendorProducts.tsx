@@ -68,39 +68,39 @@ const VendorProducts  = ({ vendorName }: ProductDetailsProps) => {
     const loadProducts = async () => {
       setLoading(true);
       setError(null);
-
+  
       try {
-        
+        // Fetch vendor products with retry mechanism
         const data = await fetchWithRetry(() => fetchVendorProducts(pageSize, pageNumber, vendorName));
-
+  
         const catalog = data.catalog?.catalog || [];
         const totalRecords = data.catalog.recordsFound;
-       
+  
         if (!Array.isArray(catalog)) {
           throw new Error("Expected catalog to be an array");
         }
-
+  
+        // Filter out only authorized products
         const authorizedProducts = catalog.filter(
           (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
         );
         setProducts(authorizedProducts);
-
+  
         const productArray = authorizedProducts.map((product) => ({
-          ingramPartNumber: product.ingramPartNumber
+          ingramPartNumber: product.ingramPartNumber,
         }));
-
+  
+        // Fetch prices and availability for authorized products
         const priceAvailabilityResponse = await fetchWithRetry(() =>
           fetchProductPricesAndAvailability(productArray)
         ).catch((error) => {
           console.error("Error fetching price/availability:", error);
           return null;
         });
-
+  
         if (priceAvailabilityResponse) {
           const priceDetails = priceAvailabilityResponse;
-
-          //console.log("Prices", JSON.stringify(priceAvailabilityResponse));
-
+  
           const newDetails = Object.fromEntries(
             authorizedProducts.map((product, index) => {
               const details = priceDetails[index];
@@ -111,7 +111,7 @@ const VendorProducts  = ({ vendorName }: ProductDetailsProps) => {
                 retailPrice > customerPriceWithMarkup
                   ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
                   : 0;
-
+  
               return [
                 product.ingramPartNumber,
                 {
@@ -126,6 +126,21 @@ const VendorProducts  = ({ vendorName }: ProductDetailsProps) => {
           );
           setProductDetails((prevDetails) => ({ ...prevDetails, ...newDetails }));
         }
+  
+        // Fetch images for all authorized products
+        const imagePromises = authorizedProducts.map((product) =>
+          fetchProductImage(product.vendorName, product.vendorPartNumber)
+        );
+        const imageResults = await Promise.all(imagePromises);
+  
+        const newImages = Object.fromEntries(
+          authorizedProducts.map((product, index) => [
+            product.ingramPartNumber,
+            imageResults[index],
+          ])
+        );
+        setProductImages((prevImages) => ({ ...prevImages, ...newImages }));
+  
       } catch (error: any) {
         console.error(JSON.stringify(error));
         setError(error.message || "Error loading products");
@@ -133,12 +148,13 @@ const VendorProducts  = ({ vendorName }: ProductDetailsProps) => {
         setLoading(false);
       }
     };
-
+  
     if (vendorName) {
       loadProducts();
-  }
+    }
   
   }, [pageSize, pageNumber, vendorName]);
+  
 
 // Retry mechanism with exponential backoff
 const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay = 1000) => {
@@ -383,7 +399,7 @@ const sendProductToBackend = async (productId: string) => {
               <div className="w-full bullet-btn"></div>
               <div className="flex flex-col p-2 ">
               <Link href={`/products/${encodeURIComponent(product.ingramPartNumber)}`}>
-                <h2 className="text-md font-bold line-clamp-1">{product.description}</h2>
+                <h2 className="text-md font-bold line-clamp-1 hover:text-yellow-500">{product.description}</h2>
               </Link> 
               <div className='flex flex-col text-sm'>
                   <p className='text-[12px]'>VPN: {product.vendorPartNumber}</p>

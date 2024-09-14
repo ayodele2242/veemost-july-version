@@ -65,46 +65,35 @@ const ProductCard: React.FC = () => {
     const loadProducts = async () => {
       setLoading(true);
       setError(null);
-
+  
       try {
-        
         const data = await fetchHomeProducts(pageSize, pageNumber);
-
+  
         const catalog = data.catalog || [];
-       //// setTotalRecords(totalRecords);
-
-       // const totalRecordsDisplayed = pageNumber * itemsPerPage;
-       // const startRecord = (pageNumber - 1) * itemsPerPage + 1;
-       // const endRecord = Math.min(totalRecordsDisplayed, totalRecords);
-
-       // setStartRecord(startRecord);
-        //setEndRecord(endRecord);
-
+        
         if (!Array.isArray(catalog)) {
           throw new Error("Expected catalog to be an array");
         }
-
+  
         const authorizedProducts = catalog.filter(
           (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
         );
         setProducts(authorizedProducts);
-
+  
         const productArray = authorizedProducts.map((product) => ({
           ingramPartNumber: product.ingramPartNumber
         }));
-
+  
         const priceAvailabilityResponse = await fetchWithRetry(() =>
           fetchProductPricesAndAvailability(productArray)
         ).catch((error) => {
           console.error("Error fetching price/availability:", error);
           return null;
         });
-
+  
         if (priceAvailabilityResponse) {
           const priceDetails = priceAvailabilityResponse;
-
-          //console.log("Prices", JSON.stringify(priceAvailabilityResponse));
-
+  
           const newDetails = Object.fromEntries(
             authorizedProducts.map((product, index) => {
               const details = priceDetails[index];
@@ -115,7 +104,7 @@ const ProductCard: React.FC = () => {
                 retailPrice > customerPriceWithMarkup
                   ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
                   : 0;
-
+  
               return [
                 product.ingramPartNumber,
                 {
@@ -130,6 +119,21 @@ const ProductCard: React.FC = () => {
           );
           setProductDetails((prevDetails) => ({ ...prevDetails, ...newDetails }));
         }
+  
+        // Fetch images for all authorized products
+        const imagePromises = authorizedProducts.map((product) =>
+          fetchProductImage(product.vendorName, product.vendorPartNumber)
+        );
+        const imageResults = await Promise.all(imagePromises);
+  
+        const newImages = Object.fromEntries(
+          authorizedProducts.map((product, index) => [
+            product.ingramPartNumber,
+            imageResults[index],
+          ])
+        );
+        setProductImages((prevImages) => ({ ...prevImages, ...newImages }));
+  
       } catch (error: any) {
         console.error(JSON.stringify(error));
         setError(error.message || "Error loading products");
@@ -137,9 +141,12 @@ const ProductCard: React.FC = () => {
         setLoading(false);
       }
     };
-
+  
     loadProducts();
   }, [pageSize, pageNumber]);
+  
+
+
 // Retry mechanism with exponential backoff
 const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay = 1000) => {
     try {

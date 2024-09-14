@@ -284,7 +284,7 @@ const sendProductToBackend = async (productId: string) => {
                         <div className="flex flex-col p-2">
                             <h2 className="text-md font-bold line-clamp-1">
                                 <Link href={`/product-details/${encodeURIComponent(product.ingramPartNumber)}`} 
-                                        className="text-lg">
+                                        className="text-lg hover:text-yellow-500">
                                             {product.description}
                                 </Link>
                             </h2>
