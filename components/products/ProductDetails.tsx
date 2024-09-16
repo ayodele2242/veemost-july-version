@@ -17,7 +17,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ ingramPartNumber }) => 
         const details = await fetchProductDetails(ingramPartNumber); // Fetch product details using the ingramPartNumber
 
         setProductDetails(details);
-        //console.log("Product details ", JSON.stringify(details));
+        //console.log("Product details ", JSON.stringify(details)); 
       } catch (error) {
         //console.error('Failed to fetch product details:', error);
       } finally {
