@@ -43,6 +43,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ ingramPartNumber }) => 
       <TabsPage
         loading={loading}
         product={productDetails}
+        etilize={''}
       />
     </section>
   );
