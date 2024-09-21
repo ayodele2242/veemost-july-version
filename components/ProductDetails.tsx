@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchProductDetails, fetchProductPrice, fetchProductImage } from '@/services/apiService';
+import { fetchProductDetails, fetchProductPrice, fetchProductImage, fetchProductInfo, fetchProductPricesAndAvailability } from '@/services/apiService';
 import Header from './Header';
 import Footer from './Footer';
 import Container from './Container';
@@ -34,6 +34,7 @@ const DEFAULT_IMAGE = "/no-image.png";
 
 const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
   const [product, setProduct] = useState<any>(null);
+  const [etilize, setEtilizeProduct] = useState<any>(null);
   const [price, setPrice] = useState<any>(null);
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,6 +42,8 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imgloading, setImgLoading] = useState<boolean>(true);
   const [warehouseId, setWareHouseId] = useState<string | null>(null);
+  const [productName, setProductName] = useState<string | null>(null);
+  const [productDescription, setProductDescription] = useState<string | null>(null);
 
 
 
@@ -51,44 +54,98 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
         setError(null); // Reset any previous errors
         try {
             // Fetch product details, price, and images concurrently
-            const [productDetails, priceData] = await Promise.all([
-                fetchWithRetry(() => fetchProductDetails(ingramPartNumber)),
-                fetchWithRetry(() => fetchProductPrice(ingramPartNumber)),
+            const [productDetails] = await Promise.all([
+              fetchProductDetails(ingramPartNumber),
+              //fetchProductPrice(ingramPartNumber),
             ]);
 
             setProduct(productDetails);
+            let productArray;
+            // Check if productDetails is an array before mapping
+            if (Array.isArray(productDetails)) {
+              // If it's an array, map over it and extract ingramPartNumber
+              productArray = productDetails.map((product: { ingramPartNumber: string }) => ({
+                  ingramPartNumber: product.ingramPartNumber,
+              }));
+          } else if (productDetails && typeof productDetails === 'object') {
+              // If it's an object, directly extract ingramPartNumber
+              productArray = [{ ingramPartNumber: productDetails.ingramPartNumber }];
+          } else {
+              throw new Error("Unexpected format for productDetails");
+          }
 
+         
+          // Fetch price and availability data
+          const priceAvailabilityResponse = await fetchWithRetry(() =>
+              fetchProductPricesAndAvailability(productArray)
+          ).catch((error) => {
+              console.error("Error fetching price/availability:", error);
+              return null;
+          });
+      
+          if (priceAvailabilityResponse && priceAvailabilityResponse[0].pricing) {
             // Handle price details
-            const productPrice = priceData[0].pricing.customerPrice;
-            const retailPrice = priceData[0].pricing.retailPrice;
+            const productPrice = priceAvailabilityResponse[0].pricing.customerPrice;
+            const retailPrice = priceAvailabilityResponse[0].pricing.retailPrice;
             const customerPrice = productPrice * 1.06; // Add 6% markup
-
+        
             // Find the warehouse with the highest quantity available
-            const availabilityData = priceData[0].availability.availabilityByWarehouse || [];
+            const availabilityData = priceAvailabilityResponse[0].availability?.availabilityByWarehouse || [];
+            
             let highestAvailabilityWarehouse = null;
             if (availabilityData.length > 0) {
                 const validWarehouses = availabilityData.filter(
-                    (warehouse: AvailabilityByWarehouse) => warehouse.warehouseId !== null
+                    (warehouse: { warehouseId: null; }) => warehouse.warehouseId !== null
                 );
                 highestAvailabilityWarehouse = validWarehouses.reduce((prev: { quantityAvailable: number; }, curr: { quantityAvailable: number; }) =>
                     prev.quantityAvailable > curr.quantityAvailable ? prev : curr
                 );
             }
-
+        
             setWareHouseId(highestAvailabilityWarehouse ? highestAvailabilityWarehouse.warehouseId : null);
-
+        
             // Set price state
             setPrice({
                 retailPrice,
                 mainCustomerPrice: productPrice,
                 customerPrice: parseFloat(customerPrice.toFixed(2)),
             });
+        } else {
+            console.error("Invalid or missing price/availability data");
+            setError('Failed to load product pricing data.');
+        }
 
             // Fetch product images
             if (productDetails && productDetails.vendorName) {
                 const productImages = await fetchWithRetry(() =>
                     fetchProductImage(productDetails.vendorName, productDetails.vendorPartNumber)
                 );
+
+                const productInfo = await fetchWithRetry(() =>
+                  fetchProductInfo(productDetails.vendorName, productDetails.vendorPartNumber)
+              );
+
+          setEtilizeProduct(productInfo);
+              // Extract the Product Name
+          const prodName = productInfo.datasheet.attributeGroup
+          .find((group: { name: string; }) => group.name === "General Information")
+          ?.attribute
+          .find((attr: { name: string; }) => attr.name === "Product Name")
+          ?.content;
+
+          const prodDescr = productInfo.datasheet.attributeGroup
+          .find((group: { name: string; }) => group.name === "General Information")
+          ?.attribute
+          .find((attr: { name: string; }) => attr.name === "Marketing Information")
+          ?.content;
+
+          const shortenedDescription = prodDescr ? prodDescr.slice(0, 600) + '...' : '';
+
+          setProductDescription(shortenedDescription);
+          setProductName(prodName)
+          //console.log("Product Name:", productName);
+
+              //console.log("Product Info ", productInfo);
 
                 if (productImages.length > 0) {
                     setImages(productImages);
@@ -132,7 +189,7 @@ const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay 
   const breadcrumbs = [
     { label: 'Home', href: '/' },
     { label: 'Products', href: '/products' },
-    { label: loading ? 'Loading...' : `${product?.description}`, href: loading ? '#' : `/products?search=${encodeURIComponent(product?.description || '')}` }
+    { label: loading ? 'Loading...' : `${productName}`, href: loading ? '#' : `/products?search=${encodeURIComponent(productName || '')}` }
   ];
 
   ///if (loading && !product) return <div>Loading product details...</div>; 
@@ -213,7 +270,7 @@ const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay 
 
                         {product ? (
                         <div className="lg:text-2xl font-bold lg:mt-6 mb-6 sm:text-lg">
-                          {product?.description}
+                          {productName}
                         </div>
                         ) : (
                             <div className="skeleton skeleton-text w-full mb-5 mt-3"></div>
@@ -222,7 +279,7 @@ const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay 
                         {product ? (
                         <p className="text-[#858586] pt-[0.2rem] xl:w-full  w-full  text-[16px] font-normal 
                                 font-GilroyRegular text-wrap cursor-pointer">
-                                {product?.productDetailDescription}
+                                <span dangerouslySetInnerHTML={{ __html: productDescription ?? '' }} />
                          </p>
                           ) : (
                             <div className="skeleton skeleton-large-box w-full mb-5 mt-3"></div>
@@ -287,7 +344,8 @@ const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay 
             <div className="w-full mt-6">
                           <TabsPage  
                           loading={loading}
-                         product={product} />
+                         product={product}
+                         etilize={etilize} />
                 </div>
 
         </Container>

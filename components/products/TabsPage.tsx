@@ -6,6 +6,7 @@ import IframeResizer from 'iframe-resizer-react';
 interface TabPageProps{
   loading: boolean;
   product: any;
+  etilize: any;
 }
 
 interface TechnicalSpecification {
@@ -14,7 +15,7 @@ interface TechnicalSpecification {
   attributeValue: string;
 }
 
-const TabsPage: React.FC<TabPageProps> = ({product, loading}) => {
+const TabsPage: React.FC<TabPageProps> = ({product, loading, etilize}) => {
 
   const ref = useRef<HTMLIFrameElement>(null);
   const [height, setHeight] = useState<string>('900px');
@@ -32,6 +33,12 @@ const TabsPage: React.FC<TabPageProps> = ({product, loading}) => {
   const attributeDisplay = (product?.technicalSpecifications?.[0]?.attributeDisplay || '') || '';
 
   const technicalSpecifications = product?.technicalSpecifications || '';
+  const groupedEtilizeSpecifications = etilize?.datasheet?.attributeGroup || [];
+  const prodDescr = etilize?.datasheet?.attributeGroup
+          .find((group: { name: string; }) => group.name === "General Information")
+          ?.attribute
+          .find((attr: { name: string; }) => attr.name === "Marketing Information")
+          ?.content;
 
 // Group the attributes by headerName
 // Group the attributes by headerName
@@ -129,7 +136,7 @@ useEffect(() => {
       {activeTab === 'tab1' && 
       <div className="tab-content pt-5">
         <div className="attributeName text-[14px]">
-        <span dangerouslySetInnerHTML={{ __html: product?.productDetailDescription }} />
+        <span dangerouslySetInnerHTML={{ __html: prodDescr }} />
         </div>
         
         </div>}
@@ -137,20 +144,26 @@ useEffect(() => {
       <div className="tab-content lg:grid lg:grid-cols-2 lg:gap-5">
        
           
-       {Object.entries(groupedSpecifications).map(([headerName, attributes]) => (
-    <div key={headerName} className="group informationDetails">
-        <div className="bg-gray-200 p-3 font-bold">{headerName}</div>
-          {attributes.map((spec, index) => (
-              <div className="informationDetail mb-0 p-3 w-full flex lg:flex-row flex-col gap-5" key={index}>
-                  <div className="lg:w-[300px] text-[14px]">{spec.attributeName}</div>  
-                  <div>
-                    <span className="text-[14px]" dangerouslySetInnerHTML={{ __html: spec.attributeValue }} />
-                    </div>
-              </div>
-          ))}
-      </div>
-  ))}
+       {groupedEtilizeSpecifications.map((group: any, index: number) => (
+          group.name.toLowerCase() !== "warranty" && ( // Condition to skip "warranty" group
+            <div key={index} className="group informationDetails">
 
+              {/* Display the group name (e.g., "Marketing Information") */}
+              <div className="bg-gray-200 p-3 font-bold">{group.name}</div>
+
+              {/* Loop through the attributes within the group and display each attribute name and content */}
+              {group.attribute.map((spec: any, specIndex: number) => (
+                <div className="informationDetail mb-0 p-3 w-full flex lg:flex-row flex-col gap-5" key={specIndex}>
+                  {/* Display attribute name */}
+                  <div className="lg:w-[300px] text-[14px]">{spec.name}</div>
+                  <div>
+                    <span className="text-[14px]" dangerouslySetInnerHTML={{ __html: spec.content }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        ))}
       
 
       </div>}
@@ -177,6 +190,27 @@ useEffect(() => {
         <div className="proInfo w-full text-[14px] flex flex-col lg:flex-row md:flex-row gap-5"><div className="ispace">Width :</div> {product?.additionalInformation?.width}</div>
         <div className="proInfo w-full text-[14px] flex flex-col lg:flex-row md:flex-row gap-5"><div className="ispace">Length :</div> {product?.additionalInformation?.length}</div>
         <div className="proInfo w-full text-[14px] flex flex-col lg:flex-row md:flex-row gap-5"><div className="ispace">Net Weight :</div> {product?.additionalInformation?.netWeight}</div>
+
+        {groupedEtilizeSpecifications.map((group: any, index: number) => (
+          group.name.toLowerCase() === "warranty" && ( // Condition to skip "warranty" group
+            <div key={index} className="mt-3">
+
+              {/* Display the group name (e.g., "Marketing Information") */}
+              <div className="bg-gray-200 p-2 font-bold">{group.name}</div>
+
+              {/* Loop through the attributes within the group and display each attribute name and content */}
+              {group.attribute.map((spec: any, specIndex: number) => (
+                <div className="informationDetail mb-0 p-3 w-full flex lg:flex-row flex-col gap-5" key={specIndex}>
+                  {/* Display attribute name */}
+                  <div className="lg:w-[300px] text-[14px]">{spec.name}</div>
+                  <div>
+                    <span className="text-[14px]" dangerouslySetInnerHTML={{ __html: spec.content }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        ))}
 
         
         

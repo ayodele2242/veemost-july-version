@@ -18,26 +18,26 @@ export const GET = async (request: NextRequest) => {
     // Make a GET request to the external API using axios 
     const response = await axios.get(PEXLIVE_API_URL, {
       params: {
-        appId: SPEXLIVE_API_KEY,
+        appId: '231327',
         catalog: 'na',
         method: 'getProduct',
         locale: 'en_us',
-        categories: 'default',
-        displayTemplate: 1,
         mfgName: vendorName,
         partNumber,
-        format: 'json',
-        resourceType: 'all',
         descriptionTypes: 'none',
-        categorizeAccessories: true,
+        categories: 'default',
+        manufacturer: 'none',
+        format: 'json',
+        displayTemplate: 1,
+        accessoryMax: 10,
+        categorizeAccessories: false,
+        skuType: 'Ingram Micro USA'
       },
     });
 
-    // Handle successful response from the external API
-    if (response.data && response.data.resources && response.data.resources.resource) {
-      const resources = response.data.resources.resource;
-      const imageUrls = resources.map((resource: { url: any; }) => resource.url);
-      return new Response(JSON.stringify(imageUrls), { status: 200 });
+    // Handle successful response from the external API 
+    if (response.data) {
+        return new Response(JSON.stringify(response.data), { status: 200 });
     } else {
       // Handle case where no images are found
       return new Response(JSON.stringify([]), { status: 200 });

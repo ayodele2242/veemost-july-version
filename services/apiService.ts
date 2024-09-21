@@ -367,6 +367,26 @@ export const fetchProductImage = async (vendorName: string, partNumber: string):
 };
 
 
+
+export const fetchProductInfo = async (vendorName: string, partNumber: string): Promise<string[]> => {
+  try {
+    const response = await axios.get('/api/product-details', {
+      params: {
+        vendorName,
+        partNumber,
+      },
+    });
+
+    
+
+    return response.data;
+  } catch (error) {
+    //console.error(`Error fetching product images for part number ${partNumber}:`, error);
+    return []; // Return an empty array in case of an error
+  }
+};
+
+
 export const getFreightEstimate = async (requestData: {
   billToAddressId: string;
   shipToAddressId: string;

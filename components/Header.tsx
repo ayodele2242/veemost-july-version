@@ -207,7 +207,7 @@ useEffect(() => {
         <div className="flex items-center gap-x-6 text-2xl">
           <div className="hidden md:block mx-2 lg:mx-8">
             <Link href="quote">
-              <div className="bg-lightBg text-primaryText text-sm font-bold py-2 px-2">Get a quote</div>
+              <div className="bg-primaryBg text-white text-sm font-bold p-2 pr-2 pl-2 rounded-[20px]">Get a quote</div>
             </Link>
           </div>
           {/* SearchIcon for mobile */}
