@@ -6,6 +6,9 @@ import Footer from '@/components/Footer';
 import Breadcrumbs from '@/components/Breadcrumb';
 import LazyImage from '@/components/LazyImage';
 import Link from 'next/link';
+import { format, addDays } from 'date-fns';
+import Spinner from '@/components/Spinner';
+
 
 interface OrderDetailsProps {
     groupOrderNumber: string;
@@ -161,8 +164,9 @@ const Details: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
     
         return imageUrl;
     };
-    
-    const totalAmount = orders.reduce((sum, order) => {
+
+
+    /*const totalAmount = orders.reduce((sum, order) => {
         const itemPrice = Number(order.product_price);
         const quantity = Number(order.quantity);
         const freightCharge = Number(order.totalFreightAmount); // Use totalFreightAmount instead of freight_charge
@@ -172,7 +176,7 @@ const Details: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         return sum + itemTotal + (isNaN(freightCharge) ? 0 : freightCharge);
     }, 0);
 
-    const finalAmount = totalAmount;
+    const finalAmount = totalAmount;*/
     
     
       // Function to parse profile JSON
@@ -185,32 +189,62 @@ const Details: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
         }
     };
 
+    const totalAmount = orders.reduce((sum, order) => {
+        const itemPrice = Number(order.product_price);
+        const quantity = Number(order.quantity);
+        
+        // Calculate item total
+        const itemTotal = isNaN(itemPrice) || isNaN(quantity) ? 0 : itemPrice * quantity;
+        
+        return sum + itemTotal;
+    }, 0);
+    
+    // Use the totalFreightAmount from the first order
+    const freightCharge = orders.length > 0 ? Number(orders[0].totalFreightAmount) : 0;
+    
+    const finalAmount = totalAmount + (isNaN(freightCharge) ? 0 : freightCharge);
+
+    const getDeliveryDateRange = (deliveryDays: string) => {
+        const days = parseInt(deliveryDays, 10);
+        if (isNaN(days)) return '';
+
+        const startDate = new Date();
+        const endDate = addDays(startDate, days);
+
+        const formattedStartDate = format(startDate, 'MMM dd').toUpperCase(); // Format: JUN 10
+        const formattedEndDate = format(endDate, 'MMM dd').toUpperCase(); // Format: JUN 12
+
+        return `${formattedStartDate} - ${formattedEndDate}`;
+    };
+
+
       // Extract the shipping address and personal information from the first order
       const shippingAddress = orders.length > 0 ? orders[0].shipping_address : null;
       const profile = orders.length > 0 ? parseProfile(orders[0].profile) : null;
 
     return (
+        
         <main className="w-full overflow-hidden">
         <Header />
-
         <Container>
+
             <div className="w-full mb-5">
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>
 
             {loading ? (
-                <div className="text-center py-10">
-                    <div className="loader"></div>
-                    <p>Loading Details...</p>
+                <div className="text-center py-10 flex justify-center items-center gap-2">
+                    <Spinner size='sm' />
+                    <div>Loading Order Details...</div>
                 </div>
             ) : error ? (
-                <div className="text-center py-10">
+                <div className="text-center py-10 flex justify-center items-center">
                     <p className="text-red-500">Error: {error}</p>
                 </div>
             ) : (
-                <div className="flex flex-col w-full mt-5">
-                    <h2 className="text-2xl mb-4">Order Details</h2>
-
+                <div className="flex flex-col w-full justify-center items-center mt-2">
+                   
+                   <h2 className="text-2xl mb-4">Order Details</h2>
                     {orders.length > 0 ? (
                         orders.map(order => {
                             const profile = parseProfile(order.profile);
@@ -229,6 +263,11 @@ const Details: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                                     <div className="w-full text-center mb-2">
                                         <b>Order date:</b> {formatDate(order.date)}
                                     </div>
+                                    {order.deliveryDays && (
+                                        <div className="w-full text-center mb-2">
+                                            <b>Delivery date:</b> {getDeliveryDateRange(order.deliveryDays)}
+                                        </div>
+                                    )}
                                     
                                     <div className="flex flex-col lg:flex-row gap-3 mb-2 justify-center items-center">
                                         {/* Left Div */}
@@ -265,59 +304,146 @@ const Details: React.FC<OrderDetailsProps> = ({ groupOrderNumber }) => {
                                         </div>
                                     </div>
 
-                                 
+                                    {/*<div className="w-full flex flex-col sm:flex-row justify-between ">
+                                        
+
+                                       
+                                        {order.carrier_name && (
+                                            <div className="box p-5 flex flex-col w-full lg:w-[33%]">
+                                                <div className="font-bold mb-3">Shipping Method</div>
+                                                <p><b>Carrier Name:</b> {order.carrier_name}</p>
+                                                <p><b>Ship from Location:</b> {order.ship_from_location}</p>
+                                            </div>
+                                        )}
+                                    </div>*/}
                                 </div>
                             );
                         })
                     ) : (
-                        <p className="text-center py-10">No orders found</p>
+                        <div className="text-center py-10 flex justify-center items-center">
+                            <p>No orders found</p>
+                        </div>
                     )}
 
-                         {orders.length > 0 && (
-                            <div className="w-full mt-8 pt-4">
-                                <div className="flex justify-between mb-2 text-[24px] text-red-400">
-                                    <b>Total:</b>
-                                    <div>{finalAmount.toFixed(2)}</div>
-                                </div>
+                    {orders.length > 0 && (
+                        <div className="w-full mt-3  pt-0">
 
-
-                                <div className="flex flex-col md:flex-row justify-between items-center">
-                                <div className="mt-8">
-                                    <h3 className="text-xl font-bold mb-2">Shipping Information:</h3>
-                                    {shippingAddress && (
-                                        <div className="flex flex-col">
-                                            <p><b>Name:</b> {shippingAddress.nickname}</p>
-                                            <p><b>Address:</b> {shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state}, {shippingAddress.country} {shippingAddress.zip}</p>
-                                            <p><b>Phone:</b> {shippingAddress.phone}</p>
-                                            <p><b>Email:</b> {shippingAddress.email}</p>
+                            <div className="flex flex-col lg:flex-row gap-3 mb-2 justify-center items-center">
+                                    <div className="lg:w-[20%] sm:w-[100%] w-full text-[18px]">
+                                        <b>Sub Total</b>
+                                    </div>
+                                    <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                        <div className="flex flex-col lg:flex-row gap-4">
+                                        <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                            
                                         </div>
-                                    )}
-                                </div>
-
-                                <div className="mt-8">
-                                    <h3 className="text-xl font-bold mb-2">Personal Information:</h3>
-                                    {profile && (
-                                        <div className="flex flex-col">
-                                            <p><b>Name:</b> {profile.first_name} {profile.last_name}</p>
-                                            <p><b>Email:</b> {profile.email}</p>
-                                            <p><b>Phone:</b> {profile.phone}</p>
+                                        <div className="lg:w-[20%] sm:w-[20%] w-full flex-col">
+                                            <h6 className="text-1xl lg:text-xl font-bold text-[18px] ">
+                                                ${!isNaN(totalAmount) ? totalAmount.toFixed(2) : '0.00'}
+                                            </h6>
+                                            
                                         </div>
-                                    )}
-                                </div>
-                                </div>
-                                <div className="w-full flex flex-col justify-center items-center mt-8 ">
-                                    <Link href="/account/orders" 
-                                    className="bg-primaryBg text-white p-2 w-[200px] flex justify-center items-center rounded-[30px]">
-                                        Back to Order
-                                        </Link></div>
-
+                                        </div>
+                                    </div>
                             </div>
-                        )}
+                            
+                            <div className="flex flex-col lg:flex-row gap-3 mb-2 justify-center items-center">
+                                    <div className="lg:w-[20%] sm:w-[100%] w-full text-[18px]">
+                                        <b>Freight Charge</b>
+                                    </div>
+                                    <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                        <div className="flex flex-col lg:flex-row gap-4">
+                                        <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                            
+                                        </div>
+                                        <div className="lg:w-[20%] sm:w-[20%] w-full flex-col">
+                                            <h6 className="text-1xl lg:text-xl font-bold text-[18px]">
+                                                ${!isNaN(freightCharge) ? freightCharge.toFixed(2) : '0.00'}
+                                            </h6>
+                                            
+                                        </div>
+                                        </div>
+                                    </div>
+                            </div>
+
+                            <div className="flex flex-col lg:flex-row gap-3 mb-2 justify-center items-center">
+                                    <div className="lg:w-[20%] sm:w-[100%] w-full text-[18px]">
+                                        <b>Tax</b>
+                                    </div>
+                                    <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                        <div className="flex flex-col lg:flex-row gap-4">
+                                        <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                            
+                                        </div>
+                                        <div className="lg:w-[20%] sm:w-[20%] w-full flex-col">
+                                            <h6 className="text-1xl lg:text-xl font-bold text-[18px]">
+                                               {/* ${!isNaN(freightCharge) ? freightCharge.toFixed(2) : '0.00'}*/}
+                                            </h6>
+                                            
+                                        </div>
+                                        </div>
+                                    </div>
+                            </div>
+
+
+                            <div className="flex flex-col lg:flex-row gap-3 mb-2 justify-center items-center">
+                                    <div className="lg:w-[20%] sm:w-[100%] w-full text-[18px] text-red-400">
+                                        <b>Total</b>
+                                    </div>
+                                    <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                        <div className="flex flex-col lg:flex-row gap-4">
+                                        <div className="lg:w-[80%] sm:w-[100%] w-full">
+                                            
+                                        </div>
+                                        <div className="lg:w-[20%] sm:w-[20%] w-full flex-col">
+                                            <h6 className="text-1xl lg:text-xl font-bold text-[18px] text-red-400">
+                                            ${!isNaN(finalAmount) ? finalAmount.toFixed(2) : '0.00'}
+                                            </h6>
+                                            
+                                        </div>
+                                        </div>
+                                    </div>
+                            </div>
+
+
+
+                            <div className="flex flex-col md:flex-row justify-between items-center">
+                            <div className="mt-8">
+                                <h3 className="text-xl font-bold mb-2">Shipping Information:</h3>
+                                {shippingAddress && (
+                                    <div className="flex flex-col">
+                                        <p><b>Name:</b> {shippingAddress.nickname}</p>
+                                        <p><b>Address:</b> {shippingAddress.street}, {shippingAddress.city}, {shippingAddress.state}, {shippingAddress.country} {shippingAddress.zip}</p>
+                                        <p><b>Phone:</b> {shippingAddress.phone}</p>
+                                        <p><b>Email:</b> {shippingAddress.email}</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="mt-3">
+                                <h3 className="text-xl font-bold mb-2">Personal Information:</h3>
+                                {profile && (
+                                    <div className="flex flex-col">
+                                        <p><b>Name:</b> {profile.first_name} {profile.last_name}</p>
+                                        <p><b>Email:</b> {profile.email}</p>
+                                        <p><b>Phone:</b> {profile.phone}</p>
+                                    </div>
+                                )}
+                            </div>
+                            </div>
+                            <div className="w-full flex flex-col justify-center items-center mt-3">
+                                <Link href="/account/orders" 
+                                className="bg-primaryBg text-white p-2 w-[200px] flex justify-center items-center rounded-[30px]">
+                                    Check Order
+                                    </Link></div>
+
+                        </div>
+                    )}
                 </div>
             )}
         </Container>
-        <Footer />
     </main>
+
 );
     
 

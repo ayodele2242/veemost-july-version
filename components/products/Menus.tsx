@@ -105,7 +105,7 @@ const Menus: React.FC<MenusProps> = ({ onSelectedCategoriesChange, selectedCateg
                   className={styles.checkboxInput}
                 />
                 <span className={styles.checkboxLabel}>
-                  {category.root_menu} ({countSubcategories(category)})
+                  {category.root_menu} {/*({countSubcategories(category)})*/}
                 </span>
               </label>
             </div>

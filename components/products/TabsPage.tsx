@@ -145,25 +145,26 @@ useEffect(() => {
        
           
        {groupedEtilizeSpecifications.map((group: any, index: number) => (
-          group.name.toLowerCase() !== "warranty" && ( // Condition to skip "warranty" group
-            <div key={index} className="group informationDetails">
+  group?.name?.toLowerCase() !== "warranty" && group?.attribute?.length > 0 && ( // Condition to skip "warranty" group and ensure attributes exist
+    <div key={index} className="group informationDetails">
 
-              {/* Display the group name (e.g., "Marketing Information") */}
-              <div className="bg-gray-200 p-3 font-bold">{group.name}</div>
+      {/* Display the group name (e.g., "Marketing Information") */}
+      <div className="bg-gray-200 p-3 font-bold">{group.name}</div>
 
-              {/* Loop through the attributes within the group and display each attribute name and content */}
-              {group.attribute.map((spec: any, specIndex: number) => (
-                <div className="informationDetail mb-0 p-3 w-full flex lg:flex-row flex-col gap-5" key={specIndex}>
-                  {/* Display attribute name */}
-                  <div className="lg:w-[300px] text-[14px]">{spec.name}</div>
-                  <div>
-                    <span className="text-[14px]" dangerouslySetInnerHTML={{ __html: spec.content }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )
-        ))}
+      {/* Loop through the attributes within the group and display each attribute name and content */}
+      {group.attribute.map((spec: any, specIndex: number) => (
+        <div className="informationDetail mb-0 p-3 w-full flex lg:flex-row flex-col gap-5" key={specIndex}>
+          {/* Display attribute name */}
+          <div className="lg:w-[300px] text-[14px]">{spec.name}</div>
+          <div>
+            <span className="text-[14px]" dangerouslySetInnerHTML={{ __html: spec.content }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+))}
+
       
 
       </div>}
@@ -192,25 +193,26 @@ useEffect(() => {
         <div className="proInfo w-full text-[14px] flex flex-col lg:flex-row md:flex-row gap-5"><div className="ispace">Net Weight :</div> {product?.additionalInformation?.netWeight}</div>
 
         {groupedEtilizeSpecifications.map((group: any, index: number) => (
-          group.name.toLowerCase() === "warranty" && ( // Condition to skip "warranty" group
-            <div key={index} className="mt-3">
+  group?.name?.toLowerCase() === "warranty" && group?.attribute?.length > 0 && ( // Condition to skip "warranty" group and ensure attributes exist
+    <div key={index} className="group informationDetails">
 
-              {/* Display the group name (e.g., "Marketing Information") */}
-              <div className="bg-gray-200 p-2 font-bold">{group.name}</div>
+      {/* Display the group name (e.g., "Marketing Information") */}
+      <div className="bg-gray-200 p-3 font-bold">{group.name}</div>
 
-              {/* Loop through the attributes within the group and display each attribute name and content */}
-              {group.attribute.map((spec: any, specIndex: number) => (
-                <div className="informationDetail mb-0 p-3 w-full flex lg:flex-row flex-col gap-5" key={specIndex}>
-                  {/* Display attribute name */}
-                  <div className="lg:w-[300px] text-[14px]">{spec.name}</div>
-                  <div>
-                    <span className="text-[14px]" dangerouslySetInnerHTML={{ __html: spec.content }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )
-        ))}
+      {/* Loop through the attributes within the group and display each attribute name and content */}
+      {group.attribute.map((spec: any, specIndex: number) => (
+        <div className="informationDetail mb-0 p-3 w-full flex lg:flex-row flex-col gap-5" key={specIndex}>
+          {/* Display attribute name */}
+          <div className="lg:w-[300px] text-[14px]">{spec.name}</div>
+          <div>
+            <span className="text-[14px]" dangerouslySetInnerHTML={{ __html: spec.content }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+))}
+
 
         
         

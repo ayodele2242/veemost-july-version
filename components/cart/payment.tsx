@@ -587,7 +587,7 @@ const closePaypalModal = () => {
                                         Debit or Credit Card
                                     </button>
                                     <div className="flex justify-center items-center mb-2 mt-1"><span className="text-gray-500 text-[12px]">Powered by</span> <b className="font-extraBold ml-1 text-blue-700">Stripe</b></div>
-                                    {isScriptLoaded && <div className="flex gap-2 justify-left items-center"><Spinner size='sm'/> Loading PayPal...</div>}
+                                   {/* {isScriptLoaded && <div className="flex gap-2 justify-left items-center"><Spinner size='sm'/> Loading PayPal...</div>}
                                     <PayPalScriptProvider 
                                     options={initialOptions} 
                                     >
@@ -598,7 +598,7 @@ const closePaypalModal = () => {
                                                     onApprove={onApprove}
                                                     onError={onError}
                                                 />
-                                    </PayPalScriptProvider>
+                                    </PayPalScriptProvider>*/}
                                     </div>
                                     {/*<button
                                         onClick={handlePaypalPayments}

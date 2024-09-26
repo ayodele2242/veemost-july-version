@@ -50,7 +50,10 @@ const About = () => {
                     {/* Subheader */}
                     <h2 className="text-left text-[#0B0B0C] tracking-wide font-gilroy-extrabold font-bold 
                      leading-tight w-full md:w-[450px] mt-6">
-                      Embark on a journey of unparalleled success with us, as we blend innovative technology, exceptional customer service, and a relentless commitment to excellence to deliver IT solutions that not only meet but exceed your business goals and aspirations.
+                      Embark on a journey of unparalleled success with us, as we blend 
+                      innovative technology, exceptional customer service.
+                       {/*and a relentless commitment to excellence to deliver IT solutions that not only meet but exceed 
+                       your business goals and aspirations.*/}
                     </h2>
                   </div>
                 </div>

@@ -36,11 +36,14 @@ const Partners = () => {
             <div className="flex flex-col">
                 <div className="">
                     <h2 className="text-[#0B0B0C] font-gilroy-extrabold  leading-none tracking-wide text-[32px] lg:text-[43px] xl:text-[42px]
-                     2xl:text-[48px] text-left">Before we began our <br className="hidden lg:block" />
-                    journey, we realized one <br className="hidden lg:block" /> thing: “No one can do it <br className="hidden lg:block" /> alone, we all need <br className="hidden lg:block" />  <span className="text-[#D6A912] font-gilroy-extrabold  leading-none tracking-wide text-[32px] lg:text-[43px] xl:text-[42px]">partners.</span>”</h2>
+                     2xl:text-[48px] text-left">Powering Progress: <br className="hidden lg:block" />
+                    Our Valued IT  <span className="text-[#D6A912] font-gilroy-extrabold  
+                    leading-none tracking-wide text-[32px] lg:text-[43px] xl:text-[42px]">partners.</span>”</h2>
                 </div>
-                <h2 className="text-[#858586] font-gilroy-extrabold font-normal text-[16px] text-left leading-tight lg:w-[500px] mt-6">
-                    We assist you plan strategically by <br className="hidden lg:block 2xl:hidden" /> consulting with your various  departments, tracking <br className="hidden lg:block" /> existing data to prove ROI, rolling forecasting etc.
+                <h2 className="text-[#858586] font-gilroy-extrabold font-normal text-[16px] text-left 
+                leading-tight lg:w-[500px] mt-6">
+                    Partnering with industry leaders to bring you cutting-edge <br className="hidden lg:block 2xl:hidden" /> 
+                    technology.
                 </h2>
             </div>
             <div className="mt-[3rem] md:mt-[1.5rem] pb-[2rem] bg-no-repeat object-cover lg:mt-[2.2rem] md:w-[600px] xl:w-[640px] lg:w-[524px] lg:h-[425px]" />

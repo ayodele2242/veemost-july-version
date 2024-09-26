@@ -14,12 +14,17 @@ const Brands = () => {
                     <div className="bg-[#FAFAFA] w-[100%]  gap-[16px] flex justify-center items-center">
                     <Container>
   <div className="lg:w-[820px] mx-auto">
-    <h2 className="text-center text-[#0B0B0C] font-gilroy-extrabold text-lg md:text-2xl mb-4">
-      Discover the power of collaboration as we partner with industry-leading brands to bring you an unparalleled selection of premium IT products and services. We ensure you have access to the most innovative, reliable, and high-performance solutions on the market.
+  
+    <h2 className="text-[#0B0B0C] font-gilroy-extrabold  leading-none tracking-wide text-[32px] lg:text-[43px] xl:text-[42px]
+                     2xl:text-[48px] text-center mb-4">
+      We partner with the <br className="hidden lg:block" />industry's leading <span className="text-[#D6A912] font-gilroy-extrabold  
+                    leading-none tracking-wide text-[32px] lg:text-[43px] xl:text-[42px]">brands.</span>
     </h2>
-    <p className="text-[#858586] font-gilroy-medium text-base text-center">
-      VeeMost specializes in architecting, deploying, and managing secure digital solutions and platforms, enabling customers to be more efficient, profitable, and relevant in their businesses.
-    </p>
+    <p className="text-[#858586] font-gilroy-bold text-base text-center">
+    Discover the power of collaboration as we bring you an unparalleled selection of premium <br className="hidden lg:block" />
+    IT products and services, ensuring you have access to the most innovative, reliable, and <br className="hidden lg:block" />
+    high-performance solutions on the market.
+      </p>
   </div>
 </Container>
 

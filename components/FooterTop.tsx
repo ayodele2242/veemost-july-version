@@ -119,7 +119,10 @@ const FooterTop = () => {
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
           >
+            <Link href="/news">
             Industry News
+            </Link>
+            
           </p>
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
@@ -134,14 +137,14 @@ const FooterTop = () => {
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular py-3 cursor-pointer"
           >
-            <Link href="help-and-faq">
+            <Link href="/help-and-faq">
             FAQs
             </Link>
           </p>
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
           >
-            <Link href="contact-us">
+            <Link href="/contact-us">
             Support
             </Link>
           </p>
@@ -149,7 +152,7 @@ const FooterTop = () => {
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
           >
-            <Link href="privacy-policy">
+            <Link href="/privacy-policy">
             Privacy Policy
             </Link>
           </p>
@@ -157,7 +160,7 @@ const FooterTop = () => {
           <p
             className="text-[14px] text-[#EAEAEA] font-normal text-gilroy-regular pb-3 cursor-pointer"
           >
-            <Link href="terms-and-conditions">
+            <Link href="/terms-and-conditions">
             Terms & Conditions
             </Link>
           </p>

@@ -25,7 +25,7 @@ const Policy = () => {
             <div className="flex flex-col lg:flex-row justify-center items-center gap-8">
             <div className="flex flex-col">
                 <div className="">
-                    <h2 className="text-[#0B0B0C] font-GilroySemiBold font-extrabold 
+                    <h2 className="text-[#0B0B0C] font-gilroy-extrabold 
                     text-[32px] lg:text-[36px] xl:text-[42px] 2xl:text-[48px] text-center leading-normal">
                        VeeMost Technologies Inc. Privacy <br className="hidden lg:block" />Statement and Notice at Collection
                     </h2>
@@ -43,7 +43,7 @@ const Policy = () => {
         <style
     dangerouslySetInnerHTML={{
       __html:
-        "\n\t\t\tbody { line-height:108%; font-family:Aptos; font-size:11pt }\n\t\t\th1, h2, h3, h4, h5, h6, p { margin:0pt 0pt 8pt }\n\t\t\tli { margin-top:0pt; margin-bottom:8pt }\n\t\t\th1 { margin-top:18pt; margin-bottom:4pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:'Aptos Display'; font-size:20pt; font-weight:normal; color:#0f4761 }\n\t\t\th2 { margin-top:8pt; margin-bottom:4pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:'Aptos Display'; font-size:16pt; font-weight:normal; color:#0f4761 }\n\t\t\th3 { margin-top:8pt; margin-bottom:4pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:Aptos; font-size:14pt; font-weight:normal; color:#0f4761 }\n\t\t\th4 { margin-top:4pt; margin-bottom:2pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:Aptos; font-size:11pt; font-weight:normal; font-style:italic; color:#0f4761 }\n\t\t\th5 { margin-top:4pt; margin-bottom:2pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:Aptos; font-size:11pt; font-weight:normal; color:#0f4761 }\n\t\t\th6 { margin-top:2pt; margin-bottom:0pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:Aptos; font-size:11pt; font-weight:normal; font-style:italic; color:#595959 }\n\t\t\t.Heading7 { margin-top:2pt; margin-bottom:0pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:Aptos; font-size:11pt; font-weight:normal; font-style:normal; color:#595959 }\n\t\t\t.Heading8 { margin-bottom:0pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:Aptos; font-size:11pt; font-weight:normal; font-style:italic; color:#272727 }\n\t\t\t.Heading9 { margin-bottom:0pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:Aptos; font-size:11pt; font-weight:normal; font-style:normal; color:#272727 }\n\t\t\t.Footer { margin-bottom:0pt; line-height:normal; font-size:11pt }\n\t\t\t.Header { margin-bottom:0pt; line-height:normal; font-size:11pt }\n\t\t\t.IntenseQuote { margin:18pt 43.2pt; text-align:center; line-height:108%; border-top:0.75pt solid #0f4761; border-bottom:0.75pt solid #0f4761; padding-top:10pt; padding-bottom:10pt; font-size:11pt; font-style:italic; color:#0f4761 }\n\t\t\t.ListParagraph { margin-left:36pt; margin-bottom:8pt; line-height:108%; font-size:11pt }\n\t\t\t.Quote { margin-top:8pt; margin-bottom:8pt; text-align:center; line-height:108%; font-size:11pt; font-style:italic; color:#404040 }\n\t\t\t.Subtitle { margin-bottom:8pt; line-height:108%; font-size:14pt; letter-spacing:0.75pt; color:#595959 }\n\t\t\t.Title { margin-bottom:4pt; line-height:normal; font-family:'Aptos Display'; font-size:28pt; letter-spacing:-0.5pt }\n\t\t\t.selectable-text { margin-top:5pt; margin-bottom:5pt; line-height:normal; font-family:'Times New Roman'; font-size:12pt }\n\t\t\tspan.Heading1Char { font-family:'Aptos Display'; font-size:20pt; color:#0f4761 }\n\t\t\tspan.Heading2Char { font-family:'Aptos Display'; font-size:16pt; color:#0f4761 }\n\t\t\tspan.Heading3Char { font-size:14pt; color:#0f4761 }\n\t\t\tspan.Heading4Char { font-style:italic; color:#0f4761 }\n\t\t\tspan.Heading5Char { color:#0f4761 }\n\t\t\tspan.Heading6Char { font-style:italic; color:#595959 }\n\t\t\tspan.Heading7Char { color:#595959 }\n\t\t\tspan.Heading8Char { font-style:italic; color:#272727 }\n\t\t\tspan.Heading9Char { color:#272727 }\n\t\t\tspan.Hyperlink { text-decoration:underline; color:#467886 }\n\t\t\tspan.IntenseEmphasis { font-style:italic; color:#0f4761 }\n\t\t\tspan.IntenseQuoteChar { font-style:italic; color:#0f4761 }\n\t\t\tspan.IntenseReference { font-weight:bold; font-variant:small-caps; letter-spacing:0.25pt; color:#0f4761 }\n\t\t\tspan.QuoteChar { font-style:italic; color:#404040 }\n\t\t\tspan.SubtitleChar { font-size:14pt; letter-spacing:0.75pt; color:#595959 }\n\t\t\tspan.TitleChar { font-family:'Aptos Display'; font-size:28pt; letter-spacing:-0.5pt }\n\t\t\tspan.UnresolvedMention { color:#605e5c; background-color:#e1dfdd }\n@media (max-width: 900px) { \nimg { \n   max-width: 100%;\n   height: auto;\n}\n\n.table-container {\n    overflow-x: auto;\n    -webkit-overflow-scrolling: touch;\n}\n\ntable {\n    width: 100%;\n    border-collapse: collapse;\n}\n\ntd, th {\n    padding: 8px;\n    text-align: left;\n    border: 1px solid #ddd;\n}\n}\t\n\n\n\t\t"
+        "\n\t\t\tbody { line-height:108%; font-family:sans-serif; font-size:11pt }\n\t\t\th1, h2, h3, h4, h5, h6, p { margin:0pt 0pt 8pt }\n\t\t\tli { margin-top:0pt; margin-bottom:8pt }\n\t\t\th1 { margin-top:18pt; margin-bottom:4pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:'sans-serif Display'; font-size:20pt; font-weight:normal; color:#0f4761 }\n\t\t\th2 { margin-top:8pt; margin-bottom:4pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:'sans-serif Display'; font-size:16pt; font-weight:normal; color:#0f4761 }\n\t\t\th3 { margin-top:8pt; margin-bottom:4pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:sans-serif; font-size:14pt; font-weight:normal; color:#0f4761 }\n\t\t\th4 { margin-top:4pt; margin-bottom:2pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:sans-serif; font-size:11pt; font-weight:normal; font-style:italic; color:#0f4761 }\n\t\t\th5 { margin-top:4pt; margin-bottom:2pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:sans-serif; font-size:11pt; font-weight:normal; color:#0f4761 }\n\t\t\th6 { margin-top:2pt; margin-bottom:0pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:sans-serif; font-size:11pt; font-weight:normal; font-style:italic; color:#595959 }\n\t\t\t.Heading7 { margin-top:2pt; margin-bottom:0pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:sans-serif; font-size:11pt; font-weight:normal; font-style:normal; color:#595959 }\n\t\t\t.Heading8 { margin-bottom:0pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:sans-serif; font-size:11pt; font-weight:normal; font-style:italic; color:#272727 }\n\t\t\t.Heading9 { margin-bottom:0pt; page-break-inside:avoid; page-break-after:avoid; line-height:108%; font-family:sans-serif; font-size:11pt; font-weight:normal; font-style:normal; color:#272727 }\n\t\t\t.Footer { margin-bottom:0pt; line-height:normal; font-size:11pt }\n\t\t\t.Header { margin-bottom:0pt; line-height:normal; font-size:11pt }\n\t\t\t.IntenseQuote { margin:18pt 43.2pt; text-align:center; line-height:108%; border-top:0.75pt solid #0f4761; border-bottom:0.75pt solid #0f4761; padding-top:10pt; padding-bottom:10pt; font-size:11pt; font-style:italic; color:#0f4761 }\n\t\t\t.ListParagraph { margin-left:36pt; margin-bottom:8pt; line-height:108%; font-size:11pt }\n\t\t\t.Quote { margin-top:8pt; margin-bottom:8pt; text-align:center; line-height:108%; font-size:11pt; font-style:italic; color:#404040 }\n\t\t\t.Subtitle { margin-bottom:8pt; line-height:108%; font-size:14pt; letter-spacing:0.75pt; color:#595959 }\n\t\t\t.Title { margin-bottom:4pt; line-height:normal; font-family:'sans-serif Display'; font-size:28pt; letter-spacing:-0.5pt }\n\t\t\t.selectable-text { margin-top:5pt; margin-bottom:5pt; line-height:normal; font-family:'Times New Roman'; font-size:12pt }\n\t\t\tspan.Heading1Char { font-family:'sans-serif Display'; font-size:20pt; color:#0f4761 }\n\t\t\tspan.Heading2Char { font-family:'sans-serif Display'; font-size:16pt; color:#0f4761 }\n\t\t\tspan.Heading3Char { font-size:14pt; color:#0f4761 }\n\t\t\tspan.Heading4Char { font-style:italic; color:#0f4761 }\n\t\t\tspan.Heading5Char { color:#0f4761 }\n\t\t\tspan.Heading6Char { font-style:italic; color:#595959 }\n\t\t\tspan.Heading7Char { color:#595959 }\n\t\t\tspan.Heading8Char { font-style:italic; color:#272727 }\n\t\t\tspan.Heading9Char { color:#272727 }\n\t\t\tspan.Hyperlink { text-decoration:underline; color:#467886 }\n\t\t\tspan.IntenseEmphasis { font-style:italic; color:#0f4761 }\n\t\t\tspan.IntenseQuoteChar { font-style:italic; color:#0f4761 }\n\t\t\tspan.IntenseReference { font-weight:bold; font-variant:small-caps; letter-spacing:0.25pt; color:#0f4761 }\n\t\t\tspan.QuoteChar { font-style:italic; color:#404040 }\n\t\t\tspan.SubtitleChar { font-size:14pt; letter-spacing:0.75pt; color:#595959 }\n\t\t\tspan.TitleChar { font-family:'sans-serif Display'; font-size:28pt; letter-spacing:-0.5pt }\n\t\t\tspan.UnresolvedMention { color:#605e5c; background-color:#e1dfdd }\n@media (max-width: 900px) { \nimg { \n   max-width: 100%;\n   height: auto;\n}\n\n.table-container {\n    overflow-x: auto;\n    -webkit-overflow-scrolling: touch;\n}\n\ntable {\n    width: 100%;\n    border-collapse: collapse;\n}\n\ntd, th {\n    padding: 8px;\n    text-align: left;\n    border: 1px solid #ddd;\n}\n}\t\n\n\n\t\t"
     }}
   />
 
@@ -115,12 +115,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          Although we empower you to read this whole Security Explanation, this
          is often a rundown of a few of the more imperative perspectives of the
@@ -132,12 +132,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          Every advertisement may include a specific protection scheme related
          to its claim. Any time you have lately accessed or used an
@@ -153,12 +153,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          Personal Data that we have directly obtained from you and your
          devices, whether they are used online or offline. Additionally, we
@@ -255,11 +255,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Contact Data: which includes phone numbers, email addresses, shipping
          addresses, and billing addresses.{" "}
        </span>
@@ -279,11 +279,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Financial Data: including credit history, bank account information,
          and payment card details.{" "}
        </span>
@@ -303,11 +303,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Transaction Data: which includes information about payments to and
          from you as well as additional specifics about the goods and services
          you have bought from us.{" "}
@@ -345,12 +345,12 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "12pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "12pt" }}
        >
          Usage Data: includes details about how you use our website, products,
          and services. It also includes information about the text you enter in
@@ -381,12 +381,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          Sensitive Personal Data: such as government issued identification
          number, username, and password to access an VeeMost Technologies Inc.
@@ -400,12 +400,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          Other information that we collect with your consent from time to time.
        </span>
@@ -424,12 +424,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          Information provided voluntarily. We may gather Personal Data from you
          directly if you freely offer it to us. For example, when you contact
@@ -445,12 +445,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          for an event or training, visit us at an event or trade show, sign up
          for marketing, promotional, or informational emails or communications,
@@ -459,7 +459,7 @@ const Policy = () => {
        </span>
        <br />
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          The Personal Data that you are asked to supply, as well as the reasons
          for doing so, will be made plain to you when we ask for it.
@@ -470,12 +470,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          We collect information automatically. When you visit our website or
          engage with any of our online ads, content, or emails, we
@@ -512,10 +512,10 @@ const Policy = () => {
        style={{
          marginLeft: "28.06pt",
          paddingLeft: "7.94pt",
-         fontFamily: "serif"
+         fontFamily: "sans-serif"
        }}
      >
-       <span style={{ fontFamily: "Aptos" }}>
+       <span style={{ fontFamily: "sans-serif" }}>
          We, or our vendors operating on our behalf, also gather information
          via &quot;session replay technology,&quot; which automatically collects your
          keystrokes, mouse movements, text entered forms, and text entered chat
@@ -578,11 +578,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          From customers. We may collect Personal Data about you from
          third-party clients who contract with us for services. For example, we
          may provide fulfillment services on behalf of other organizations,
@@ -592,7 +592,7 @@ const Policy = () => {
          on behalf of the customer.{" "}
        </span>
        <br />
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>&nbsp;</span>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>&nbsp;</span>
      </li>
      <li
        className="ListParagraph"
@@ -601,11 +601,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "11pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "11pt" }}>
          Data sourced from providers. VeeMost Technologies Inc. may also
          collect or license Personal Data from third parties who hold
          information about you and have the right to transfer it to us. For
@@ -617,10 +617,10 @@ const Policy = () => {
          gather information.
        </span>
        <u>
-         <span style={{ fontFamily: "Aptos", fontSize: "11pt" }}> </span>
+         <span style={{ fontFamily: "sans-serif", fontSize: "11pt" }}> </span>
        </u>
        <br />
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>&nbsp;</span>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>&nbsp;</span>
      </li>
      <li
        className="ListParagraph"
@@ -629,11 +629,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Based on publicly available sources. We may also collect Personal Data
          from publicly available sources, such as open government databases or
          other public domain data.{" "}
@@ -654,11 +654,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "7.48pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "12pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos" }}>
+       <span style={{ fontFamily: "sans-serif" }}>
          From affiliates and subsidiaries. We may collect personal information
          from our affiliates and subsidiaries.{" "}
        </span>
@@ -678,11 +678,11 @@ const Policy = () => {
          marginBottom: "12pt",
          lineHeight: "normal",
          paddingLeft: "7.48pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "12pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos" }}>
+       <span style={{ fontFamily: "sans-serif" }}>
          We improve our products and advertising by using Microsoft Clarity to
          see how you use our website.{" "}
        </span>
@@ -720,11 +720,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "7.48pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "12pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos" }}>
+       <span style={{ fontFamily: "sans-serif" }}>
          Cookies that are strictly necessary. These are the cookies that our
          website needs in order to function. They consist of, for instance,
          cookies that let you utilize a shopping cart or log into secure
@@ -738,12 +738,12 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "7.48pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "12pt"
        }}
      >
        <br />
-       <span style={{ fontFamily: "Aptos" }}>
+       <span style={{ fontFamily: "sans-serif" }}>
          Cookies for performance and analytics. These cookies let us track and
          assess how the website is used, which enables us to make improvements
          to your online experience.{" "}
@@ -764,11 +764,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "7.48pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "12pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos" }}>
+       <span style={{ fontFamily: "sans-serif" }}>
          These cookies enable us to detect when technical problems with the
          website occur and to customize the content of the website to reflect
          what users find most interesting. Additionally, we might utilize this
@@ -792,10 +792,10 @@ const Policy = () => {
          marginLeft: "28.52pt",
          marginBottom: "14pt",
          paddingLeft: "7.48pt",
-         fontFamily: "serif"
+         fontFamily: "sans-serif"
        }}
      >
-       <span className="selectable-text1" style={{ fontFamily: "Aptos" }}>
+       <span className="selectable-text1" style={{ fontFamily: "sans-serif" }}>
          Cookies that track and function. We are able to identify returning
          users of our websites thanks to these cookies. A tracking cookie
          records a user&apos;s origin, the search engine they may have used, the
@@ -810,7 +810,7 @@ const Policy = () => {
      className="selectable-text"
      style={{ marginTop: "14pt", marginBottom: "14pt" }}
    >
-     <span className="selectable-text1" style={{ fontFamily: "Aptos" }}>
+     <span className="selectable-text1" style={{ fontFamily: "sans-serif" }}>
        &nbsp;
      </span>
    </p>
@@ -822,10 +822,10 @@ const Policy = () => {
          marginLeft: "28.52pt",
          marginBottom: "14pt",
          paddingLeft: "7.48pt",
-         fontFamily: "serif"
+         fontFamily: "sans-serif"
        }}
      >
-       <span className="selectable-text1" style={{ fontFamily: "Aptos" }}>
+       <span className="selectable-text1" style={{ fontFamily: "sans-serif" }}>
          Aiming for cookies. These cookies keep track of your visits to our
          website, including the pages you view and the links you click. We will
          use this data to better target our advertisements on our website and
@@ -846,12 +846,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          Cookies used during sessions. These cookies are used &quot;in-session&quot; each
          time you visit and then expire soon after; they don&apos;t include any
@@ -869,12 +869,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          Cookie persistence. This kind of cookie is not removed when the
          browser is closed and is stored on your device for a predetermined
@@ -933,13 +933,13 @@ const Policy = () => {
          marginLeft: "27.6pt",
          marginBottom: "0pt",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
          className="selectable-text1"
-         style={{ fontFamily: "Aptos", fontSize: "12pt" }}
+         style={{ fontFamily: "sans-serif", fontSize: "12pt" }}
        >
          Register you as a new customer;{" "}
        </span>
@@ -951,13 +951,13 @@ const Policy = () => {
          marginLeft: "27.6pt",
          marginBottom: "0pt",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
          className="selectable-text1"
-         style={{ fontFamily: "Aptos", fontSize: "12pt" }}
+         style={{ fontFamily: "sans-serif", fontSize: "12pt" }}
        >
          Provide, maintain, and improve the Website and our Offerings,
          including operating certain features and functionality of the Website;{" "}
@@ -970,19 +970,19 @@ const Policy = () => {
          marginLeft: "27.6pt",
          marginBottom: "0pt",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
          className="selectable-text1"
-         style={{ fontFamily: "Aptos", fontSize: "12pt" }}
+         style={{ fontFamily: "sans-serif", fontSize: "12pt" }}
        >
          &nbsp;
        </span>
        <span
          className="selectable-text1"
-         style={{ fontFamily: "Aptos", fontSize: "12pt" }}
+         style={{ fontFamily: "sans-serif", fontSize: "12pt" }}
        >
          Recognize user preferences to improve user experience;
        </span>
@@ -994,13 +994,13 @@ const Policy = () => {
          marginLeft: "27.6pt",
          marginBottom: "0pt",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
          className="selectable-text1"
-         style={{ fontFamily: "Aptos", fontSize: "12pt" }}
+         style={{ fontFamily: "sans-serif", fontSize: "12pt" }}
        >
          Research and analyze the efficacy of the Website and the marketing,
          advertising, and sales efforts of VeeMost Technologies Inc., its
@@ -1016,13 +1016,13 @@ const Policy = () => {
          marginLeft: "27.6pt",
          marginBottom: "0pt",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
          className="selectable-text1"
-         style={{ fontFamily: "Aptos", fontSize: "12pt" }}
+         style={{ fontFamily: "sans-serif", fontSize: "12pt" }}
        >
          Gather account receivables owed by VeeMost Technologies Inc.
        </span>
@@ -1034,11 +1034,11 @@ const Policy = () => {
          marginLeft: "27.6pt",
          marginBottom: "0pt",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Handle payments, delivery, and orders sent via the website;
        </span>
      </li>
@@ -1049,12 +1049,12 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>&nbsp;</span>
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>&nbsp;</span>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Create new offerings;
        </span>
      </li>
@@ -1065,12 +1065,12 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>&nbsp;</span>
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>&nbsp;</span>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Adhere to legal requirements or legitimate requests from public
          authorities (such as those pertaining to national security or law
          enforcement);{" "}
@@ -1083,12 +1083,12 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>&nbsp;</span>
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>&nbsp;</span>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Oversee our day-to-day operations;
        </span>
      </li>
@@ -1099,12 +1099,12 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>&nbsp;</span>
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>&nbsp;</span>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Ensure adherence to our Terms of Use and relevant legislation;{" "}
        </span>
      </li>
@@ -1115,12 +1115,12 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>&nbsp;</span>
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>&nbsp;</span>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Bring a case in court, in arbitration, or in a comparable legal
          setting and/or defend it.{" "}
        </span>
@@ -1132,11 +1132,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          For security and safety reasons, including safeguarding the Website
          and our business from online threats, defending our legal rights and
          our customers&apos; legal rights, and identifying, looking into, and
@@ -1171,12 +1171,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          • Provide you with advertising, such as by assisting publishers and
          advertisers in managing and serving ads on the Website or on other
@@ -1211,11 +1211,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Adhere to our legal and contractual requirements to exchange
          information with law enforcement, fraud prevention, and credit
          reference agencies;
@@ -1236,11 +1236,11 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Gather aggregated data regarding the functionality and usage of our
          website in order to have a deeper understanding of the preferences of
          our users; and
@@ -1261,12 +1261,12 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "normal",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>&nbsp;</span>
-       <span style={{ fontFamily: "Aptos", fontSize: "12pt" }}>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>&nbsp;</span>
+       <span style={{ fontFamily: "sans-serif", fontSize: "12pt" }}>
          Other Purposes: To accomplish other justifiable business objectives
          and other legal objectives that we will advise you of.
        </span>
@@ -1508,10 +1508,10 @@ const Policy = () => {
      style={{ marginTop: "14pt", marginBottom: "14pt" }}
    >
      <u>
-       <span style={{ fontFamily: "Aptos" }}>Interest-Based Advertising.</span>
+       <span style={{ fontFamily: "sans-serif" }}>Interest-Based Advertising.</span>
      </u>
-     <span style={{ fontFamily: "Aptos" }}> </span>
-     <span className="selectable-text1" style={{ fontFamily: "Aptos" }}>
+     <span style={{ fontFamily: "sans-serif" }}> </span>
+     <span className="selectable-text1" style={{ fontFamily: "sans-serif" }}>
        nterest-Based Advertising means showing ads that match what you like or
        are interested in. When you go to the Website, we and other companies
        that provide cookies might put cookies and similar tools on your device.
@@ -1523,7 +1523,7 @@ const Policy = () => {
      className="selectable-text"
      style={{ marginTop: "14pt", marginBottom: "14pt" }}
    >
-     <span className="selectable-text1" style={{ fontFamily: "Aptos" }}>
+     <span className="selectable-text1" style={{ fontFamily: "sans-serif" }}>
        &nbsp;
      </span>
    </p>
@@ -1531,7 +1531,7 @@ const Policy = () => {
      className="selectable-text"
      style={{ marginTop: "14pt", marginBottom: "14pt" }}
    >
-     <span className="selectable-text1" style={{ fontFamily: "Aptos" }}>
+     <span className="selectable-text1" style={{ fontFamily: "sans-serif" }}>
        interests. You can stop being tracked online for targeted ads by
        visiting https://optout. aboutadsinfo or
        https://optoutnetworkadvertisingorg You can also turn off advertising
@@ -1543,7 +1543,7 @@ const Policy = () => {
      className="selectable-text"
      style={{ marginTop: "14pt", marginBottom: "14pt" }}
    >
-     <span className="selectable-text1" style={{ fontFamily: "Aptos" }}>
+     <span className="selectable-text1" style={{ fontFamily: "sans-serif" }}>
        &nbsp;
      </span>
    </p>
@@ -1551,7 +1551,7 @@ const Policy = () => {
      className="selectable-text"
      style={{ marginTop: "14pt", marginBottom: "14pt" }}
    >
-     <span className="selectable-text1" style={{ fontFamily: "Aptos" }}>
+     <span className="selectable-text1" style={{ fontFamily: "sans-serif" }}>
        this page. The choices you make depend on the device and the web browser
        you are using. If you use different web browsers on your computer or on
        different devices, you'll need to turn off interest-based ads separately
@@ -1638,7 +1638,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1647,7 +1647,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1656,7 +1656,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You have the right to check if we are using your Personal Data and to
@@ -1676,7 +1676,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1685,7 +1685,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1694,7 +1694,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You may have the right to request that we correct, update, or modify
@@ -1706,7 +1706,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1715,7 +1715,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1724,7 +1724,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You can ask us to delete the copies of your Personal Data that we
@@ -1737,7 +1737,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1746,7 +1746,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1756,7 +1756,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You can choose not to sell or share your personal information for ads
@@ -1772,7 +1772,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1781,7 +1781,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1790,7 +1790,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You might have the right to ask to stop being profiled or to keep
@@ -1803,7 +1803,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1812,7 +1812,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1821,7 +1821,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          About the Sensitive Personal Data mentioned in Section 2 above, you
@@ -1834,7 +1834,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1843,7 +1843,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1872,7 +1872,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1881,7 +1881,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1890,7 +1890,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You have the right to see your Personal Data if we are using it. You
@@ -1902,7 +1902,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1911,7 +1911,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1920,7 +1920,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You can ask us to fix, change, or update your Personal Data that we
@@ -1933,7 +1933,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1942,7 +1942,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1951,7 +1951,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You can ask us to delete the copies of your personal information that
@@ -1963,7 +1963,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -1972,7 +1972,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -1981,7 +1981,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You can refuse to let us use your personal information if we are doing
@@ -1993,7 +1993,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -2002,7 +2002,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -2011,7 +2011,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You can ask us to limit how we use your personal information or stop
@@ -2025,7 +2025,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -2034,7 +2034,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -2043,7 +2043,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          If we have gathered and used your personal information because you
@@ -2058,7 +2058,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -2067,7 +2067,7 @@ const Policy = () => {
            <span
              style={{
                lineHeight: "108%",
-               fontFamily: "Aptos",
+               fontFamily: "sans-serif",
                fontSize: "11pt"
              }}
            >
@@ -2076,7 +2076,7 @@ const Policy = () => {
          </u>
        </em>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          You can complain to a data protection authority if you are unhappy
@@ -2092,7 +2092,7 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
@@ -2100,7 +2100,7 @@ const Policy = () => {
          <span
            style={{
              lineHeight: "108%",
-             fontFamily: "Aptos",
+             fontFamily: "sans-serif",
              fontSize: "11pt"
            }}
          >
@@ -2109,7 +2109,7 @@ const Policy = () => {
          </span>
        </u>
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          {" "}
          The controller for any Personal Data processed by us is the VeeMost
@@ -2193,12 +2193,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          We gather and use the following types of personal information for the
          business and commercial reasons explained in this Privacy Policy:
@@ -2221,12 +2221,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          We use the types of personal information mentioned earlier for our
          rules, business needs, and sales as explained in Section 4 above.
@@ -2237,12 +2237,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          We collect your personal information from various sources. This
          includes information you give us, data from your devices, other users
@@ -2257,12 +2257,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          products, businesses that help us provide services, third-party
          customers we work with, data providers, public records, and our
@@ -2282,12 +2282,12 @@ const Policy = () => {
          marginBottom: "0pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          We might &quot;sell&quot; or &quot;share&quot; some of these types of personal
          information: names and other identifiers, and personal information
@@ -2304,12 +2304,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          We don&apos;t use or share your private information for anything other than
          what California privacy laws allow.
@@ -2320,12 +2320,12 @@ const Policy = () => {
          marginLeft: "27.6pt",
          lineHeight: "108%",
          paddingLeft: "8.4pt",
-         fontFamily: "serif",
+         fontFamily: "sans-serif",
          fontSize: "10pt"
        }}
      >
        <span
-         style={{ lineHeight: "108%", fontFamily: "Aptos", fontSize: "11pt" }}
+         style={{ lineHeight: "108%", fontFamily: "sans-serif", fontSize: "11pt" }}
        >
          See Section 11 for information about how long we retain Personal Data.
        </span>

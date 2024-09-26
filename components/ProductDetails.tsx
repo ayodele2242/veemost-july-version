@@ -111,7 +111,7 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
                 customerPrice: parseFloat(customerPrice.toFixed(2)),
             });
         } else {
-            console.error("Invalid or missing price/availability data");
+            //console.error("Invalid or missing price/availability data");
             setError('Failed to load product pricing data.');
         }
 
@@ -127,17 +127,19 @@ const ProductDetails = ({ ingramPartNumber }: ProductDetailsProps) => {
 
           setEtilizeProduct(productInfo);
               // Extract the Product Name
-          const prodName = productInfo.datasheet.attributeGroup
-          .find((group: { name: string; }) => group.name === "General Information")
+         // Fetch Product Name
+          const prodName = productInfo?.datasheet?.attributeGroup
+          ?.find((group: { name: string }) => group.name === "General Information")
           ?.attribute
-          .find((attr: { name: string; }) => attr.name === "Product Name")
-          ?.content;
+          ?.find((attr: { name: string }) => attr.name === "Product Name")
+          ?.content || product?.description; // Default to "N/A" if not found
 
-          const prodDescr = productInfo.datasheet.attributeGroup
-          .find((group: { name: string; }) => group.name === "General Information")
+          // Fetch Product Description
+          const prodDescr = productInfo?.datasheet?.attributeGroup
+          ?.find((group: { name: string }) => group.name === "General Information")
           ?.attribute
-          .find((attr: { name: string; }) => attr.name === "Marketing Information")
-          ?.content;
+          ?.find((attr: { name: string }) => attr.name === "Marketing Information")
+          ?.content || product?.description; // Default to "N/A" if not found
 
           const shortenedDescription = prodDescr ? prodDescr.slice(0, 600) + '...' : '';
 
@@ -189,7 +191,7 @@ const fetchWithRetry = async (fetchFunc: () => Promise<any>, retries = 3, delay 
   const breadcrumbs = [
     { label: 'Home', href: '/' },
     { label: 'Products', href: '/products' },
-    { label: loading ? 'Loading...' : `${productName}`, href: loading ? '#' : `/products?search=${encodeURIComponent(productName || '')}` }
+    { label: loading ? 'Loading...' : `${productName ?? product?.description}`, href: loading ? '#' : `/products?search=${encodeURIComponent(productName ?? product?.description)}` }
   ];
 
   ///if (loading && !product) return <div>Loading product details...</div>; 
