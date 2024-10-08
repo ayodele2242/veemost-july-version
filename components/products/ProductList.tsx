@@ -263,7 +263,7 @@ const ProductList: React.FC = () => {
           }
     
           const authorizedProducts = catalog.filter(
-            (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
+            (product: { authorizedToPurchase: string }) => product.authorizedToPurchase.toLowerCase() === "true"
           );
           setProducts(authorizedProducts);
     

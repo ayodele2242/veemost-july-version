@@ -82,7 +82,7 @@ const VendorProducts  = ({ vendorName }: ProductDetailsProps) => {
   
         // Filter out only authorized products
         const authorizedProducts = catalog.filter(
-          (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
+          (product: { authorizedToPurchase: string }) => product.authorizedToPurchase.toLowerCase() === "true"
         );
         setProducts(authorizedProducts);
   

@@ -21,7 +21,7 @@ const getCommonHeaders = (token: string) => {
     'IM-CorrelationID': generateRandomUuid(),
     'IM-SenderID': 'VeeMost',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    'Authorization': `Bearer ${token}`,
     'Accept-Encoding': 'gzip,deflate,sdch',
     'Accept-Language': 'en',
   };

@@ -70,19 +70,27 @@ const ProductCard: React.FC = () => {
         const data = await fetchHomeProducts(pageSize, pageNumber);
   
         const catalog = data.catalog || [];
+
+        //console.log("Poducts before filter returned ", JSON.stringify(catalog));
+  
         
         if (!Array.isArray(catalog)) {
           throw new Error("Expected catalog to be an array");
         }
   
         const authorizedProducts = catalog.filter(
-          (product: { authorizedToPurchase: string }) => product.authorizedToPurchase === "true"
+          (product: { authorizedToPurchase: string }) => product.authorizedToPurchase.toLowerCase() === "true"
         );
         setProducts(authorizedProducts);
+        
+
+       // console.log("Poducts returned ", JSON.stringify(authorizedProducts));
   
         const productArray = authorizedProducts.map((product) => ({
           ingramPartNumber: product.ingramPartNumber
         }));
+
+       // console.log(productArray);
   
         const priceAvailabilityResponse = await fetchWithRetry(() =>
           fetchProductPricesAndAvailability(productArray)
