@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import { fetchCategories } from '@/services/category.service';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
@@ -44,9 +45,9 @@ const Menus: React.FC<MenusProps> = ({ onSelectedCategoriesChange, selectedCateg
       .finally(() => setLoading(false));
   }, []);
 
-  if (typeof window !== 'undefined' && !window.navigator.onLine) {
-    return <div>No internet connection. Please check your network settings.</div>;
-  }
+  /*if (typeof window !== 'undefined' && !window.navigator.onLine) {
+    return <div className="w-full">No internet connection. Please check your network settings.</div>;
+  }*/
 
   if (loading) {
     return <div className="w-[200px]"><MobileSkeletonList /></div>;
