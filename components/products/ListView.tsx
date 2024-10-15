@@ -24,6 +24,7 @@ import Link from 'next/link';
 import SkeletonPage from '@/loaders/SkeletonPage';
 import BuyNowBtns from '../cart-buy-now-btn';
 import PriceSkeleton from '@/loaders/PriceSkeleton';
+import { RiErrorWarningFill } from 'react-icons/ri';
 
 interface ListViewProps {
     products: IngramProductType[];
@@ -210,8 +211,21 @@ const ListView: React.FC<ListViewProps> = ({ products, productDetails, productIm
         }
     };
 
-    if (error) return <div className="flex items-center justify-center border border-red-400 px-4 h-[100px] py-3 bg-red-100 mt-10 desktop:p-10">Error: {error}</div>;
+    if (error) {
+        const errorMessage =
+          error.includes("Failed to fetch")
+            ? "No products available for the search query"
+            : error;
+      
+        return (
+          <div className="flex flex-col gap-4 items-center justify-center border border-red-400 px-4 h-[210px] font-bold py-3 bg-red-100 mt-10 desktop:p-10">
+            <RiErrorWarningFill size={150}/>
 
+             {errorMessage}
+          </div> 
+        );
+      }
+      
     return (
         
         <div className="relative productList flex flex-col">

@@ -14,6 +14,7 @@ import { isUserLoggedIn } from '@/auth/auth';
 import { ApiRequestService } from '@/services/apiRequest.service';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import Link from 'next/link';
+import { RiErrorWarningFill } from 'react-icons/ri';
 
 interface GridViewProps {
     products: IngramProductType[];
@@ -224,8 +225,20 @@ const sendProductToBackend = async (productId: string) => {
 
     
 
-    if (error) return <div>Error: {error}</div>;
-
+    if (error) {
+        const errorMessage =
+          error.includes("Failed to fetch")
+            ? "No products available for the search query"
+            : error;
+      
+        return (
+          <div className="flex flex-col items-center justify-center border border-red-400 px-4 h-[100px] py-3 gap-4 bg-red-100 mt-10 desktop:p-10">
+            <RiErrorWarningFill size={50}/>
+             {errorMessage}
+          </div>
+        );
+      }
+      
     return (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-5">
             {products.map(product => {

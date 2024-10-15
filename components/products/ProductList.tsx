@@ -334,7 +334,7 @@ const ProductList: React.FC = () => {
         );
         setProductImages((prevImages) => ({ ...prevImages, ...newImages }));
       } catch (error: any) {
-        console.error(JSON.stringify(error));
+        console.error("Tracking error", JSON.stringify(error));
         setError(error.message || "Error loading products");
       } finally {
         setLoading(false);
@@ -388,6 +388,7 @@ const ProductList: React.FC = () => {
             }
         } else if (error.message) {
             setError(error.message);
+            console.log("Error Tracker 2", error.message);
         } else {
             setError('An unknown error occurred. Please try again later.');
         }
