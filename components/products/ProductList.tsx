@@ -204,41 +204,31 @@ const ProductList: React.FC = () => {
             data = await fetchWithRetry(() =>
               fetchVendorProducts(itemsPerPage, pageNumber, vendorName)
             );
+          } else if (search) {
+            // If a search is made, only include the search keyword and do not include category
+            const keywords: string[] = [];
+            keywords.push(search.toLowerCase());
+    
+            data = await fetchWithRetry(() =>
+              searchProductsAndCategories(itemsPerPage, pageNumber, keywords, "")
+            );
           } else if (selectedCategories.length === 1) {
             const category = selectedCategories[0];
             data = await fetchWithRetry(() =>
               fetchCategoryProducts(itemsPerPage, pageNumber, category)
             );
-          } else if (selectedCategories.length > 1 || search) {
+          } else if (selectedCategories.length > 1) {
             let category = "";
             const keywords: string[] = [];
             const specificKeywords = ["switch", "routers", "firewalls", "wireless"];
-            const searchLower = search ? search.toLowerCase() : "";
-            const containsSpecificKeyword = specificKeywords.some((keyword) =>
-              searchLower.includes(keyword)
+    
+            // Handle categories if no search term is provided
+            const randomIndex = Math.floor(Math.random() * selectedCategories.length);
+            category = selectedCategories[randomIndex];
+            const otherCategories = selectedCategories.filter(
+              (_, index) => index !== randomIndex
             );
-    
-            if (containsSpecificKeyword) {
-              keywords.push(
-                ...specificKeywords.filter((keyword) => searchLower.includes(keyword))
-              );
-              category = "Accessories";
-            } else {
-              if (search !== null) {
-                keywords.push(search);
-              }
-    
-              if (selectedCategories.length > 0) {
-                const randomIndex = Math.floor(Math.random() * selectedCategories.length);
-                category = selectedCategories[randomIndex];
-                const otherCategories = selectedCategories.filter(
-                  (_, index) => index !== randomIndex
-                );
-                keywords.push(...otherCategories);
-              } else {
-                category = "";
-              }
-            }
+            keywords.push(...otherCategories);
     
             data = await fetchWithRetry(() =>
               searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category)
@@ -263,7 +253,8 @@ const ProductList: React.FC = () => {
           }
     
           const authorizedProducts = catalog.filter(
-            (product: { authorizedToPurchase: string }) => product.authorizedToPurchase.toLowerCase() === "true"
+            (product: { authorizedToPurchase: string }) =>
+              product.authorizedToPurchase.toLowerCase() === "true"
           );
           setProducts(authorizedProducts);
     
@@ -320,7 +311,6 @@ const ProductList: React.FC = () => {
             ])
           );
           setProductImages((prevImages) => ({ ...prevImages, ...newImages }));
-    
         } catch (error: any) {
           console.error(JSON.stringify(error));
           setError(error.message || "Error loading products");
