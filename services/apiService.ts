@@ -103,6 +103,8 @@ export const fetchHomeProducts = async (pageSize: number, pageNumber: number): P
 };
 
 
+
+
 export const fetchCategoryProducts = async (pageSize: number, pageNumber: number, category: string): Promise<any> => {
   try {
     const token = await getToken('OUryC2ID6tEEQh9eUeEcDoYwkXtMGZAP', 'Gaz46wUKAC4F9T2c');
@@ -121,6 +123,54 @@ export const fetchCategoryProducts = async (pageSize: number, pageNumber: number
     throw error;
   }
 };
+
+/*export const fetchCategoryProducts = async (pageSize: number, pageNumber: number, category: string): Promise<any> => {
+  try {
+    const token = await getToken('OUryC2ID6tEEQh9eUeEcDoYwkXtMGZAP', 'Gaz46wUKAC4F9T2c');
+    
+    const requestBody = {
+      "EnablePNA": false,
+      "filters": [
+        {
+          "displayvalue": "",
+          "field": "categories",
+          "filteroperation": "eq",
+          "isabsolute": false,
+          "type": "CAT_REFINE",
+          "values": [
+            category // Dynamically include the category here
+          ]
+        }
+      ],
+      "keyword": "", // Assuming no keyword search is provided
+      "page": pageNumber, // Page number as provided in the function parameter
+      "size": pageSize, // Page size as provided in the function parameter
+      "sort": ["relevance"],
+      "DisableSuggestionSearch": false
+    };
+
+    const response = await fetch(`https://apix-prod.ingrammicro.com/product/v1/products`, {
+      method: 'POST',
+      headers: {
+        ...getCommonHeaders(token),
+        'Content-Type': 'application/json', // Ensure the request sends JSON data
+      },
+      body: JSON.stringify(requestBody), // Pass the requestBody object in the request
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    return { catalog: data };
+  } catch (error) {
+    // Handle error appropriately
+    console.error('Error fetching category products:', error);
+    throw error;
+  }
+};*/
+
 
 export const fetchVendorProducts = async (pageSize: number, pageNumber: number, vendorName: string): Promise<any> => {
   try {
@@ -167,7 +217,7 @@ export const searchProductsAndCategories = async (pageSize: number, pageNumber: 
     
     // Build query parameters
     const keywordParams = keywords.map(keyword => `keyword=${encodeURIComponent(keyword)}`).join('&');
-    const categoryParam = category ? `category=${encodeURIComponent(category)}` : '';
+    const categoryParam = category ? `categories=${encodeURIComponent(category)}` : '';
     
     const queryString = [
       `pageSize=${pageSize}`,

@@ -119,7 +119,11 @@ const ProductList: React.FC = () => {
      const pathname = usePathname();
      const nextSearchParams = new URLSearchParams(searchParams.toString())
      const [warehouseId, setWareHouseId] = useState<any>(null);
+     const [categoryDisplay, setCategoryDisplay] = useState('');
+     
 
+
+    
 
     // Function to create a new query string with a given key/value pair
     const createQueryString = useCallback(
@@ -185,143 +189,161 @@ const ProductList: React.FC = () => {
     };
 
 
- 
     useEffect(() => {
-      const loadProducts = async () => {
-        setLoading(true);
-        setError(null);
-    
-        try {
-          let data;
-          let vendorName = "";
-          const vendorNames = ["Dell", "Cisco", "Meraki", "Apple", "Samsung"];
-          const matchedVendor = vendorNames.find(
-            (vendor) => search && search.toLowerCase().includes(vendor.toLowerCase())
+      if (category && subCategory) {
+        setCategoryDisplay(`Search results for ${category} - ${subCategory}`);
+      } else if (category) {
+        setCategoryDisplay(`Search results for ${category}`);
+      } else {
+        setCategoryDisplay('');
+      }
+  }, [category, subCategory]);
+
+
+ 
+  useEffect(() => {
+    const loadProducts = async () => {
+      setLoading(true);
+      setError(null);
+  
+      try {
+        let data;
+        let vendorName = "";
+        const vendorNames = ["Dell", "Cisco", "Meraki", "Apple", "Samsung"];
+        const matchedVendor = vendorNames.find(
+          (vendor) => search && search.toLowerCase().includes(vendor.toLowerCase())
+        );
+  
+        const subCategory = searchParams.get('subCategory') || '';
+  
+        if (matchedVendor) {
+          vendorName = matchedVendor;
+          data = await fetchWithRetry(() =>
+            fetchVendorProducts(itemsPerPage, pageNumber, vendorName)
           );
-    
-          if (matchedVendor) {
-            vendorName = matchedVendor;
-            data = await fetchWithRetry(() =>
-              fetchVendorProducts(itemsPerPage, pageNumber, vendorName)
-            );
-          } else if (search) {
-            // If a search is made, only include the search keyword and do not include category
-            const keywords: string[] = [];
+        } else if (search || subCategory) {
+          // If a search or subCategory is present, pass them as keywords
+          const keywords: string[] = [];
+          if (search) {
             keywords.push(search.toLowerCase());
-    
-            data = await fetchWithRetry(() =>
-              searchProductsAndCategories(itemsPerPage, pageNumber, keywords, "")
-            );
-          } else if (selectedCategories.length === 1) {
-            const category = selectedCategories[0];
-            data = await fetchWithRetry(() =>
-              fetchCategoryProducts(itemsPerPage, pageNumber, category)
-            );
-          } else if (selectedCategories.length > 1) {
-            let category = "";
-            const keywords: string[] = [];
-            const specificKeywords = ["switch", "routers", "firewalls", "wireless"];
-    
-            // Handle categories if no search term is provided
-            const randomIndex = Math.floor(Math.random() * selectedCategories.length);
-            category = selectedCategories[randomIndex];
-            const otherCategories = selectedCategories.filter(
-              (_, index) => index !== randomIndex
-            );
-            keywords.push(...otherCategories);
-    
-            data = await fetchWithRetry(() =>
-              searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category)
-            );
-          } else {
-            data = await fetchWithRetry(() => fetchProducts(itemsPerPage, pageNumber));
           }
-    
-          const catalog = data.catalog?.catalog || [];
-          const totalRecords = data.catalog.recordsFound;
-          setTotalRecords(totalRecords);
-    
-          const totalRecordsDisplayed = pageNumber * itemsPerPage;
-          const startRecord = (pageNumber - 1) * itemsPerPage + 1;
-          const endRecord = Math.min(totalRecordsDisplayed, totalRecords);
-    
-          setStartRecord(startRecord);
-          setEndRecord(endRecord);
-    
-          if (!Array.isArray(catalog)) {
-            throw new Error("Expected catalog to be an array");
+          if (subCategory) {
+            keywords.push(subCategory.toLowerCase());
           }
-    
-          const authorizedProducts = catalog.filter(
-            (product: { authorizedToPurchase: string }) =>
-              product.authorizedToPurchase.toLowerCase() === "true"
+  
+          data = await fetchWithRetry(() =>
+            searchProductsAndCategories(itemsPerPage, pageNumber, keywords, "")
           );
-          setProducts(authorizedProducts);
-    
-          const productArray = authorizedProducts.map((product) => ({
-            ingramPartNumber: product.ingramPartNumber,
-          }));
-    
-          const priceAvailabilityResponse = await fetchWithRetry(() =>
-            fetchProductPricesAndAvailability(productArray)
-          ).catch((error) => {
-            console.error("Error fetching price/availability:", error);
-            return null;
-          });
-    
-          if (priceAvailabilityResponse) {
-            const priceDetails = priceAvailabilityResponse;
-    
-            const newDetails = Object.fromEntries(
-              authorizedProducts.map((product, index) => {
-                const details = priceDetails[index];
-                const productAvailability = details.availability.totalAvailability;
-                const retailPrice = details.pricing.retailPrice;
-                const customerPriceWithMarkup = details.pricing.customerPrice * 1.06;
-                const discount =
-                  retailPrice > customerPriceWithMarkup
-                    ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
-                    : 0;
-    
-                return [
-                  product.ingramPartNumber,
-                  {
-                    ingramPartNumber: product.ingramPartNumber,
-                    availability: productAvailability,
-                    retailPrice,
-                    customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
-                    discount: discount.toFixed(2),
-                  },
-                ];
-              })
-            );
-            setProductDetails((prevDetails) => ({ ...prevDetails, ...newDetails }));
-          }
-    
-          // Fetch images for all authorized products
-          const imagePromises = authorizedProducts.map((product) =>
-            fetchProductImage(product.vendorName, product.vendorPartNumber)
+        } else if (selectedCategories.length === 1) {
+          const category = selectedCategories[0];
+          data = await fetchWithRetry(() =>
+            fetchCategoryProducts(itemsPerPage, pageNumber, category)
           );
-          const imageResults = await Promise.all(imagePromises);
-    
-          const newImages = Object.fromEntries(
-            authorizedProducts.map((product, index) => [
-              product.ingramPartNumber,
-              imageResults[index],
-            ])
+        } else if (selectedCategories.length > 1) {
+          let category = "";
+          const keywords: string[] = [];
+          const specificKeywords = ["switch", "routers", "firewalls", "wireless"];
+  
+          // Handle multiple categories
+          const randomIndex = Math.floor(Math.random() * selectedCategories.length);
+          category = selectedCategories[randomIndex];
+          const otherCategories = selectedCategories.filter(
+            (_, index) => index !== randomIndex
           );
-          setProductImages((prevImages) => ({ ...prevImages, ...newImages }));
-        } catch (error: any) {
-          console.error(JSON.stringify(error));
-          setError(error.message || "Error loading products");
-        } finally {
-          setLoading(false);
+          keywords.push(...otherCategories);
+  
+          data = await fetchWithRetry(() =>
+            searchProductsAndCategories(itemsPerPage, pageNumber, keywords, category)
+          );
+        } else {
+          data = await fetchWithRetry(() => fetchProducts(itemsPerPage, pageNumber));
         }
-      };
-    
-      loadProducts();
-    }, [selectedCategories, search, itemsPerPage, pageNumber]);
-    
+  
+        const catalog = data.catalog?.catalog || [];
+        const totalRecords = data.catalog.recordsFound;
+        setTotalRecords(totalRecords);
+  
+        const totalRecordsDisplayed = pageNumber * itemsPerPage;
+        const startRecord = (pageNumber - 1) * itemsPerPage + 1;
+        const endRecord = Math.min(totalRecordsDisplayed, totalRecords);
+  
+        setStartRecord(startRecord);
+        setEndRecord(endRecord);
+  
+        if (!Array.isArray(catalog)) {
+          throw new Error("Expected catalog to be an array");
+        }
+  
+        const authorizedProducts = catalog.filter(
+          (product: { authorizedToPurchase: string }) =>
+            product.authorizedToPurchase.toLowerCase() === "true"
+        );
+        setProducts(authorizedProducts);
+  
+        const productArray = authorizedProducts.map((product) => ({
+          ingramPartNumber: product.ingramPartNumber,
+        }));
+  
+        const priceAvailabilityResponse = await fetchWithRetry(() =>
+          fetchProductPricesAndAvailability(productArray)
+        ).catch((error) => {
+          console.error("Error fetching price/availability:", error);
+          return null;
+        });
+  
+        if (priceAvailabilityResponse) {
+          const priceDetails = priceAvailabilityResponse;
+  
+          const newDetails = Object.fromEntries(
+            authorizedProducts.map((product, index) => {
+              const details = priceDetails[index];
+              const productAvailability = details.availability.totalAvailability;
+              const retailPrice = details.pricing.retailPrice;
+              const customerPriceWithMarkup = details.pricing.customerPrice * 1.06;
+              const discount =
+                retailPrice > customerPriceWithMarkup
+                  ? ((retailPrice - customerPriceWithMarkup) / retailPrice) * 100
+                  : 0;
+  
+              return [
+                product.ingramPartNumber,
+                {
+                  ingramPartNumber: product.ingramPartNumber,
+                  availability: productAvailability,
+                  retailPrice,
+                  customerPrice: parseFloat(customerPriceWithMarkup.toFixed(2)),
+                  discount: discount.toFixed(2),
+                },
+              ];
+            })
+          );
+          setProductDetails((prevDetails) => ({ ...prevDetails, ...newDetails }));
+        }
+  
+        // Fetch images for all authorized products
+        const imagePromises = authorizedProducts.map((product) =>
+          fetchProductImage(product.vendorName, product.vendorPartNumber)
+        );
+        const imageResults = await Promise.all(imagePromises);
+  
+        const newImages = Object.fromEntries(
+          authorizedProducts.map((product, index) => [
+            product.ingramPartNumber,
+            imageResults[index],
+          ])
+        );
+        setProductImages((prevImages) => ({ ...prevImages, ...newImages }));
+      } catch (error: any) {
+        console.error(JSON.stringify(error));
+        setError(error.message || "Error loading products");
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    loadProducts();
+  }, [selectedCategories, search, subCategory, itemsPerPage, pageNumber]);
+  
     
     
     // Retry mechanism with exponential backoff
@@ -373,7 +395,6 @@ const ProductList: React.FC = () => {
     
     
     
-    
 
     const shouldShowBanner = !selectedCategories.length && !search && !category && !subCategory;
     const shouldShowClear = selectedCategories.length || search || category || subCategory;
@@ -390,7 +411,8 @@ const ProductList: React.FC = () => {
            
             
                 <div className="w-full pl-6 md:pl-[70px]">
-                <Breadcrumbs breadcrumbs={breadcrumbs} />
+                <Breadcrumbs breadcrumbs={breadcrumbs} /> 
+                <p className="font-bold md:text-[20px] sm:text-[14px]">{categoryDisplay}</p>
                 </div>
                 
         

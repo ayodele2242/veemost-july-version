@@ -111,8 +111,8 @@ const HeaderMobileCategories: React.FC<HeaderCategoriesProps> = ({ onClose }) =>
           <ul>
             {category.sub_categories.map((subCategory: any) => (
               <li key={subCategory.sub_id} className='font-semibold p-1 cursor-pointer hover:text-primaryText'>
-                <a href={`/products?category=${encodeURIComponent(category.root_menu)}`}>
-                  {subCategory.name}
+                <a href={`/products?category=${encodeURIComponent(category.root_menu === 'Networking' ? 'Network Devices' : category.root_menu)}&subCategory=${encodeURIComponent(subCategory.name)}`}>
+                 {subCategory.name}
                 </a>
               </li>
             ))}

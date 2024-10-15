@@ -18,6 +18,12 @@ const nextConfig = {
                 pathname: '/**',
             },
             {
+                protocol: 'https',
+                hostname: 'apix-prod.ingrammicro.com',
+                port: '',
+                pathname: '/**',
+            },
+            {
                 protocol: 'http',
                 hostname: 'store.veemost.com',
                 port: '',
@@ -66,7 +72,7 @@ const nextConfig = {
               style-src 'self' 'unsafe-inline' https://*.stripe.com https://*.paypal.com https://www.paypalobjects.com https://embed.tawk.to https://*.tawk.to https://cdn.jsdelivr.net;
               img-src 'self' data: https: blob:;
               font-src 'self' data: https://*.stripe.com https://*.paypal.com https://www.paypalobjects.com https://embed.tawk.to https://*.tawk.to https://cdn.jsdelivr.net;
-              connect-src 'self' https://*.stripe.com https://api.stripe.com https://*.paypal.com https://www.paypalobjects.com https://*.tawk.to wss://*.tawk.to https://www.clarity.ms https://*.clarity.ms https://api.ingrammicro.com https://content.etilize.com https://store.veemost.com;
+              connect-src 'self' https://*.stripe.com https://api.stripe.com https://*.paypal.com https://www.paypalobjects.com https://*.tawk.to wss://*.tawk.to https://www.clarity.ms https://*.clarity.ms https://api.ingrammicro.com https://content.etilize.com https://store.veemost.com https://apix-prod.ingrammicro.com;
               frame-src 'self' https://*.stripe.com https://*.paypal.com https://www.paypalobjects.com https://tawk.to;
               object-src 'none';
               base-uri 'self';
